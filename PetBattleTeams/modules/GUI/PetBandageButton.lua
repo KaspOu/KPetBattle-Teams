@@ -29,6 +29,8 @@ function GUI:CreateBandageButton(name,parent)
     local icon = GetItemIcon(86143)
     local itemCount = GetItemCount(86143)
     local button = CreateFrame("Button",parent:GetName()..name,UIParent,"secureactionbuttontemplate")
+    button:EnableMouse(true);
+    button:RegisterForClicks("AnyUp", "AnyDown");
     button:SetAttribute("unit", "player")
     button:SetAttribute("type", "macro")
     button:SetAttribute("macrotext","/use item:86143" )

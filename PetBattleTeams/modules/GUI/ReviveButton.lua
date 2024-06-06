@@ -32,6 +32,8 @@ function GUI:CreateReviveButton(name,parent)
     local start, duration, enable = GetSpellCooldown(HEAL_PET_SPELL)
 
     local button = CreateFrame("Button",parent:GetName()..name,UIParent,"secureactionbuttontemplate")
+    button:EnableMouse(true);
+    button:RegisterForClicks("AnyUp", "AnyDown");
     button:SetAttribute("type", "spell")
     button.spellID = HEAL_PET_SPELL
     button:SetAttribute("spell",spellName)
