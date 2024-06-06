@@ -1,11 +1,20 @@
-## Interface: 80100
+## Interface: 100207
 ## Title: PetBattleTeams
-## Author: Nullberri
-## Version: @project-version@
+## Version: 10.2.701
+## Author: |cff00ff00Kallye|r (EU-Elune)
 ## Notes: Create unlimited teams of pets and quickly switch between them in the Pet Journal
+## DefaultState: Enabled
+## LoadOnDemand: 0
 ## X-Category: Pet Battles
 ## X-Localizations: enUS
 ## SavedVariables: PetBattleTeamsDB, PetBattleTeamsSettings
+
+
+## X-Credits: Nullberri, 3.3.11 fixed by Marcio Wesley Borges (marciowb)
+## X-Category: Buffs & Debuffs
+## X-License: All Rights Reserved: You are free to fork and modify on Github, please ask about anything else.
+## X-Website: https://github.com/KaspOu/KPetBattle-Teams
+## X-Curse-Project-ID: XXXXXX
 
 libs\LibStub\LibStub.lua
 libs\CallbackHandler-1.0\CallbackHandler-1.0.xml

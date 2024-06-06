@@ -28,11 +28,12 @@ enable-nolib-creation:
     no
 
 move-folders:
-	PetBattleTeams/PetBattleTeams: PetBattleTeams
+    PetBattleTeams/PetBattleTeams: PetBattleTeams
 
 ignore:
-    - .gitignore
-	- changelog
-	- README.md
     - todo.txt
     - modules\GUI\New folder\
+    - .git*
+    - changelog
+    - README.md
+    - .release*
