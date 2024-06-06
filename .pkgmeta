@@ -2,27 +2,27 @@ package-as: PetBattleTeams
 
 externals:
     PetBattleTeams/libs/AceAddon-3.0:
-        https://repos.curseforge.com/wow/ace3/trunk/AceAddon-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceAddon-3.0/
     PetBattleTeams/libs/AceGUI-3.0:
-        https://repos.curseforge.com/wow/ace3/trunk/AceGUI-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceGUI-3.0/
     PetBattleTeams/libs/AceConfig-3.0:
-        https://repos.curseforge.com/wow/ace3/trunk/AceConfig-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceConfig-3.0/
     PetBattleTeams/libs/AceConfigDialog-3.0:
-        https://repos.curseforge.com/wow/ace3/trunk/AceConfig-3.0/AceConfigDialog-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceConfig-3.0/AceConfigDialog-3.0/
     PetBattleTeams/libs/AceDB-3.0:
-        https://repos.curseforge.com/wow/ace3/trunk/AceDB-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceDB-3.0/
     PetBattleTeams/libs/AceConsole-3.0:
-        https://repos.curseforge.com/wow/ace3/trunk/AceConsole-3.0
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceConsole-3.0/
     PetBattleTeams/libs/LibStub:
-        https://repos.curseforge.com/wow/ace3/trunk/LibStub
+        url: https://repos.wowace.com/wow/libstub/tags/1.0
     PetBattleTeams/libs/CallbackHandler-1.0:
-        https://repos.curseforge.com/wow/callbackhandler/trunk/CallbackHandler-1.0
+        url: https://repos.curseforge.com/wow/callbackhandler/trunk/CallbackHandler-1.0/
     PetBattleTeams/libs/LibSharedMedia-3.0:
-         https://repos.curseforge.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
+        url: https://repos.curseforge.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0/
     PetBattleTeams/libs/LibPetJournal-2.0:
-        https://repos.curseforge.com/wow/libpetjournal-2-0
+        url: https://github.com/KaspOu/Klibpetjournal-2-0.git
     PetBattleTeams/libs/LibPetBreedInfo-1.0: 
-        https://github.com/Stanzilla/LibPetBreedInfo-1.0.git
+        url: https://github.com/Stanzilla/LibPetBreedInfo-1.0.git
 
 enable-nolib-creation:
     no
@@ -31,9 +31,20 @@ move-folders:
     PetBattleTeams/PetBattleTeams: PetBattleTeams
 
 ignore:
-    - todo.txt
-    - modules\GUI\New folder\
+    - *\Libs\*\*.rockspec
+    - *\Libs\*\*.toc
+    - *\Libs\*\*.url
+    - *\Libs\*\.checkout\
+    - *\Libs\*\changelog.*
+    - *\Libs\*\CHANGELOG.*
+    - *\Libs\*\docs
+    - *\Libs\*\examples
+    - *\Libs\*\README.*
+    - *\Libs\*\tests
+    - *\Libs\*\.pkgmeta
     - .git*
     - changelog
-    - README.md
+    - *\README.md
     - .release*
+    - *\Todo.txt
+    - *\New folder\

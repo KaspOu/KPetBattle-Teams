@@ -1,5 +1,6 @@
 ## Interface: 100207
-## Title: PetBattleTeams
+## Title: PetBattleTeams Reloaded by |cff00ff00Kallye|r
+## Title-frFR: PetBattleTeams Reloaded, par |cff00ff00Kallye|r
 ## Version: 10.2.701
 ## Author: |cff00ff00Kallye|r (EU-Elune)
 ## Notes: Create unlimited teams of pets and quickly switch between them in the Pet Journal
