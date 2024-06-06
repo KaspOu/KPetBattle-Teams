@@ -1,9 +1,10 @@
 ## Interface: 100207
 ## Title: PetBattleTeams Reloaded by |cff00ff00Kallye|r
 ## Title-frFR: PetBattleTeams Reloaded, par |cff00ff00Kallye|r
-## Version: 10.2.701
+## Version: 10.2.702
 ## Author: |cff00ff00Kallye|r (EU-Elune)
 ## Notes: Create unlimited teams of pets and quickly switch between them in the Pet Journal
+## Notes-frFR: Créez des équipes de mascottes illimitées et passez rapidement de l'une à l'autre dans le Journal des Mascottes
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## X-Category: Pet Battles
@@ -29,6 +30,7 @@ libs\EmbedHandler-1.0\EmbedHandler-1.0.xml
 libs\LibPetJournal-2.0\LibPetJournal-2.0.lua
 
 PetBattleTeams.lua
+i18n\locales.xml
 
 modules\TeamManager.lua
 modules\TeamManagerUnitTests.lua

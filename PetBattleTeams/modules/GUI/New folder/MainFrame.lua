@@ -152,7 +152,7 @@ function GUI:CreateMainFrame()
 
     local selectedTeamText = widget:CreateFontString(nil,"OVERLAY","GameFontNormal")
     widget.selectedTeamText = selectedTeamText
-    selectedTeamText:SetText("Selected Team")
+    selectedTeamText:SetText(L["Selected Team"])
     selectedTeamText:SetPoint("TOP", widget, "TOP",-5,-10)
     selectedTeamText:SetJustifyH("CENTER")
     selectedTeamText:Show()

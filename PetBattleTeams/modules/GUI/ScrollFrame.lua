@@ -5,6 +5,8 @@ local Embed = PetBattleTeams.Embed
 local RosterFrame = {}
 local PetBattleTeamsFrame = PetBattleTeams.PetBattleTeamsFrame
 
+local _, addon = ...
+local L = addon.L
 -- luacheck: globals FauxScrollFrame_Update FauxScrollFrame_GetOffset FauxScrollFrame_OnVerticalScroll
 
 local function Update(self)
@@ -113,7 +115,7 @@ local function CreateRosterFrame()
     self.scrollFrame = scrollFrame
     self:Show()
 
-    rosterText:SetText("Team Roster")
+    rosterText:SetText(L["Team Roster"])
     rosterText:SetPoint("TOP", self, "TOP", 0, 0)
     rosterText:SetJustifyH("CENTER")
     rosterText:Show()
