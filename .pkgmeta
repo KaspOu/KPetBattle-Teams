@@ -21,7 +21,7 @@ externals:
         url: https://repos.curseforge.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0/
     PetBattleTeams/libs/LibPetJournal-2.0:
         url: https://github.com/KaspOu/Klibpetjournal-2-0.git
-    PetBattleTeams/libs/LibPetBreedInfo-1.0: 
+    PetBattleTeams/libs/LibPetBreedInfo-1.0:
         url: https://github.com/Stanzilla/LibPetBreedInfo-1.0.git
 
 enable-nolib-creation:

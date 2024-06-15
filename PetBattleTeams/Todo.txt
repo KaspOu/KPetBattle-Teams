@@ -109,7 +109,7 @@ Add configuration
 	xp display on level
 	attach|detach
 	lock team
-teamFrame: 
+teamFrame:
 	add visual indicator for a user locked team
 
 Add unlock/lock all button ?
