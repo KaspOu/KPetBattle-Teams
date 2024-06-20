@@ -7,9 +7,17 @@ local Tooltip = PetBattleTeams:GetModule("Tooltip")
 
 local _, addon = ...
 local L = addon.L
+local devVer = "";
+
+--@do-not-package@
+-- Development icons
+devVer = "|TInterface/PVPFrame/Icons/prestige-icon-8-3:16|t"
+L["Selected Team"] = L["Selected Team"]..devVer
+L["Team Roster"] = L["Team Roster"]..devVer
+--@end-do-not-package@
 
 Config.options = {
-    name = L["PetBattle Teams"],
+    name = L["PetBattle Teams"]..devVer,
     type = 'group',
     args = {
         TeamFrameHeading = {
@@ -246,7 +254,7 @@ Config.options = {
 
 function Config:OnInitialize()
     LibStub("AceConfig-3.0"):RegisterOptionsTable("PetBattleTeams", Config.options,"/pbt")
-    LibStub("AceConfigDialog-3.0"):AddToBlizOptions("PetBattleTeams","PetBattle Teams")
+    LibStub("AceConfigDialog-3.0"):AddToBlizOptions("PetBattleTeams","PetBattle Teams"..devVer)
 end
 
 function Config:GetEasyMenu()
