@@ -5,7 +5,8 @@ local AUTO_HIDE_DELAY = 12
 
 function GUI:CreateMenuButton()
     local button = CreateFrame("BUTTON")
-    local menuFrame = CreateFrame("frame", "PetBattleTeamsMenu", UIParent, "UIDropDownMenuTemplate")
+    local lib = LibStub("LibDropDownMenu");
+    local menuFrame = lib.Create_DropDownMenu("PetBattleTeamsMenu", UIParent)
 
 
     local options = Config:GetEasyMenu()
@@ -33,7 +34,7 @@ function GUI:CreateMenuButton()
         if mouseButton == "LeftButton" then
             GUI:ToggleMinimize(not GUI:GetIsMinimized())
         else
-            EasyMenu(options, menuFrame, button, 0 , 0, "MENU",AUTO_HIDE_DELAY);
+            lib.EasyMenu(options, menuFrame, button, 0 , 0, "MENU",AUTO_HIDE_DELAY);
         end
     end)
     return button

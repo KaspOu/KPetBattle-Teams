@@ -8,7 +8,8 @@ local PETS_PER_TEAM = 3
 PetBattleTeams.PetBattleTeamsUnitFrame = {}
 local PetBattleTeamsUnitFrame = PetBattleTeams.PetBattleTeamsUnitFrame
 
-local menuFrame = CreateFrame("frame", "PetBattleTeamsUnitFrameMenu", UIParent, "UIDropDownMenuTemplate")
+local lib = LibStub("LibDropDownMenu");
+local menuFrame = lib.Create_DropDownMenu("PetBattleTeamsUnitFrameMenu", UIParent)
 menuFrame.menu = {
     { text = "Team Options", notCheckable = true, isTitle = true },
 
@@ -108,7 +109,7 @@ function PetBattleTeamsUnitFrame:ShowTeamOptionsMenu()
     local menu = menuFrame.menu
     menuFrame.teamIndex = self.teamIndex
     menuFrame.petIndex = self.petIndex
-    EasyMenu(menu, menuFrame, "cursor", 0 , 0, "MENU");
+    lib.EasyMenu(menu, menuFrame, "cursor", 0 , 0, "MENU");
 end
 
 function PetBattleTeamsUnitFrame:New()
