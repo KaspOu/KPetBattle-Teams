@@ -15,8 +15,8 @@ local eventFrame = CreateFrame("frame")
 
 local function OnEvent(self,event,...)
     if event == "PET_JOURNAL_LIST_UPDATE" then
-        if not IsAddOnLoaded("Blizzard_PetJournal") then
-            LoadAddOn("Blizzard_PetJournal")
+        if not C_AddOns.IsAddOnLoaded("Blizzard_PetJournal") then
+            C_AddOns.LoadAddOn("Blizzard_PetJournal")
         end
         if not GUI.delayedInit then
             GUI:InitializeGUI()

@@ -18,7 +18,7 @@ local eventFrame = CreateFrame("frame")
 local function OnEvent(self,event,...)
     if event == "ADDON_LOADED" then
         local name = ...
-        if (IsAddOnLoaded("Blizzard_Collections") or name == "Blizzard_Collections") and not GUI.delayedInit then
+        if (C_AddOns.IsAddOnLoaded("Blizzard_Collections") or name == "Blizzard_Collections") and not GUI.delayedInit then
             GUI:InitializeGUI()
             self:UnregisterEvent("ADDON_LOADED")
         end
@@ -26,7 +26,7 @@ local function OnEvent(self,event,...)
     end
 
     if event == "PLAYER_REGEN_ENABLED" or event == "PET_BATTLE_CLOSE"  then
-        if GUI.delayedInit and IsAddOnLoaded("Blizzard_Collections")  then
+        if GUI.delayedInit and C_AddOns.IsAddOnLoaded("Blizzard_Collections")  then
             GUI:InitializeGUI()
             self:UnregisterEvent("PLAYER_REGEN_ENABLED")
             self:UnregisterEvent("PET_BATTLE_CLOSE")
@@ -68,7 +68,7 @@ function GUI:OnInitialize()
         self.delayedInit = true
     end
 
-    if IsAddOnLoaded("Blizzard_Collections") then
+    if C_AddOns.IsAddOnLoaded("Blizzard_Collections") then
         eventFrame:UnregisterEvent("ADDON_LOADED")
         if not GUI.delayedInit then
             GUI:InitializeGUI()
@@ -77,7 +77,7 @@ function GUI:OnInitialize()
 end
 
 function GUI:PetJournalReady()
-    if IsAddOnLoaded("Blizzard_Collections") then
+    if C_AddOns.IsAddOnLoaded("Blizzard_Collections") then
         eventFrame:UnregisterEvent("ADDON_LOADED")
         LibPetJournal.UnregisterCallback(self,"PostPetListUpdated", "PetJournalReady")
     end
