@@ -5,8 +5,9 @@ local GUI = PetBattleTeams:GetModule("GUI")
 
 local function OnEvent(self,event)
     if event == "SPELL_UPDATE_COOLDOWN"  then
-        local start, duration, enable = GetSpellCooldown(self.spellID)
-        CooldownFrame_Set(self.Cooldown, start, duration, enable)
+        local spellCD = C_Spell.GetSpellCooldown(self.spellID)
+        local startTime, duration, isEnabled = spellCD.startTime, spellCD.duration, spellCD.isEnabled;
+        CooldownFrame_Set(self.Cooldown, startTime, duration, isEnabled)
         if ( GameTooltip:GetOwner() == self ) then
             --cheat and use blizzards tooltip setup
             PetJournalHealPetButton_OnEnter(self)
@@ -28,8 +29,10 @@ end
 
 function GUI:CreateReviveButton(name,parent)
     local HEAL_PET_SPELL = 125439
-    local spellName, spellSubname, spellIcon = GetSpellInfo(HEAL_PET_SPELL)
-    local start, duration, enable = GetSpellCooldown(HEAL_PET_SPELL)
+    local spellInfo = C_Spell.GetSpellInfo(HEAL_PET_SPELL)
+    local spellName, spellIcon = spellInfo.name, spellInfo.iconID;
+    local spellCD = C_Spell.GetSpellCooldown(HEAL_PET_SPELL);
+    local startTime, duration, isEnabled = spellCD.startTime, spellCD.duration, spellCD.isEnabled;
 
     local button = CreateFrame("Button",parent:GetName()..name,UIParent,"secureactionbuttontemplate")
     button:EnableMouse(true);
@@ -48,7 +51,7 @@ function GUI:CreateReviveButton(name,parent)
     button:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square","ADD")
 
     button.Cooldown = CreateFrame("Cooldown", name.."Cooldown",button, "CooldownFrameTemplate")
-    CooldownFrame_Set(button.Cooldown, start, duration, enable)
+    CooldownFrame_Set(button.Cooldown, startTime, duration, isEnabled)
 
     button:RegisterEvent("SPELL_UPDATE_COOLDOWN")
     button:RegisterEvent("PLAYER_REGEN_DISABLED")
