@@ -37,47 +37,13 @@
         "PetJournal_UpdatePetLoadOut",
         "PET_BATTLE_CURRENT_XP_FORMAT",
         "PET_BATTLE_CURRENT_HEALTH_FORMAT",
-        "GetLocale",
-        "hooksecurefunc",
         "UIParent",
-        "C_PetJournal",
-        "GetCursorPosition",
-        "CreateFrame",
-        "tinsert",
-        "IsControlKeyDown",
-        "IsShiftKeyDown",
-        "ClearCursor",
-        "max",
         "GameTooltip",
-        "UnitAffectingCombat",
-        "InCombatLockdown",
         "UIFrameFadeOut",
         "UIFrameFadeIn",
         "BackdropTemplateMixin",
-        "GetScreenHeight",
-        "GetScreenWidth",
         "PET_TYPE_SUFFIX",
-        "wipe",
-        "C_PetBattles",
-        "format",
-        "assert",
-        "type",
-        "string",
-        "tostring",
-        "pairs",
-        "unpack",
-        "select",
-        "ipairs",
-        "setmetatable",
-        "print",
-        "rawset",
-        "table",
-        "_G",
-        "math",
-        "pcall",
-        "C_Spell",
-        "LibStub",
-        "C_AddOns"
+        "LibStub"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#cf5018",
@@ -114,6 +80,6 @@
         "utf8": "disable"
     },
     "Lua.workspace.library": [
-        "~\\c:\\Users\\kaspo\\.cursor\\extensions\\ketho.wow-api-0.16.8\\Annotations"
+        "c:\\Users\\kaspo\\.cursor\\extensions\\ketho.wow-api-0.17.5\\Annotations"
     ]
 }
