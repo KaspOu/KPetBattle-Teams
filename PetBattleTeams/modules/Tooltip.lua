@@ -131,7 +131,7 @@ function Tooltip:SetUnit(petID,abilities,teamName)
     if petID == 0 then return false end
     if not rarity then return false end
 
-    local r, g, b,hex = GetItemQualityColor(rarity-1)
+    local r, g, b,hex = C_Item.GetItemQualityColor(rarity-1)
 
     local tooltip = self.tooltip
     tooltip.rarityGlow:SetVertexColor(r, g, b)

@@ -210,7 +210,7 @@ function PetBattleTeamsUnitFrame:UpdateWidget()
     if not speciesID then self:SetDefaultPet() return end
 
     if rarity then
-        local r, g, b = GetItemQualityColor(rarity-1)
+        local r, g, b = C_Item.GetItemQualityColor(rarity-1)
         self.rarityGlow:SetVertexColor(r, g, b)
         self.rarityGlow:SetHeight(self:GetHeight() * 1.3)
         self.rarityGlow:SetPoint("CENTER", self.Icon, "CENTER", 0, 4)
