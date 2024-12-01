@@ -78,7 +78,7 @@ local function CreateScollChild()
 
     self.teamFrames[1] = team
     --self:SetMinResize(h,w)
-    self:SetResizeBounds(h,w)
+    self:SetResizeBounds(h,w) -- FIXME ? (widget:GetWidth(), ROW_HEIGHT * 2 + 150, widget:GetWidth(), ROW_HEIGHT * 11 + 150)
     self:SetSize(h,w)
     self.numToDisplay = 1
     self:SetScript("OnSizeChanged",OnScrollChildSizeChanged)
