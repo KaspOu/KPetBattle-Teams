@@ -1,7 +1,7 @@
-## Interface: 110005
+## Interface: 110005, 110007
 ## Title: PetBattleTeams Reloaded by |cff00ff00Kallye|r
 ## Title-frFR: PetBattleTeams Reloaded, par |cff00ff00Kallye|r
-## Version: 11.0.501
+## Version: 11.0.701
 ## Author: |cff00ff00Kallye|r (EU-Elune)
 ## Notes: Create unlimited teams of pets and quickly switch between them in the Pet Journal
 ## Notes-frFR: Créez des équipes de mascottes illimitées et passez rapidement de l'une à l'autre dans le Journal des Mascottes
