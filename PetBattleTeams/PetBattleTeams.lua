@@ -40,6 +40,12 @@ function PetBattleTeams.slashHandler(msg, chatPromptFrame)
     elseif msg == "detach" then
         GUI:SetAttached(false)
         print("PetBattleTeams: Frame Detached")
+    elseif msg == "max" then
+        GUI:ToggleMinimize(false)
+        print("PetBattleTeams: Frame Maximized")
+    elseif msg == "min" then
+        GUI:ToggleMinimize(true)
+        print("PetBattleTeams: Frame Minimized")
     elseif msg == "lock teams" then
         TeamManager:SetLockStateAllTeams(true)
         print("PetBattleTeams: Teams Locked")
@@ -60,6 +66,8 @@ function PetBattleTeams.slashHandler(msg, chatPromptFrame)
         print("/pbt", "detach", ": Detaches PetBattleTeams from the Pet Journal")
         print("/pbt","lock teams", ": Locks all existing teams, preventing changes to those teams. Does not effect new teams")
         print("/pbt","unlock teams", ": Unlocks all existing Teams, allowing changes to be made")
+        print("/pbt","max", ": Maximize PetBattleTeams frame (if hidden)")
+        print("/pbt","min", ": Minimize PetBattleTeams frame")
         print("/pbt","reset teams" , ": Deletes all teams, Warning no confirmation is given")
         print("/pbt","reset ui", ": Resets the UI to its defualt configuration")
     end

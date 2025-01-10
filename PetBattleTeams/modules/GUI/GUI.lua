@@ -110,6 +110,9 @@ function GUI:SetAttached(enabled)
     self.db.global.attached = enabled
     if self.mainFrame then
         self.mainFrame:SetAttached(enabled)
+		if enabled then
+			GUI:ToggleMinimize(false);
+		end
     end
 end
 
@@ -186,6 +189,7 @@ function GUI:ToggleMinimize(enabled)
     if enabled then
         self.menuButton:SetPoint("CENTER",PetJournal,"TOPRIGHT",-40,-10)
         self.menuButton:SetParent(PetJournal)
+		self.menuButton:SetFrameStrata("DIALOG")
     else
         self.menuButton:SetPoint("CENTER",self.mainFrame,"TOPRIGHT",-10,-10)
         self.menuButton:SetParent(self.mainFrame)
