@@ -1,4 +1,4 @@
-## Interface: 110007, 110100
+## Interface: 110100
 ## Title: PetBattleTeams Reloaded by |cff00ff00Kallye|r
 ## Title-frFR: PetBattleTeams Reloaded, par |cff00ff00Kallye|r
 ## Version: 11.1.001
