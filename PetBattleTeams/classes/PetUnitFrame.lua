@@ -27,6 +27,7 @@ menuFrame.menu = {
             return TeamManager:IsTeamLockedByUser(teamIndex)
         end,
     },
+    -- FIXME Add Description
     { text = L["Rename Team"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex
         local displayName = TeamManager:GetTeamName(teamIndex)
@@ -97,6 +98,7 @@ end
 
 -- end widget event handlers
 function PetBattleTeamsUnitFrame:SetTooltip()
+    -- FIXME Tooltip avec Description?
     if self.teamIndex and self.petIndex then
         local petID, abilities = TeamManager:GetPetInfo(self.teamIndex,self.petIndex)
         if petID then

@@ -132,6 +132,7 @@ function PetBattleTeamsFrame:Update()
     local showTeamName = TeamManager:GetShowTeamName()
     local showLocked = TeamManager:IsTeamLocked(self.teamIndex)
 
+    -- FIXME Affichage avec Description ?
     if showTeamName then
         local displayName = TeamManager:GetTeamName(self.teamIndex)
         self.teamNameText:SetText(displayName)
@@ -148,6 +149,7 @@ function PetBattleTeamsFrame:Update()
     end
 
     if isSelected then
+        -- FIXME Ou ici ?
         self.selectedTexture:SetShown(not showLocked)
         self.lockedTexture:SetShown(showLocked)
     else
