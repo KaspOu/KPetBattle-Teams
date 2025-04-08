@@ -167,5 +167,9 @@ function addon:RegisterLocale(locale, tbl)
                 self.L[k] = k
             end
         end
+
+        StaticPopupDialogs["PBT_TEAM_DELETE"].text = self.L["PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?"]
+        StaticPopupDialogs["PBT_TEAM_RENAME"].text = self.L["PetBattleTeams:|nEnter a name for |cffffd200%s|r."]
+        StaticPopupDialogs["PBT_IMPORT_TEAMS"].text = self.L["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"]
     end
 end

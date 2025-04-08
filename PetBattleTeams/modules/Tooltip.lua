@@ -13,6 +13,9 @@ local function GetColor(confidence)
     return "|cffffcc00"
 end
 
+local _, addon = ...
+local L = addon.L
+
 
 function Tooltip:OnInitialize()
 
@@ -45,7 +48,7 @@ function Tooltip:OnInitialize()
     --team indicator
     tooltip.teamText = tooltip:CreateFontString("PetBattleTeamTooltipTeamText","OVERLAY","GameFontNormalSmall")
     tooltip.teamText:SetJustifyH("LEFT")
-    tooltip.teamText:SetText("Team XX")
+    tooltip.teamText:SetText(L["Team XX"])
     tooltip.teamText:SetTextColor(1,1,1)
     tooltip.teamText:SetSize(0,0)
     tooltip.teamText:SetFont("Fonts\\FRIZQT__.TTF",12,"OUTLINE")
@@ -55,7 +58,7 @@ function Tooltip:OnInitialize()
     --Helper Text
     tooltip.helpText = tooltip:CreateFontString("PetBattleTeamTooltipHelperText","OVERLAY","GameFontNormalSmall")
     tooltip.helpText:SetJustifyH("LEFT")
-    tooltip.helpText:SetText("Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team.")
+    tooltip.helpText:SetText(L["Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team."])
     tooltip.helpText:SetTextColor(0,1,0)
     tooltip.helpText:SetSize(0,0)
     tooltip.helpText:SetFont("Fonts\\FRIZQT__.TTF",12,"OUTLINE")

@@ -8,12 +8,15 @@ local PETS_PER_TEAM = 3
 PetBattleTeams.PetBattleTeamsUnitFrame = {}
 local PetBattleTeamsUnitFrame = PetBattleTeams.PetBattleTeamsUnitFrame
 
+local _, addon = ...
+local L = addon.L
+
 local lib = LibStub("LibDropDownMenu");
 local menuFrame = lib.Create_DropDownMenu("PetBattleTeamsUnitFrameMenu", UIParent)
 menuFrame.menu = {
-    { text = "Team Options", notCheckable = true, isTitle = true },
+    { text = L["Team Options"], notCheckable = true, isTitle = true },
 
-    { text = "Lock Team", notCheckable = false, isNotRadio = true, keepShownOnClick = true,
+    { text = L["Lock Team"], notCheckable = false, isNotRadio = true, keepShownOnClick = true,
         func = function()
             local teamIndex = menuFrame.teamIndex
             local locked = TeamManager:IsTeamLockedByUser(teamIndex)
@@ -24,19 +27,19 @@ menuFrame.menu = {
             return TeamManager:IsTeamLockedByUser(teamIndex)
         end,
     },
-    { text = "Rename Team", notCheckable = true, func = function()
+    { text = L["Rename Team"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex
         local displayName = TeamManager:GetTeamName(teamIndex)
         StaticPopup_Show("PBT_TEAM_RENAME", displayName, nil, teamIndex)
     end,
     },
-    { text = "Delete Team", notCheckable = true, func = function()
+    { text = L["Delete Team"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex
         local displayName = TeamManager:GetTeamName(teamIndex)
         StaticPopup_Show("PBT_TEAM_DELETE", displayName, nil, teamIndex)
     end,
     },
-    { text = "Remove Pet", notCheckable = true, func = function()
+    { text = L["Remove Pet"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex
         local petIndex = menuFrame.petIndex
         TeamManager:RemovePetFromTeam(teamIndex, petIndex)

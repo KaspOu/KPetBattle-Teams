@@ -39,6 +39,18 @@ local baseLocale = {
     ["Permanently deletes all teams. There is no confirmation for this action."] = "Permanently deletes all teams. There is no confirmation for this action.",
     ["Reset UI"] = "Reset UI",
     ["Resets the UI to its default settings. There is no confirmation for this action."] = "Resets the UI to its default settings. There is no confirmation for this action.",
+
+    ["Team: "] = "Team: ",
+    ["Team Options"] = "Team Options",
+    ["Lock Team"] = "Lock Team",
+    ["Rename Team"] = "Rename Team",
+    ["Delete Team"] = "Delete Team",
+    ["Remove Pet"] = "Remove Pet",
+    ["Team XX"] = "Team XX",
+    ["Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team."] = "Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team.",
+    ["PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?"] = "PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?",
+    ["PetBattleTeams:|nEnter a name for |cffffd200%s|r."] = "PetBattleTeams:|nEnter a name for |cffffd200%s|r.",
+    ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?",
 }
 
 

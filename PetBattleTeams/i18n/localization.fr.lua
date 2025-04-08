@@ -42,6 +42,18 @@ local baseLocale = {
     ["Permanently deletes all teams. There is no confirmation for this action."] = "Supprime d\195\169finitivement toutes les \195\169quipes. Il n'y a pas de confirmation pour cette action.",
     ["Reset UI"] = "R\195\169initialiser l'interface utilisateur",
     ["Resets the UI to its default settings. There is no confirmation for this action."] = "R\195\169initialise l'interface utilisateur aux param\195\168tres par d\195\169faut. Il n'y a pas de confirmation pour cette action.",
+
+    ["Team: "] = "\195\137quipe : ",
+    ["Team Options"] = "Options de l'\195\169quipe",
+    ["Lock Team"] = "Verrouiller l'\195\169quipe",
+    ["Rename Team"] = "Renommer l'\195\169quipe",
+    ["Delete Team"] = "Supprimer l'\195\169quipe",
+    ["Remove Pet"] = "Retirer la mascotte",
+    ["Team XX"] = "\195\137quipe XX",
+    ["Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team."] = "Glisser pour \195\169changer les mascottes entre les \195\169quipes.|nMaj+Glisser pour copier la mascotte vers une nouvelle \195\169quipe.|nCtrl+Glisser pour d\195\169placer l'\195\169quipe.",
+    ["PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?"] = "PetBattleTeams:|n\195\138tes-vous s\195\187r de vouloir|nsupprimer |cffffd200%s|r ?",
+    ["PetBattleTeams:|nEnter a name for |cffffd200%s|r."] = "PetBattleTeams:|nEntrez un nom pour |cffffd200%s|r.",
+    ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "PetBattleTeams:|nSouhaitez-vous importer vos mascottes depuis les versions pr\195\169c\195\169dentes de PetBattleTeams ?",
 }
 
 

@@ -30,6 +30,9 @@ local FINISHED = 6
 local EMPTY_PET = "BattlePet-0-000000000000"
 local LibPetJournal = LibStub("LibPetJournal-2.0")
 
+local _, addon = ...
+local L = addon.L
+
 -- luacheck: globals PetJournal_UpdatePetLoadOut
 
 --frame functions
@@ -262,7 +265,7 @@ end
 function TeamManager:GetTeamName(teamIndex)
     if type(teamIndex) ~= "number" then return "Unknown Team" end
 
-    local name = "Team: "..tostring(teamIndex)
+    local name = L["Team: "]..tostring(teamIndex)
     local customName
 
     if self.teams[teamIndex] and self.teams[teamIndex].name then
