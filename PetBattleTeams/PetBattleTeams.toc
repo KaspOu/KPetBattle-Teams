@@ -8,7 +8,7 @@
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## X-Category: Pet Battles
-## X-Localizations: enUS, frFR
+## X-Localizations: enUS, frFR, ruRU
 ## SavedVariables: PetBattleTeamsDB, PetBattleTeamsSettings
 ## IconTexture: Interface\Icons\INV_Pet_BabyMurlocs_Blue
 
