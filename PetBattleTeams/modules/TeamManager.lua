@@ -167,14 +167,24 @@ function TeamManager:ResetUI()
     self:SetShowTeamName(true)
     self:SetShowXpInLevel(true)
     self:SetShowXpInHealthBar(false)
+    self:SetSortTeams(false)
     self:SetAutomaticallySaveTeams(true)
     self:SetLockStateAllTeams(false)
     self:SetSelected(1)
 end
 
+function TeamManager:SetSortTeams(enabled)
+    assert(type(enabled)== "boolean")
+    self.db.global.sortTeams = enabled
+end
+
 function TeamManager:SetAutomaticallySaveTeams(enabled)
     assert(type(enabled)== "boolean")
     self.db.global.automaticallySaveTeams = enabled
+end
+
+function TeamManager:GetSortTeams()
+    return self.db.global.sortTeams
 end
 
 function TeamManager:GetAutomaticallySaveTeams()
@@ -259,6 +269,7 @@ function TeamManager:SetTeamName(teamIndex,name)
     if  self.teams[teamIndex] then
         self.teams[teamIndex].name = name
     end
+	TeamManager:SortTeamsByName()
     self.callbacks:Fire("TEAM_UPDATED",teamIndex)
 end
 
@@ -419,6 +430,7 @@ function TeamManager:MoveTeam(teamIndexSource,teamIndexDesintation)
                 self:SetSelected(selected + adjust)
             end
 
+			TeamManager:SortTeamsByName()
             self.callbacks:Fire("TEAM_UPDATED")
         end
     end
@@ -465,6 +477,21 @@ function TeamManager:UpdateTeamNewPet(petID,teamIndex,petIndex,sourceTeamIndex,s
     return
 end
 
+function TeamManager:SortTeamsByName()
+	if self:GetSortTeams() then
+		table.sort(self.teams, function(a, b)
+			local nameA = a.name or ""
+			local nameB = b.name or ""
+			return string.lower(nameA) < string.lower(nameB)
+		end)
+
+		if self:GetNumTeams() > 0 and (self:GetSelected() <= 0 or self:GetSelected() > self:GetNumTeams()) then
+			self:SetSelected(1)
+		end
+	end
+end
+
+
 --CRUD functions
 
 function TeamManager:CreateTeam()
@@ -492,6 +519,7 @@ function TeamManager:CreateTeam()
     end
 
     table.insert(self.teams, self:GetSelected() + 1, team)
+	TeamManager:SortTeamsByName()
     self.callbacks:Fire("TEAM_CREATED", self:GetSelected() + 1)
     self.callbacks:Fire("TEAM_UPDATED", self:GetSelected() + 1)
     self:SetSelected(self:GetSelected() + 1)
@@ -534,6 +562,7 @@ function TeamManager.UpdateCurrentTeam()
             end
         end
 
+		TeamManager:SortTeamsByName()
         TeamManager.callbacks:Fire("TEAM_UPDATED", selected)
     end
 end
@@ -554,6 +583,7 @@ function TeamManager:OnInitialize()
             showTeamName = true,
             showXpInLevel = true,
             showXpInHealthBar = false,
+            sortTeams = false,
             automaticallySaveTeams = true,
             ignoreEmptyPets = false,
         }
@@ -650,6 +680,7 @@ function TeamManager:ReconstructTeams()
             end
         end
     end
+	TeamManager:SortTeamsByName()
     TeamManager.callbacks:Fire("TEAM_UPDATED")
 end
 
@@ -748,5 +779,6 @@ function TeamManager:FixTeams()
         end
     end
 
+	TeamManager:SortTeamsByName()
     self.callbacks:Fire("TEAM_UPDATED")
 end

@@ -171,6 +171,17 @@ Config.options = {
             width = "double",
             type = "header",
         },
+        SortTeams = {
+            order = 99,
+            name = L["Automatically Sort Teams Alphabetically"],
+            desc = L["When enabled:|nTeams will be sorted by the Team Name alphabetically."],
+            type = "toggle",
+            width = "double",
+            set = function(info,val)
+                TeamManager:SetSortTeams(val)
+            end,
+            get = function(info) return TeamManager:GetSortTeams() end
+        },
         SaveTeams = {
             order = 100,
             name = L["Automatically Save Teams"],
