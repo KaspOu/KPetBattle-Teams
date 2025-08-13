@@ -1,4 +1,6 @@
 TODO:
+ Add team description
+ Add sort by name
 
 alpha:
 
