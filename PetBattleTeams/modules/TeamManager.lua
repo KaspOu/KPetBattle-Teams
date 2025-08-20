@@ -583,7 +583,7 @@ function TeamManager:OnInitialize()
             showTeamName = true,
             showXpInLevel = true,
             showXpInHealthBar = false,
-            sortTeams = false,
+            sortTeams = true,
             automaticallySaveTeams = true,
             ignoreEmptyPets = false,
         }
