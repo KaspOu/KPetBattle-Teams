@@ -50,6 +50,7 @@ modules\TeamManager.lua
 modules\TeamManagerUnitTests.lua
 modules\Tooltip.lua
 modules\Cursor.lua
+modules\DescriptionEditor.lua
 modules\GUI\GUI.lua
 modules\Config.lua
 

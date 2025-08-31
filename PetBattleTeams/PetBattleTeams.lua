@@ -127,6 +127,8 @@ StaticPopupDialogs["PBT_TEAM_RENAME"] = {
     enterClicksFirstButton = true,
 }
 
+
+
 StaticPopupDialogs["PBT_IMPORT_TEAMS"] = {
     preferredIndex = STATICPOPUP_NUMDIALOGS,
     text = "PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?",

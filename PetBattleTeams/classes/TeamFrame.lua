@@ -6,26 +6,33 @@ local TeamManager = PetBattleTeams:GetModule("TeamManager")
 local Cursor =  PetBattleTeams:GetModule("Cursor")
 local Embed = PetBattleTeams.Embed
 local HEIGHT_WITH_NAME = 55
+local HEIGHT_WITH_DESCRIPTION = 70
 local HEIGHT = 42
 local PetBattleTeamsUnitFrame = PetBattleTeams.PetBattleTeamsUnitFrame
+
+local _, addon = ...
+local L = addon.L
+
+local function CalculateTeamHeight(teamIndex)
+    local height = HEIGHT
+    if TeamManager:GetShowTeamName() then
+        height = HEIGHT_WITH_NAME
+    end
+    return height
+end
 
 local function OnEnter(self)
     local operation = Cursor:GetCursorInfo()
     self.helperText:Show()
 
     local parent = self:GetParent()
-
-    local height = TeamManager:GetShowTeamName() and HEIGHT_WITH_NAME or HEIGHT
-
     parent:SetHeight(55*1.5)
-
 end
 
 local function OnLeave(self)
     local parent = self:GetParent()
     self.helperText:Hide()
-    local height = TeamManager:GetShowTeamName() and HEIGHT_WITH_NAME or HEIGHT
-    parent:SetHeight(height)
+    parent:SetHeight(CalculateTeamHeight(parent.teamIndex))
 end
 
 local function OnClickOrDrag(self)
@@ -34,7 +41,8 @@ local function OnClickOrDrag(self)
     if operation == "MOVE TEAM" then
         TeamManager:MoveTeam(teamIndex,parent.teamIndex)
     end
-    parent:SetHeight(HEIGHT)
+
+    parent:SetHeight(CalculateTeamHeight(parent.teamIndex))
     ClearCursor()
 end
 
@@ -96,6 +104,37 @@ function PetBattleTeamsFrame:New()
     teamNameText:SetJustifyH("LEFT")
     teamNameText:Hide()
 
+    local teamDescriptionIcon = petBattleTeamsFrame:CreateTexture(nil, "OVERLAY")
+    petBattleTeamsFrame.teamDescriptionIcon = teamDescriptionIcon
+    teamDescriptionIcon:SetSize(16, 16)
+    teamDescriptionIcon:SetTexture("Interface\\Buttons\\UI-GroupLoot-Coin-Up")
+    teamDescriptionIcon:SetPoint("BOTTOMRIGHT", petBattleTeamsFrame.unitFrames[3], "TOPRIGHT", -2, 2)
+    teamDescriptionIcon:Hide()
+
+    local teamDescriptionButton = CreateFrame("Button", nil, petBattleTeamsFrame)
+    petBattleTeamsFrame.teamDescriptionButton = teamDescriptionButton
+    teamDescriptionButton:SetSize(16, 16)
+    teamDescriptionButton:SetPoint("CENTER", teamDescriptionIcon, "CENTER")
+    teamDescriptionButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
+    teamDescriptionButton:SetScript("OnEnter", function(self)
+        local teamIndex = self:GetParent().teamIndex
+        local description = TeamManager:GetTeamDescription(teamIndex)
+        if description and description ~= "" then
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            GameTooltip:ClearLines()
+            GameTooltip:AddLine(L["Team Description"], 1, 1, 1)
+            GameTooltip:AddLine(description, 0.8, 0.8, 0.8, false)
+            GameTooltip:Show()
+        end
+    end)
+    teamDescriptionButton:SetScript("OnLeave", function(self)
+        GameTooltip:Hide()
+    end)
+    teamDescriptionButton:SetScript("OnClick", function(self)
+        local parent = self:GetParent()
+        parent:ShowDescriptionEditor()
+    end)
+
     petBattleTeamsFrame.selectedTexture = petBattleTeamsFrame:CreateTexture(nil,"OVERLAY")
     petBattleTeamsFrame.selectedTexture:SetSize(36,36)
     petBattleTeamsFrame.selectedTexture:SetTexture("Interface\\PetBattles\\PetJournal")
@@ -135,11 +174,19 @@ function PetBattleTeamsFrame:Update()
     if showTeamName then
         local displayName = TeamManager:GetTeamName(self.teamIndex)
         self.teamNameText:SetText(displayName)
-        self:SetHeight(HEIGHT_WITH_NAME)
-    else
-        self:SetHeight(HEIGHT)
     end
     self.teamNameText:SetShown(showTeamName)
+
+    local description = TeamManager:GetTeamDescription(self.teamIndex)
+    if description and description ~= "" then
+        self.teamDescriptionIcon:SetShown(showTeamName)
+        self.teamDescriptionButton:SetShown(showTeamName)
+    else
+        self.teamDescriptionIcon:Hide()
+        self.teamDescriptionButton:Hide()
+    end
+
+    self:SetHeight(CalculateTeamHeight(self.teamIndex))
 
     if self.teamIndex and TeamManager:IsTeamLockedByUser(self.teamIndex) then
         self.teamNameText:SetTextColor(.95,1,.2)
@@ -194,4 +241,22 @@ end
 function PetBattleTeamsFrame:BATTLE_PET_CURSOR_CHANGED(event,operation , petID, teamIndex, petIndex)
     local show =  operation == "MOVE TEAM"
     self.teamMovementFrame:SetShown(show)
+end
+
+function PetBattleTeamsFrame:ShowDescriptionEditor()
+    if not self.teamIndex then return end
+    
+    -- Utiliser l'EditBox globale
+    local globalEditor = PetBattleTeams:GetModule("DescriptionEditor")
+    if globalEditor then
+        globalEditor:ShowEditor(self.teamIndex)
+    end
+end
+
+function PetBattleTeamsFrame:HideDescriptionEditor()
+    -- Cette méthode n'est plus nécessaire car l'EditBox est géré globalement
+end
+
+function PetBattleTeamsFrame:SaveDescription()
+    -- Cette méthode n'est plus nécessaire car l'EditBox est géré globalement
 end
