@@ -308,7 +308,7 @@ end
 
 function TeamManager:GetTeamDescription(teamIndex)
     if type(teamIndex) ~= "number" then return nil end
-    
+
     if self.teams[teamIndex] and self.teams[teamIndex].description then
         return self.teams[teamIndex].description
     end

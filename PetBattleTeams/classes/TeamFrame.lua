@@ -6,7 +6,6 @@ local TeamManager = PetBattleTeams:GetModule("TeamManager")
 local Cursor =  PetBattleTeams:GetModule("Cursor")
 local Embed = PetBattleTeams.Embed
 local HEIGHT_WITH_NAME = 55
-local HEIGHT_WITH_DESCRIPTION = 70
 local HEIGHT = 42
 local PetBattleTeamsUnitFrame = PetBattleTeams.PetBattleTeamsUnitFrame
 
@@ -107,9 +106,11 @@ function PetBattleTeamsFrame:New()
     local teamDescriptionIcon = petBattleTeamsFrame:CreateTexture(nil, "OVERLAY")
     petBattleTeamsFrame.teamDescriptionIcon = teamDescriptionIcon
     teamDescriptionIcon:SetSize(16, 16)
-    teamDescriptionIcon:SetTexture("Interface\\Buttons\\UI-GroupLoot-Coin-Up")
-    teamDescriptionIcon:SetPoint("BOTTOMRIGHT", petBattleTeamsFrame.unitFrames[3], "TOPRIGHT", -2, 2)
-    teamDescriptionIcon:Hide()
+    teamDescriptionIcon:SetTexture("Interface\\Icons\\INV_Letter_15")
+    teamDescriptionIcon:SetPoint("BOTTOMRIGHT", petBattleTeamsFrame.unitFrames[3], "TOPRIGHT", 0, 0)
+    teamDescriptionIcon:SetAtlas("ui-hud-minimap-mail-up", true)
+    teamDescriptionIcon:SetAlpha(.2)
+    teamDescriptionIcon:SetDesaturated(true)
 
     local teamDescriptionButton = CreateFrame("Button", nil, petBattleTeamsFrame)
     petBattleTeamsFrame.teamDescriptionButton = teamDescriptionButton
@@ -119,13 +120,16 @@ function PetBattleTeamsFrame:New()
     teamDescriptionButton:SetScript("OnEnter", function(self)
         local teamIndex = self:GetParent().teamIndex
         local description = TeamManager:GetTeamDescription(teamIndex)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:ClearLines()
+        local displayName = TeamManager:GetTeamName(teamIndex)
+        GameTooltip:AddLine(displayName, 1, 1, 1)
         if description and description ~= "" then
-            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-            GameTooltip:ClearLines()
-            GameTooltip:AddLine(L["Team Description"], 1, 1, 1)
             GameTooltip:AddLine(description, 0.8, 0.8, 0.8, false)
-            GameTooltip:Show()
+        else
+            GameTooltip:AddLine("> "..L["Add Description"].." <")
         end
+        GameTooltip:Show()
     end)
     teamDescriptionButton:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
@@ -174,17 +178,18 @@ function PetBattleTeamsFrame:Update()
     if showTeamName then
         local displayName = TeamManager:GetTeamName(self.teamIndex)
         self.teamNameText:SetText(displayName)
+
+        local description = TeamManager:GetTeamDescription(self.teamIndex)
+        if description and description ~= "" and showTeamName then
+            self.teamDescriptionIcon:SetAlpha(1)
+            self.teamDescriptionIcon:SetDesaturated(false)
+        else
+            self.teamDescriptionIcon:SetAlpha(.2)
+            self.teamDescriptionIcon:SetDesaturated(true)
+        end
     end
     self.teamNameText:SetShown(showTeamName)
-
-    local description = TeamManager:GetTeamDescription(self.teamIndex)
-    if description and description ~= "" then
-        self.teamDescriptionIcon:SetShown(showTeamName)
-        self.teamDescriptionButton:SetShown(showTeamName)
-    else
-        self.teamDescriptionIcon:Hide()
-        self.teamDescriptionButton:Hide()
-    end
+    self.teamDescriptionIcon:SetShown(showTeamName)
 
     self:SetHeight(CalculateTeamHeight(self.teamIndex))
 
@@ -245,18 +250,10 @@ end
 
 function PetBattleTeamsFrame:ShowDescriptionEditor()
     if not self.teamIndex then return end
-    
-    -- Utiliser l'EditBox globale
+
     local globalEditor = PetBattleTeams:GetModule("DescriptionEditor")
     if globalEditor then
         globalEditor:ShowEditor(self.teamIndex)
     end
 end
 
-function PetBattleTeamsFrame:HideDescriptionEditor()
-    -- Cette méthode n'est plus nécessaire car l'EditBox est géré globalement
-end
-
-function PetBattleTeamsFrame:SaveDescription()
-    -- Cette méthode n'est plus nécessaire car l'EditBox est géré globalement
-end

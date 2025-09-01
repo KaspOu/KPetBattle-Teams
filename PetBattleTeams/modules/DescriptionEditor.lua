@@ -7,13 +7,10 @@ local L = addon.L
 
 local descriptionEditFrame
 local descriptionEditBox
-local saveButton
-local cancelButton
 local editorCurrentTeamIndex
 local battleDescriptionFrame
 local battleDescriptionText
-local teamNameEditorText -- Nouvelle variable pour afficher le nom de l'équipe dans l'éditeur
-local infoTextEditor -- Nouvelle variable pour le texte d'information sur la validation
+local teamNameEditorText
 
 function DescriptionEditor:OnInitialize()
     self:CreateDescriptionEditor()
@@ -42,17 +39,14 @@ function DescriptionEditor:CreateDescriptionEditor()
     teamNameEditorText:SetTextColor(1.0, 0.82, 0.0)
     teamNameEditorText:SetJustifyH("LEFT")
     teamNameEditorText:SetJustifyV("TOP")
-    teamNameEditorText:Hide() -- Caché par défaut
 
-    -- Texte d'information (au-dessus de l'EditBox, sous le nom de l'équipe)
-    infoTextEditor = descriptionEditFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    -- Texte d'information
+    local infoTextEditor = descriptionEditFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     infoTextEditor:SetPoint("TOPLEFT", teamNameEditorText, "BOTTOMLEFT", 0, -7)
     infoTextEditor:SetPoint("TOPRIGHT", teamNameEditorText, "BOTTOMRIGHT", 0, -7)
     infoTextEditor:SetTextColor(0.7, 0.7, 0.7)
-    -- Utilise une clé de localisation ou un texte par défaut si non défini
-    infoTextEditor:SetText(L["Press Ctrl+Enter to save the description"] or "Appuyez sur Ctrl+Entrée pour sauvegarder la description.")
+    infoTextEditor:SetText(L["Press Ctrl+Enter to save the description"])
     infoTextEditor:SetJustifyH("LEFT")
-    infoTextEditor:Hide() -- Caché par défaut
 
     -- EditBox
     descriptionEditBox = CreateFrame("EditBox", nil, descriptionEditFrame, "InputBoxTemplate BackdropTemplate")
@@ -61,7 +55,7 @@ function DescriptionEditor:CreateDescriptionEditor()
     descriptionEditBox:SetAutoFocus(false)
     descriptionEditBox:SetFrameStrata("DIALOG")
     descriptionEditBox:SetFrameLevel(1000)
-    -- descriptionEditBox:SetFont("GameFontNormal", 12) -- Définir une police pour que le texte s'affiche correctement
+    -- descriptionEditBox:SetFont("GameFontNormal", 12)
     descriptionEditBox:SetBackdrop({
         bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
 	    edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
@@ -75,14 +69,19 @@ function DescriptionEditor:CreateDescriptionEditor()
             bottom = 0
         }
     })
-    -- Positionner l'EditBox à l'intérieur du cadre, en laissant de la place pour les boutons en bas
+    -- Agrandit le cadre de l'EditBox (simule multiligne)
     descriptionEditBox:SetTextInsets(5, 5, 5, 5)
-    -- Ajuster les points pour faire de la place aux nouveaux éléments (nom de l'équipe et texte d'info)
     descriptionEditBox:SetPoint("TOPLEFT", descriptionEditFrame, "TOPLEFT", 30, -60)
     descriptionEditBox:SetPoint("TOPRIGHT", descriptionEditFrame, "TOPRIGHT", -37, -60)
     descriptionEditBox:SetPoint("BOTTOM", descriptionEditFrame, "BOTTOM", 0, 60)
+    -- Masque pour masquer le singleline inputtext original
+    local editBoxBorder = descriptionEditBox:CreateTexture(nil, "BORDER")
+    editBoxBorder:SetPoint("TOPLEFT", descriptionEditBox, "TOPLEFT", 0, 0)
+    editBoxBorder:SetPoint("BOTTOMRIGHT", descriptionEditBox, "BOTTOMRIGHT", 0, 0)
+    editBoxBorder:SetColorTexture(0, 0, 0, 1)
+    editBoxBorder:SetDrawLayer("BORDER", -1)
 
-    -- Gestion des raccourcis clavier
+    -- Raccourcis clavier
     descriptionEditBox:SetScript("OnKeyDown", function(self, key)
         if key == "ENTER" then
             if IsModifierKeyDown() then
@@ -94,28 +93,21 @@ function DescriptionEditor:CreateDescriptionEditor()
         end
     end)
 
-    -- Masque pour masquer l'inputtext singleline
-    local editBoxBorder = descriptionEditBox:CreateTexture(nil, "BORDER")
-    editBoxBorder:SetPoint("TOPLEFT", descriptionEditBox, "TOPLEFT", 0, 0)
-    editBoxBorder:SetPoint("BOTTOMRIGHT", descriptionEditBox, "BOTTOMRIGHT", 0, 0)
-    editBoxBorder:SetColorTexture(0, 0, 0, 1)
-    editBoxBorder:SetDrawLayer("BORDER", -1)
-
     local frameInset = 20
-    saveButton = CreateFrame("Button", nil, descriptionEditFrame, "UIPanelButtonTemplate")
+    local saveButton = CreateFrame("Button", nil, descriptionEditFrame, "UIPanelButtonTemplate")
     saveButton:SetSize(150, 20)
     saveButton:SetPoint("BOTTOMLEFT", descriptionEditFrame, "BOTTOMLEFT", frameInset, frameInset)
-    saveButton:SetText(L["OK"])
+    saveButton:SetText(OKAY)
     saveButton:SetFrameStrata("DIALOG")
     saveButton:SetFrameLevel(1001)
     saveButton:SetScript("OnClick", function()
         DescriptionEditor:SaveDescription()
     end)
 
-    cancelButton = CreateFrame("Button", nil, descriptionEditFrame, "UIPanelButtonTemplate")
+    local cancelButton = CreateFrame("Button", nil, descriptionEditFrame, "UIPanelButtonTemplate")
     cancelButton:SetSize(150, 20)
     cancelButton:SetPoint("BOTTOMRIGHT", descriptionEditFrame, "BOTTOMRIGHT", -frameInset, frameInset)
-    cancelButton:SetText(L["Cancel"])
+    cancelButton:SetText(CANCEL)
     cancelButton:SetFrameStrata("DIALOG")
     cancelButton:SetFrameLevel(1001)
     cancelButton:SetScript("OnClick", function()
@@ -195,33 +187,19 @@ function DescriptionEditor:ShowEditor(teamIndex)
 
     editorCurrentTeamIndex = teamIndex
 
-    -- Charger le texte existant
     local currentDescription = TeamManager:GetTeamDescription(teamIndex)
-    descriptionEditBox:SetText(currentDescription or "")
-
-    -- Charger et afficher le nom de l'équipe
     local name, _, customName = TeamManager:GetTeamName(teamIndex)
+    descriptionEditBox:SetText(currentDescription or "")
     teamNameEditorText:SetText(customName or name)
-    teamNameEditorText:Show()
-    infoTextEditor:Show()
 
-    -- Afficher l'éditeur
     descriptionEditFrame:Show()
-    saveButton:Show()
-    cancelButton:Show()
-
-    -- Focus sur l'EditBox
     descriptionEditBox:SetFocus()
 end
 
 function DescriptionEditor:HideEditor()
     descriptionEditFrame:Hide()
-    saveButton:Hide()
-    cancelButton:Hide()
-    teamNameEditorText:Hide() -- Cacher le nom de l'équipe
-    infoTextEditor:Hide() -- Cacher le texte d'information
     descriptionEditBox:ClearFocus()
-    teamNameEditorText:SetText("") -- Effacer le texte du nom de l'équipe
+    teamNameEditorText:SetText("")
 
     editorCurrentTeamIndex = nil
 end
@@ -230,8 +208,7 @@ function DescriptionEditor:SaveDescription()
     if not editorCurrentTeamIndex then DescriptionEditor:HideEditor(); return end
 
     local newDescription = descriptionEditBox:GetText()
-
-    -- Supprimer les espaces en début et fin
+    -- Trim description
     if newDescription then
         newDescription = string.gsub(newDescription, "^%s*(.-)%s*$", "%1")
         if newDescription == "" then
@@ -244,7 +221,6 @@ function DescriptionEditor:SaveDescription()
 end
 
 function DescriptionEditor:ShowBattleDescription()
-    -- Vérifier si l'option est activée
     if not TeamManager:GetShowBattleDescription() then
         return
     end
