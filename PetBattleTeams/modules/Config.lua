@@ -3,6 +3,7 @@ local Config = PetBattleTeams:NewModule("Config","AceConsole-3.0")
 local TeamManager = PetBattleTeams:GetModule("TeamManager")
 local GUI = PetBattleTeams:GetModule("GUI")
 local Tooltip = PetBattleTeams:GetModule("Tooltip")
+local ACD = LibStub("AceConfigDialog-3.0")
 
 
 local _, addon = ...
@@ -23,13 +24,13 @@ Config.options = {
         TeamFrameHeading = {
             order = 1,
             name = L["Teams and Pets"],
-            width = "double",
+            width = "full",
             type = "header",
         },
         showXpInLevel = {
             order = 2,
             name = L["Display pets xp as part of the pets level"],
-            width = "double",
+            width = "full",
             type = "toggle",
             set = function(info,val)
                 TeamManager:SetShowXpInLevel(val)
@@ -40,7 +41,7 @@ Config.options = {
             order = 3,
             name = L["Display pets xp instead of the health bar"],
             type = "toggle",
-            width = "double",
+            width = "full",
             set = function(info,val)
                 TeamManager:SetShowXpInHealthBar(val)
             end,
@@ -50,7 +51,7 @@ Config.options = {
             order = 4,
             name = L["Display team name above the team"],
             type = "toggle",
-            width = "double",
+            width = "full",
             set = function(info,val)
                 TeamManager:SetShowTeamName(val)
             end,
@@ -60,7 +61,7 @@ Config.options = {
             order = 6,
             name = L["Show team description during pet battles"],
             type = "toggle",
-            width = "double",
+            width = "full",
             set = function(info,val)
                 TeamManager:SetShowBattleDescription(val)
             end,
@@ -70,7 +71,7 @@ Config.options = {
             order = 7,
             name = L["Enable mouse wheel scrolling for the selected team"],
             type = "toggle",
-            width = "double",
+            width = "full",
             desc = L["When enabled allows you to change the selected team by using the mouse wheel on the selected team (above the roster)"],
             set = function(info,val)
                 GUI:SetSelectedTeamScrolling(val)
@@ -80,7 +81,7 @@ Config.options = {
         MainFrameHeading = {
             order = 50,
             name = L["Main"],
-            width = "double",
+            width = "full",
             type = "header",
         },
         AttachToPetJournal = {
@@ -88,7 +89,7 @@ Config.options = {
             name = L["Attach PetBattle Teams to Pet Journal"],
             desc = L["When attached, PetBattle Teams will only be usable from the Pet Journal."],
             type = "toggle",
-            width = "double",
+            width = "full",
             set = function(info,val)
                 GUI:SetAttached(val)
             end,
@@ -99,7 +100,7 @@ Config.options = {
             name = L["Hide PetBattle Teams while in combat or in a Pet Battle"],
             desc = L["Hides PetBattle Teams while in combat or in a Pet Battle."],
             type = "toggle",
-            width = "double",
+            width = "full",
             set = function(info,val)
                 GUI:SetHideInCombat(val)
             end,
@@ -109,7 +110,7 @@ Config.options = {
             order = 53,
             name = L["Lock PetBattle Teams Position"],
             type = "toggle",
-            width = "double",
+            width = "full",
             desc = L["When the team frame is not attached to the Pet Journal then if the frame is locked it cannot be moved."],
             set = function(info,val)
                 GUI:SetLocked(val)
@@ -120,7 +121,7 @@ Config.options = {
             order = 60,
             name = L["Show the selected team indicator"],
             type = "toggle",
-            width = "double",
+            width = "full",
             desc = "",
             set = function(info,val)
                 GUI:SetComponentPoints(val,nil,nil)
@@ -131,7 +132,7 @@ Config.options = {
             order = 61,
             name = L["Show control buttons"],
             type = "toggle",
-            width = "double",
+            width = "full",
             desc = "",
             set = function(info,val)
                 GUI:SetComponentPoints(nil,val,nil)
@@ -142,7 +143,7 @@ Config.options = {
             order = 62,
             name = L["Show the team roster"],
             type = "toggle",
-            width = "double",
+            width = "full",
             desc = "",
             set = function(info,val)
                 GUI:SetComponentPoints(nil,nil,val)
@@ -152,14 +153,14 @@ Config.options = {
         TooltipHeading = {
             order = 75,
             name = L["Tooltip"],
-            width = "double",
+            width = "full",
             type = "header",
         },
         ShowHelperText = {
             order = 80,
             name = L["Show keybinding helper text in tooltip"],
             type = "toggle",
-            width = "double",
+            width = "full",
             set = function(info,val)
                 Tooltip:SetShowHelpText(val)
             end,
@@ -169,7 +170,7 @@ Config.options = {
             order = 81,
             name = L["Show breed information in tooltip"],
             type = "toggle",
-            width = "double",
+            width = "full",
             set = function(info,val)
                 Tooltip:SetShowBreedInfo(val)
             end,
@@ -178,15 +179,15 @@ Config.options = {
         TeamFunctionsHeading = {
             order = 98,
             name = L["Team Management"],
-            width = "double",
+            width = "full",
             type = "header",
         },
         SortTeams = {
             order = 99,
             name = L["Automatically Sort Teams Alphabetically"],
-            desc = L["When enabled:|nTeams will be sorted by the Team Name alphabetically."],
+            desc = L["When enabled, teams will be sorted alphabetically by name."],
             type = "toggle",
-            width = "double",
+            width = "full",
             set = function(info,val)
                 TeamManager:SetSortTeams(val)
             end,
@@ -197,7 +198,7 @@ Config.options = {
             name = L["Automatically Save Teams"],
             desc = L["When enabled:|nThe currently selected team will have its pets updated to match the pet journal at all times unless the selected team is locked.|n|nNewly created teams will be created using the currently selected pets."],
             type = "toggle",
-            width = "double",
+            width = "full",
             set = function(info,val)
                 TeamManager:SetAutomaticallySaveTeams(val)
             end,
@@ -208,7 +209,7 @@ Config.options = {
             name = L["Automatically Dismiss pet after team changes"],
             desc = L["When enabled, Your active pet will be dismissed when switching teams"],
             type = "toggle",
-            width = "double",
+            width = "full",
             set = function(info,val)
                 TeamManager:SetDismissPet(val)
             end,
@@ -274,8 +275,14 @@ Config.options = {
 }
 
 function Config:OnInitialize()
-    LibStub("AceConfig-3.0"):RegisterOptionsTable("PetBattleTeams", Config.options,"/pbt")
-    LibStub("AceConfigDialog-3.0"):AddToBlizOptions("PetBattleTeams","PetBattle Teams"..devVer)
+    LibStub("AceConfig-3.0"):RegisterOptionsTable("PetBattleTeams", Config.options, {"pbt"} )
+	ACD:SetDefaultSize("PetBattleTeams", 640, 600)
+    ACD:AddToBlizOptions("PetBattleTeams","PetBattle Teams"..devVer)
+	self:RegisterChatCommand("pbto", self.OpenConfig)
+end
+
+function Config:OpenConfig()
+	ACD:Open("PetBattleTeams")
 end
 
 function Config:GetEasyMenu()
