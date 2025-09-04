@@ -54,6 +54,7 @@ local baseLocale = {
     ["Remove Pet"] = "Remove Pet",
     ["Team XX"] = "Team XX",
     ["Click to add a new team"] = "Click to add a new team",
+    ["Right-click to show options menu.|nClick to toggle teams frame."] = "Right-click to show options menu.|nClick to toggle teams frame.",
     ["Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team."] = "Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team.",
     ["PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?"] = "PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?",
     ["PetBattleTeams:|nEnter a name for |cffffd200%s|r."] = "PetBattleTeams:|nEnter a name for |cffffd200%s|r.",

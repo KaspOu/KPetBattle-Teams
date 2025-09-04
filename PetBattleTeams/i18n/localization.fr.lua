@@ -58,6 +58,7 @@ local baseLocale = {
     ["Remove Pet"] = "Retirer la mascotte",
     ["Team XX"] = "\195\137quipe XX",
     ["Click to add a new team"] = "Ajouter une nouvelle \195\169quipe",
+    ["Right-click to show options menu.|nClick to toggle teams frame."] = "Clic droit pour afficher le menu des options.|nClic gauche pour afficher/masquer les \195\169quipes.",
     ["Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team."] = "Glisser pour \195\169changer les mascottes entre les \195\169quipes.|nMaj+Glisser pour copier la mascotte dans une nouvelle \195\169quipe.|nCtrl+Glisser pour d\195\169placer l'\195\169quipe.",
     ["PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?"] = "PetBattleTeams:|n\195\138tes-vous s\195\187r de vouloir|nsupprimer |cffffd200%s|r ?",
     ["PetBattleTeams:|nEnter a name for |cffffd200%s|r."] = "PetBattleTeams:|nEntrez un nom pour |cffffd200%s|r.",

@@ -56,6 +56,7 @@ local baseLocale = {
     ["Remove Pet"] = "Удалить питомца",
     ["Team XX"] = "Команда XX",
     ["Click to add a new team"] = "Нажмите, чтобы добавить новую команду", -- ChatGPT
+    ["Right-click to show options menu.|nClick to toggle teams frame."] = "Нажмите правой кнопкой мыши, чтобы открыть меню опций.|nНажмите левой кнопкой мыши, чтобы переключить рамку команд.", -- ChatGPT
     ["Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team."] = "Перетаскивайте, чтобы поменять питомцев между командами.|nShift+Перетаскивание для копирования питомца в новую команду.|nCtrl+Перетаскивание для перемещения команды.",
     ["PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?"] = "PetBattleTeams:|nВы уверены, что хотите удалить |cffffd200%s|r?",
     ["PetBattleTeams:|nEnter a name for |cffffd200%s|r."] = "PetBattleTeams:|nВведите имя для |cffffd200%s|r.",

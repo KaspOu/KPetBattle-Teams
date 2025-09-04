@@ -10,7 +10,7 @@ local function OnClick(self)
 end
 
 local function OnEnter(self)
-    GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+    GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT");
     GameTooltip:ClearLines()
     GameTooltip:AddLine(L["Click to add a new team"])
     local numTeams = TeamManager:GetNumTeams()

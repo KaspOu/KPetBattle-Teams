@@ -4,7 +4,11 @@ local GUI = PetBattleTeams:GetModule("GUI")
 local function OnEvent(self,event)
     local itemCount = C_Item.GetItemCount(86143)
     self.QuantityOwned:SetText(itemCount)
-    self.Icon:SetDesaturated(itemCount <= 0 )
+    if (itemCount <= 0) then
+        self.Icon:SetVertexColor(.5, .5, .5)
+    else
+        self.Icon:SetVertexColor(1, 1 , 1)
+    end
 end
 
 local function OnLeave()
@@ -12,7 +16,7 @@ local function OnLeave()
 end
 
 local function OnEnter(self)
-    GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+    GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT");
     GameTooltip:SetItemByID(86143)
 end
 
@@ -40,6 +44,11 @@ function GUI:CreateBandageButton(name,parent)
     button.Icon = button:CreateTexture(name.."Icon","ARTWORK")
     button.Icon:SetTexture(icon)
     button.Icon:SetAllPoints()
+    if (itemCount <= 0) then
+        button.Icon:SetVertexColor(.5, .5, .5)
+    else
+        button.Icon:SetVertexColor(1, 1 , 1)
+    end
 
     button.Border = button:CreateTexture(name.."Border","OVERLAY","ActionBarFlyoutButton-IconFrame")
     button:SetPushedTexture("Interface\\Buttons\\UI-Quickslot-Depress")
