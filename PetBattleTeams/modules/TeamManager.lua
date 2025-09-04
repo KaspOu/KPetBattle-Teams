@@ -131,6 +131,10 @@ function TeamManager:GetShowTeamName()
     return self.db.global.showTeamName
 end
 
+function TeamManager:GetShowBattleDescription()
+    return self.db.global.showBattleDescription
+end
+
 function TeamManager:GetShowXpInLevel()
     return self.db.global.showXpInLevel
 end
@@ -143,6 +147,11 @@ function TeamManager:SetShowTeamName(enabled)
     assert(type(enabled) == "boolean")
     self.db.global.showTeamName = enabled
     self.callbacks:Fire("TEAM_UPDATED")
+end
+
+function TeamManager:SetShowBattleDescription(enabled)
+    assert(type(enabled) == "boolean")
+    self.db.global.showBattleDescription = enabled
 end
 
 function TeamManager:SetShowXpInLevel(enabled)
@@ -165,6 +174,7 @@ end
 
 function TeamManager:ResetUI()
     self:SetShowTeamName(true)
+    self:SetShowBattleDescription(true)
     self:SetShowXpInLevel(true)
     self:SetShowXpInHealthBar(false)
     self:SetSortTeams(false)
@@ -286,6 +296,23 @@ function TeamManager:GetTeamName(teamIndex)
     local displayName = customName and customName or name
 
     return displayName, name, customName
+end
+
+function TeamManager:SetTeamDescription(teamIndex, description)
+    assert(type(teamIndex) == "number" and (type(description) == "string" or description == nil))
+    if self.teams[teamIndex] then
+        self.teams[teamIndex].description = description
+    end
+    self.callbacks:Fire("TEAM_UPDATED", teamIndex)
+end
+
+function TeamManager:GetTeamDescription(teamIndex)
+    if type(teamIndex) ~= "number" then return nil end
+
+    if self.teams[teamIndex] and self.teams[teamIndex].description then
+        return self.teams[teamIndex].description
+    end
+    return nil
 end
 
 function TeamManager:TeamExists(teamIndex)
@@ -498,6 +525,7 @@ function TeamManager:CreateTeam()
     local numTeams = self:GetNumTeams()
     local team = {}
     team.name = nil;
+    team.description = nil;
     team.enabled = {}
 
     for i = 1,PETS_PER_TEAM do
@@ -581,6 +609,7 @@ function TeamManager:OnInitialize()
             hasImported = false,
             userLocked = false,
             showTeamName = true,
+            showBattleDescription = true,
             showXpInLevel = true,
             showXpInHealthBar = false,
             sortTeams = true,

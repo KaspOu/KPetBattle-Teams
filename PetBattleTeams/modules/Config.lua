@@ -56,8 +56,18 @@ Config.options = {
             end,
             get = function(info) return TeamManager:GetShowTeamName()  end
         },
+        ShowBattleDescription = {
+            order = 6,
+            name = L["Show team description during pet battles"],
+            type = "toggle",
+            width = "double",
+            set = function(info,val)
+                TeamManager:SetShowBattleDescription(val)
+            end,
+            get = function(info) return TeamManager:GetShowBattleDescription()  end
+        },
         SelectedTeamScrolling = {
-            order = 5,
+            order = 7,
             name = L["Enable mouse wheel scrolling for the selected team"],
             type = "toggle",
             width = "double",

@@ -2,6 +2,9 @@ local PetBattleTeams = LibStub("AceAddon-3.0"):GetAddon("PetBattleTeams")
 local TeamManager =  PetBattleTeams:GetModule("TeamManager")
 local GUI = PetBattleTeams:GetModule("GUI")
 
+local _, addon = ...
+local L = addon.L
+
 local function OnClick(self)
     TeamManager:CreateTeam()
 end
@@ -9,7 +12,7 @@ end
 local function OnEnter(self)
     GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
     GameTooltip:ClearLines()
-    GameTooltip:AddLine("Click to add a new team")
+    GameTooltip:AddLine(L["Click to add a new team"])
     local numTeams = TeamManager:GetNumTeams()
 
     GameTooltip:Show()

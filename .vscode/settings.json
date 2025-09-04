@@ -43,7 +43,8 @@
         "UIFrameFadeIn",
         "BackdropTemplateMixin",
         "PET_TYPE_SUFFIX",
-        "LibStub"
+        "LibStub",
+        "Add"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#cf5018",
