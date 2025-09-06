@@ -1,7 +1,13 @@
 local PetBattleTeams = LibStub("AceAddon-3.0"):GetAddon("PetBattleTeams")
 local GUI = PetBattleTeams:GetModule("GUI")
+local HEAL_PET_SPELL = 125439
 
 -- luacheck: globals PetJournalHealPetButton_OnEnter
+
+local PetJournalHealPetButton_OnEnter = PetJournalHealPetButton_OnEnter or function(self)
+    GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT");
+    GameTooltip:SetSpellByID(HEAL_PET_SPELL)
+end
 
 local function OnEvent(self,event)
     if event == "SPELL_UPDATE_COOLDOWN"  then
@@ -9,7 +15,6 @@ local function OnEvent(self,event)
         local startTime, duration, isEnabled = spellCD.startTime, spellCD.duration, spellCD.isEnabled;
         CooldownFrame_Set(self.Cooldown, startTime, duration, isEnabled)
         if ( GameTooltip:GetOwner() == self ) then
-            --cheat and use blizzards tooltip setup
             PetJournalHealPetButton_OnEnter(self)
         end
     end
@@ -28,7 +33,6 @@ local function OnHide(self)
 end
 
 function GUI:CreateReviveButton(name,parent)
-    local HEAL_PET_SPELL = 125439
     local spellInfo = C_Spell.GetSpellInfo(HEAL_PET_SPELL)
     local spellName, spellIcon = spellInfo.name, spellInfo.iconID;
     local spellCD = C_Spell.GetSpellCooldown(HEAL_PET_SPELL);

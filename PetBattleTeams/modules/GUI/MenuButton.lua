@@ -3,6 +3,20 @@ local Config = PetBattleTeams:GetModule("Config","AceConsole-3.0")
 local GUI = PetBattleTeams:GetModule("GUI")
 local AUTO_HIDE_DELAY = 12
 
+local _, addon = ...
+local L = addon.L
+
+local function OnEnter(self)
+    GameTooltip:SetOwner(self, "ANCHOR_CENTER");
+    GameTooltip:ClearLines()
+    GameTooltip:AddLine(L["PetBattle Teams"], 1, 1, 1)
+    GameTooltip:AddLine(L["Right-click to show options menu.|nClick to toggle teams frame."], 0,1,0)
+    GameTooltip:Show()
+end
+local function OnLeave(self)
+    GameTooltip:Hide()
+end
+
 function GUI:CreateMenuButton()
     local button = CreateFrame("BUTTON")
     local lib = LibStub("LibDropDownMenu");
@@ -31,11 +45,14 @@ function GUI:CreateMenuButton()
     button:SetHighlightTexture("Interface\\MiniMap\\UI-MiniMap-ZoomButton-Highlight","ADD")
     button:RegisterForClicks("LeftButtonUp","RightButtonUp")
     button:SetScript("OnClick", function(self,mouseButton)
+        GameTooltip:Hide()
         if mouseButton == "LeftButton" then
             GUI:ToggleMinimize(not GUI:GetIsMinimized())
         else
             lib.EasyMenu(options, menuFrame, button, 0 , 0, "MENU",AUTO_HIDE_DELAY);
         end
     end)
+    button:SetScript("OnEnter",OnEnter)
+    button:SetScript("OnLeave",OnLeave)
     return button
 end

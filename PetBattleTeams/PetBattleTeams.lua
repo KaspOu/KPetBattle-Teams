@@ -21,7 +21,10 @@ function PetBattleTeams.slashHandler(msg, chatPromptFrame)
     local GUI = self:GetModule("GUI")
     local TeamManager = self:GetModule("TeamManager")
     msg = string.lower(msg)
-    if msg == "lock frame" then
+    if msg == "option" or msg == "options" then
+        local Config = self:GetModule("Config")
+        Config:OpenConfig()
+    elseif msg == "lock frame" then
         GUI:SetLocked(true)
         print("PetBattleTeams: Frame Locked")
     elseif msg == "unlock frame" then
@@ -60,6 +63,7 @@ function PetBattleTeams.slashHandler(msg, chatPromptFrame)
         GUI:ResetUI()
         self:GetModule("TeamManager"):ResetUI()
     else
+        print("/pbt","options",": Show the PetBattleTeams options (/pbto)")
         print("/pbt","lock frame",": Locks PetBattleTeams when detached preventing it from being moved or resized")
         print("/pbt","unlock frame",": Unlocks PetBattleTeams allowing it to be moved or resized while detached")
         print("/pbt","attach", ": Attach PetBattleTeams to the Pet Journal")
