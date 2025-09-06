@@ -166,8 +166,18 @@ Config.options = {
             end,
             get = function(info) return Tooltip:GetShowHelpText() end
         },
-        ShowBreedInfo = {
+        ShowStrongWeakHints = {
             order = 81,
+            name = L["Show strong/weak hints in tooltip"],
+            type = "toggle",
+            width = "double",
+            set = function(info,val)
+                Tooltip:SetShowStrongWeakHints(val)
+            end,
+            get = function(info) return Tooltip:GetShowStrongWeakHints() end
+        },
+        ShowBreedInfo = {
+            order = 82,
             name = L["Show breed information in tooltip"],
             type = "toggle",
             width = "full",

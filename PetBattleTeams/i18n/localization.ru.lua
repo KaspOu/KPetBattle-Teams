@@ -30,6 +30,7 @@ local baseLocale = {
     ["Attempts to reconstuct teams with invalid pets"] = "Попытки восстановить команды с недействительными питомцами",
     ["Tooltip"] = "Подсказка",
     ["Show keybinding helper text in tooltip"] = "Показывать текст помощи по привязке клавиш в подсказке",
+    ["Show strong/weak hints in tooltip"] = "Показывать подсказки о сильных/слабых сторонах в подсказке", -- ChatGPT
     ["Show breed information in tooltip"] = "Показывать информацию о породе в подсказке",
     ["Automatically Sort Teams Alphabetically"] = "Автоматически сортировать команды в алфавитном порядке", -- ChatGPT
     ["When enabled, teams will be sorted alphabetically by name."] = "Когда включено, команды будут сортироваться в алфавитном порядке по имени.", -- ChatGPT

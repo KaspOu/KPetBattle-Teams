@@ -28,6 +28,7 @@ local baseLocale = {
     ["Attempts to reconstuct teams with invalid pets"] = "Attempts to reconstuct teams with invalid pets",
     ["Tooltip"] = "Tooltip",
     ["Show keybinding helper text in tooltip"] = "Show keybinding helper text in tooltip",
+    ["Show strong/weak hints in tooltip"] = "Show strong/weak hints in tooltip",
     ["Show breed information in tooltip"] = "Show breed information in tooltip",
     ["Automatically Sort Teams Alphabetically"] = "Automatically Sort Teams Alphabetically",
     ["When enabled, teams will be sorted alphabetically by name."] = "When enabled, teams will be sorted alphabetically by name.",

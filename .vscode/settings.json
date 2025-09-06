@@ -44,7 +44,8 @@
         "BackdropTemplateMixin",
         "PET_TYPE_SUFFIX",
         "LibStub",
-        "Add"
+        "Add",
+        "GetPetTypeTexture"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#cf5018",

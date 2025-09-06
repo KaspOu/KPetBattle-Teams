@@ -32,6 +32,7 @@ local baseLocale = {
     ["Attempts to reconstuct teams with invalid pets"] = "Tente de reconstruire des \195\169quipes avec des mascottes invalides",
     ["Tooltip"] = "Infobulle",
     ["Show keybinding helper text in tooltip"] = "Afficher l'aide des raccourcis clavier dans l'infobulle",
+    ["Show strong/weak hints in tooltip"] = "Afficher les forces/faiblesses dans l'infobulle",
     ["Show breed information in tooltip"] = "Afficher les informations de race dans l'infobulle",
     ["Automatically Sort Teams Alphabetically"] = "Trier automatiquement les \195\169quipes par ordre alphab\195\169tique",
     ["When enabled, teams will be sorted alphabetically by name."] = "Lorsqu'activ\195\169, les \195\169quipes seront tri\195\169es par ordre alphab\195\169tique par nom.",
