@@ -16,6 +16,8 @@ end
 local _, addon = ...
 local L = addon.L
 
+local FRAME_HEIGHT = 288
+
 
 function Tooltip:OnInitialize()
 
@@ -33,7 +35,6 @@ function Tooltip:OnInitialize()
 
     self.tooltip =  CreateFrame("frame","PetBattleTeamsTooltip",nil,"PetBattleUnitTooltipTemplate")
     local tooltip = self.tooltip
-    tooltip:SetHeight(215)
 
     --icon quality glow
     tooltip.rarityGlow = tooltip:CreateTexture("PetBattleTeamTooltipGlow","OVERLAY")
@@ -62,10 +63,12 @@ function Tooltip:OnInitialize()
     tooltip.helpText:SetTextColor(0,1,0)
     tooltip.helpText:SetSize(0,0)
     tooltip.helpText:SetFont("Fonts\\FRIZQT__.TTF",12,"OUTLINE")
-    tooltip.helpText:SetPoint("BOTTOMLEFT",tooltip,"BOTTOMLEFT",6,6)
-    tooltip.helpText:SetPoint("BOTTOMRIGHT",tooltip,"BOTTOMRIGHT",-6,6)
+    tooltip.helpText:SetPoint("BOTTOMLEFT",tooltip,"BOTTOMLEFT",14,8)
+    tooltip.helpText:SetPoint("BOTTOMRIGHT",tooltip,"BOTTOMRIGHT",-6,8)
 
     --template parts
+    tooltip.Delimiter2:Show()
+    tooltip.Delimiter2:SetPoint("TOPLEFT",tooltip.helpText,"TOPLEFT", -9, 8)
     tooltip.AbilitiesLabel:Show()
     tooltip.XPBar:Show()
     tooltip.XPBG:Show()
@@ -95,6 +98,7 @@ function Tooltip:Attach(frame)
         tooltip:SetPoint("BOTTOMRIGHT", frame, "TOPLEFT", 0, 0)
     end
 
+    tooltip:SetHeight(FRAME_HEIGHT)
     tooltip:Show()
 end
 
@@ -187,15 +191,29 @@ function Tooltip:SetUnit(petID,abilities,teamName)
     for i=1, #abilities do
 
         local name, icon, petType = C_PetJournal.GetPetAbilityInfo(abilities[i])
+        local disabled = level < (i-1)*2 -- 0 2 4
 
         local abilityIcon = tooltip["AbilityIcon"..i]
         local abilityName = tooltip["AbilityName"..i]
 
         abilityName:SetShown(true)
+        abilityName:SetVertexColor(1, 1, 1)
         abilityIcon:SetShown(true)
         abilityIcon:SetTexture("Interface\\PetBattles\\BattleBar-AbilityBadge-Neutral")
+        abilityIcon:SetDesaturated(disabled)
+        abilityIcon:SetVertexColor(1, 1, 1)
+
         if name then
             abilityName:SetText(name)
+            if (disabled) then
+                abilityName:SetVertexColor(.5, .5, .5)
+            end
+        end
+        if (icon) then
+            abilityIcon:SetTexture(icon)
+            if (disabled) then
+                abilityIcon:SetVertexColor(.5, .5, .5)
+            end
         end
     end
 

@@ -50,13 +50,13 @@ modules\TeamManager.lua
 modules\TeamManagerUnitTests.lua
 modules\Tooltip.lua
 modules\Cursor.lua
-modules\DescriptionEditor.lua
 modules\GUI\GUI.lua
 modules\Config.lua
 
 classes\PetUnitFrame.lua
 classes\TeamFrame.lua
 
+modules\GUI\DescriptionEditor.lua
 modules\GUI\LockTeamsButton.lua
 modules\GUI\AddTeamButton.lua
 modules\GUI\ReviveButton.lua
