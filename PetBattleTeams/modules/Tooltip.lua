@@ -44,6 +44,7 @@ function Tooltip:OnInitialize()
 
     self.tooltip =  CreateFrame("frame","PetBattleTeamsTooltip",nil,"PetBattleUnitTooltipTemplate")
     local tooltip = self.tooltip
+    tooltip:SetHeight(FRAME_HEIGHT_NO_TT)
 
     --icon quality glow
     tooltip.rarityGlow = tooltip:CreateTexture("PetBattleTeamTooltipGlow","OVERLAY")
@@ -246,7 +247,7 @@ function Tooltip:SetUnit(petID,abilities,teamName)
     tooltip.rarityGlow:SetVertexColor(r, g, b)
     tooltip.Icon:SetTexture(petIcon)
 
-    if self.db.global.ShowBreedInfo then
+    if Tooltip:GetShowBreedInfo() then
         local breedIndex, confidence = libPetBreedInfo:GetBreedByPetID(petID)
         local breedName = libPetBreedInfo:GetBreedName(breedIndex) or ""
         local breedColor = GetColor(confidence)
@@ -262,6 +263,7 @@ function Tooltip:SetUnit(petID,abilities,teamName)
     tooltip.AttackAmount:SetText(attack)
     tooltip.SpeedAmount:SetText(speed)
     tooltip.PetType.Icon:SetTexture(GetPetTypeTexture(petType))
+    tooltip.PetType:SetPoint("TOPRIGHT", tooltip, "TOPRIGHT", 5, 5)
 
     -- Main Pet Type Resistances/Weaknesses
     if (Tooltip:GetShowStrongWeakHints()) then
@@ -335,7 +337,7 @@ function Tooltip:SetUnit(petID,abilities,teamName)
     end
 
     for i=1, #abilities do
-        local name, icon, abilityPetType = C_PetJournal.GetPetAbilityInfo(abilities[i])
+        local _, name, icon, _, _, _, abilityPetType, noStrongWeakHints = C_PetBattles.GetAbilityInfoByID(abilities[i])
         local disabled = level < (i-1)*2
 
         local abilityIcon = tooltip["AbilityIcon"..i]
@@ -362,27 +364,36 @@ function Tooltip:SetUnit(petID,abilities,teamName)
 
             local abilityStrongIcon = tooltip.abilityStrongIcons[i]
             local abilityStrongArrow = tooltip.abilityStrongArrows[i]
-            abilityStrongIcon:SetTexture(GetPetTypeTexture(strongType))
-            abilityStrongIcon:ClearAllPoints()
-            abilityStrongIcon:SetPoint("LEFT", abilityName, "RIGHT", -15, 0)
-            abilityStrongIcon:SetDesaturated(disabled)
-            abilityStrongIcon:Show()
-            abilityStrongArrow:ClearAllPoints()
-            abilityStrongArrow:SetPoint("LEFT", abilityStrongIcon, "RIGHT", -8, -5)
-            abilityStrongArrow:SetDesaturated(disabled)
-            abilityStrongArrow:Show()
+            if (not noStrongWeakHints) then
+                abilityStrongIcon:SetTexture(GetPetTypeTexture(strongType))
+                abilityStrongIcon:ClearAllPoints()
+                abilityStrongIcon:SetPoint("LEFT", abilityName, "RIGHT", -15, 0)
+                abilityStrongIcon:SetDesaturated(disabled)
+                abilityStrongIcon:Show()
+                abilityStrongArrow:ClearAllPoints()
+                abilityStrongArrow:SetPoint("LEFT", abilityStrongIcon, "RIGHT", -8, -5)
+                abilityStrongArrow:SetDesaturated(disabled)
+                abilityStrongArrow:Show()
+            end
 
             local abilityWeakIcon = tooltip.abilityWeakIcons[i]
             local abilityWeakArrow = tooltip.abilityWeakArrows[i]
-            abilityWeakIcon:SetTexture(GetPetTypeTexture(weakType))
-            abilityWeakIcon:ClearAllPoints()
-            abilityWeakIcon:SetPoint("LEFT", abilityStrongIcon, "RIGHT", 2, 0)
-            abilityWeakIcon:SetDesaturated(disabled)
-            abilityWeakIcon:Show()
-            abilityWeakArrow:ClearAllPoints()
-            abilityWeakArrow:SetPoint("LEFT", abilityWeakIcon, "RIGHT", -8, -5)
-            abilityWeakArrow:SetDesaturated(disabled)
-            abilityWeakArrow:Show()
+            if (not noStrongWeakHints) then
+                abilityWeakIcon:SetTexture(GetPetTypeTexture(weakType))
+                abilityWeakIcon:ClearAllPoints()
+                abilityWeakIcon:SetPoint("LEFT", abilityStrongIcon, "RIGHT", 2, 0)
+                abilityWeakIcon:SetDesaturated(disabled)
+                abilityWeakIcon:Show()
+                abilityWeakArrow:ClearAllPoints()
+                abilityWeakArrow:SetPoint("LEFT", abilityWeakIcon, "RIGHT", -8, -5)
+                abilityWeakArrow:SetDesaturated(disabled)
+                abilityWeakArrow:Show()
+            else
+                abilityStrongIcon:Hide()
+                abilityStrongArrow:Hide()
+                abilityWeakIcon:Hide()
+                abilityWeakArrow:Hide()
+            end
         end
     end
 
