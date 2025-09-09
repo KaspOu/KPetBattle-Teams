@@ -612,7 +612,7 @@ function TeamManager:OnInitialize()
             showBattleDescription = true,
             showXpInLevel = true,
             showXpInHealthBar = false,
-            sortTeams = true,
+            sortTeams = false,
             automaticallySaveTeams = true,
             ignoreEmptyPets = false,
         }
