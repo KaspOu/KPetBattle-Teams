@@ -167,6 +167,9 @@ function TeamManager:SetShowXpInHealthBar(enabled)
 end
 
 function TeamManager:ResetTeams()
+    StaticPopup_Show("PBT_RESET_TEAMS", nil, nil, nil)
+end
+function TeamManager:ResetTeamsCallback()
     wipe(self.teams)
     self.db.global.selected = 0
     self:CreateTeam()

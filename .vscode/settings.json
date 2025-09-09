@@ -45,7 +45,8 @@
         "PET_TYPE_SUFFIX",
         "LibStub",
         "Add",
-        "GetPetTypeTexture"
+        "GetPetTypeTexture",
+        "ToggleCollectionsJournal"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#cf5018",

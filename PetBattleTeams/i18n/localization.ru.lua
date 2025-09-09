@@ -43,7 +43,7 @@ local baseLocale = {
     ["Lock all existing teams"] = "Заблокировать все существующие команды",
     ["This does not lock newly created teams or prevent you from unlocking individual teams."] = "Это не блокирует новые команды и не мешает разблокировать отдельные команды.",
     ["Delete all teams"] = "Удалить все команды",
-    ["Permanently deletes all teams. There is no confirmation for this action."] = "Безвозвратно удаляет все команды. Для этого действия нет подтверждения.",
+    ["Permanently deletes all teams."] = "Безвозвратно удаляет все команды.",
     ["Reset UI"] = "Сбросить интерфейс",
     ["Resets the UI to its default settings. There is no confirmation for this action."] = "Сбрасывает интерфейс на стандартные настройки. Для этого действия нет подтверждения.",
 
@@ -62,6 +62,7 @@ local baseLocale = {
     ["PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?"] = "PetBattleTeams:|nВы уверены, что хотите удалить |cffffd200%s|r?",
     ["PetBattleTeams:|nEnter a name for |cffffd200%s|r."] = "PetBattleTeams:|nВведите имя для |cffffd200%s|r.",
     ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "PetBattleTeams:|nХотите импортировать питомцев из предыдущих версий PetBattleTeams?",
+    ["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"] = "PetBattleTeams:|nВы уверены, что хотите |cffffd200сбросить все команды|r?", -- ChatGPT
 }
 
 

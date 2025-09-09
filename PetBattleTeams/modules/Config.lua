@@ -262,7 +262,7 @@ Config.options = {
             name = L["Delete all teams"],
             type = "execute",
             width = "double",
-            desc= L["Permanently deletes all teams. There is no confirmation for this action."],
+            desc= L["Permanently deletes all teams."],
             func = function()
                 TeamManager:ResetTeams()
                 GUI:ResetScrollBar()

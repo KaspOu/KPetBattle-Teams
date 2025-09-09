@@ -45,7 +45,7 @@ local baseLocale = {
     ["Lock all existing teams"] = "Verrouiller toutes les \195\169quipes existantes",
     ["This does not lock newly created teams or prevent you from unlocking individual teams."] = "Cela ne verrouille pas les \195\169quipes nouvellement cr\195\169\195\169es ou ne vous emp\195\170che pas de d\195\169verrouiller des \195\169quipes individuelles.",
     ["Delete all teams"] = "Supprimer toutes les \195\169quipes",
-    ["Permanently deletes all teams. There is no confirmation for this action."] = "Supprime d\195\169finitivement toutes les \195\169quipes. Il n'y a pas de confirmation pour cette action.",
+    ["Permanently deletes all teams."] = "Supprime d\195\169finitivement toutes les \195\169quipes.",
     ["Reset UI"] = "R\195\169initialiser l'interface utilisateur",
     ["Resets the UI to its default settings. There is no confirmation for this action."] = "R\195\169initialise l'interface utilisateur aux param\195\168tres par d\195\169faut. Il n'y a pas de confirmation pour cette action.",
 
@@ -64,6 +64,7 @@ local baseLocale = {
     ["PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?"] = "PetBattleTeams:|n\195\138tes-vous s\195\187r de vouloir|nsupprimer |cffffd200%s|r ?",
     ["PetBattleTeams:|nEnter a name for |cffffd200%s|r."] = "PetBattleTeams:|nEntrez un nom pour |cffffd200%s|r.",
     ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "PetBattleTeams:|nSouhaitez-vous importer vos mascottes depuis les versions pr\195\169c\195\169dentes de PetBattleTeams ?",
+    ["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"] = "PetBattleTeams:|n\195\138tes-vous s\195\187r de vouloir|n|cffffd200r\195\169initialiser toutes les \195\169quipes|r?",
 }
 
 addon:RegisterLocale('frFR', baseLocale)

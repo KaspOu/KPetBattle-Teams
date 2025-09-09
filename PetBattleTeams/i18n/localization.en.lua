@@ -41,7 +41,7 @@ local baseLocale = {
     ["Lock all existing teams"] = "Lock all existing teams",
     ["This does not lock newly created teams or prevent you from unlocking individual teams."] = "This does not lock newly created teams or prevent you from unlocking individual teams.",
     ["Delete all teams"] = "Delete all teams",
-    ["Permanently deletes all teams. There is no confirmation for this action."] = "Permanently deletes all teams. There is no confirmation for this action.",
+    ["Permanently deletes all teams."] = "Permanently deletes all teams.",
     ["Reset UI"] = "Reset UI",
     ["Resets the UI to its default settings. There is no confirmation for this action."] = "Resets the UI to its default settings. There is no confirmation for this action.",
 
@@ -60,6 +60,7 @@ local baseLocale = {
     ["PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?"] = "PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?",
     ["PetBattleTeams:|nEnter a name for |cffffd200%s|r."] = "PetBattleTeams:|nEnter a name for |cffffd200%s|r.",
     ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?",
+    ["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"] = "PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?",
 }
 
 
