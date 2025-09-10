@@ -208,12 +208,9 @@ function DescriptionEditor:SaveDescription()
     if not editorCurrentTeamIndex then DescriptionEditor:HideEditor(); return end
 
     local newDescription = descriptionEditBox:GetText()
-    -- Trim description
-    if newDescription then
-        newDescription = string.gsub(newDescription, "^%s*(.-)%s*$", "%1")
-        if newDescription == "" then
-            newDescription = nil
-        end
+    -- isBlank description.trim()
+    if newDescription and string.gsub(newDescription, "^%s*(.-)%s*$", "%1") == "" then
+        newDescription = nil
     end
 
     TeamManager:SetTeamDescription(editorCurrentTeamIndex, newDescription)

@@ -104,7 +104,7 @@ StaticPopupDialogs["PBT_TEAM_RENAME"] = {
     button1 = OKAY,
     button2 = DEFAULT,
     OnShow = function(self)
-        local editBox = self.editBox or self.EditBox
+        local editBox = self.editBox or self:GetEditBox()
         local teamManager = PetBattleTeams:GetModule("TeamManager")
         local _, _, customName = teamManager:GetTeamName(self.data)
         if customName then
@@ -113,7 +113,7 @@ StaticPopupDialogs["PBT_TEAM_RENAME"] = {
         editBox:SetAutoFocus(1)
     end,
     OnAccept = function(self)
-        local editBox = self.editBox or self.EditBox
+        local editBox = self.editBox or self:GetEditBox()
         local text = editBox:GetText()
         local teamManager = PetBattleTeams:GetModule("TeamManager")
         if (text == "") then
