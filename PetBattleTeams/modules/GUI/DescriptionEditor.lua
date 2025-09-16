@@ -1,6 +1,7 @@
 local PetBattleTeams = LibStub("AceAddon-3.0"):GetAddon("PetBattleTeams")
 local DescriptionEditor = PetBattleTeams:NewModule("DescriptionEditor")
 local TeamManager = PetBattleTeams:GetModule("TeamManager")
+local GUI = PetBattleTeams:GetModule("GUI")
 
 local _, addon = ...
 local L = addon.L
@@ -9,8 +10,22 @@ local descriptionEditFrame
 local descriptionEditBox
 local editorCurrentTeamIndex
 local battleDescriptionFrame
-local battleDescriptionText
 local teamNameEditorText
+
+
+local tinyBackdrop = {
+    bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+    edgeFile = "Interface\\LFGFRAME\\LFGBorder",
+    tile = true,
+    tileSize = 16,
+    edgeSize = 16,
+    insets = {
+        left = 5,
+        right = 5,
+        top = 5,
+        bottom = 5
+    }
+}
 
 function DescriptionEditor:OnInitialize()
     self:CreateDescriptionEditor()
@@ -20,16 +35,12 @@ end
 
 function DescriptionEditor:CreateDescriptionEditor()
     descriptionEditFrame = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
-    descriptionEditFrame:SetSize(410, 317)
+    descriptionEditFrame:SetSize(430, 317)
+    -- descriptionEditFrame:SetSize(500, 317)
     descriptionEditFrame:SetPoint("CENTER", UIParent, "CENTER")
     descriptionEditFrame:SetFrameStrata("DIALOG")
-    descriptionEditFrame:SetBackdrop({
-        bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
-        edgeFile = "Interface\\LFGFRAME\\LFGBorder",
-        tile = true,
-        tileSize = 16,
-        edgeSize = 16
-    })
+    descriptionEditFrame:SetBackdrop(tinyBackdrop)
+    descriptionEditFrame:SetBackdropColor(0.1, 0.1, 0.1, 1)
     descriptionEditFrame:Hide();
 
     -- Nom de l'équipe (au-dessus de l'EditBox)
@@ -48,17 +59,10 @@ function DescriptionEditor:CreateDescriptionEditor()
     infoTextEditor:SetText(L["Press Ctrl+Enter to save the description"])
     infoTextEditor:SetJustifyH("LEFT")
 
-    -- EditBox
-    descriptionEditBox = CreateFrame("EditBox", nil, descriptionEditFrame, "InputBoxTemplate BackdropTemplate")
-    descriptionEditBox:SetMultiLine(true)
-    descriptionEditBox:SetMaxLetters(1000)
-    descriptionEditBox:SetAutoFocus(false)
-    descriptionEditBox:SetFrameStrata("DIALOG")
-    descriptionEditBox:SetFrameLevel(1000)
-    -- descriptionEditBox:SetFont("GameFontNormal", 12)
-    descriptionEditBox:SetBackdrop({
+    -- Scroll EditBox
+    local backdrop = {
         bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
-	    edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+        edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
         tile = true,
         tileSize = 16,
         edgeSize = 16,
@@ -67,22 +71,37 @@ function DescriptionEditor:CreateDescriptionEditor()
             right = 0,
             top = 0,
             bottom = 0
-        }
-    })
-    -- Agrandit le cadre de l'EditBox (simule multiligne)
-    descriptionEditBox:SetTextInsets(5, 5, 5, 5)
-    descriptionEditBox:SetPoint("TOPLEFT", descriptionEditFrame, "TOPLEFT", 30, -60)
-    descriptionEditBox:SetPoint("TOPRIGHT", descriptionEditFrame, "TOPRIGHT", -37, -60)
-    descriptionEditBox:SetPoint("BOTTOM", descriptionEditFrame, "BOTTOM", 0, 60)
-    -- Masque pour masquer le singleline inputtext original
-    local editBoxBorder = descriptionEditBox:CreateTexture(nil, "BORDER")
-    editBoxBorder:SetPoint("TOPLEFT", descriptionEditBox, "TOPLEFT", 0, 0)
-    editBoxBorder:SetPoint("BOTTOMRIGHT", descriptionEditBox, "BOTTOMRIGHT", 0, 0)
-    editBoxBorder:SetColorTexture(0, 0, 0, 1)
-    editBoxBorder:SetDrawLayer("BORDER", -1)
+        },
+    }
+    local scrollContainer = CreateFrame("Frame", nil, descriptionEditFrame,"BackdropTemplate")
+    --  descriptionEditFrame:SetSize(410, 317)
+    scrollContainer:SetPoint("TOPLEFT", descriptionEditFrame, "TOPLEFT", 30, -60)
+    scrollContainer:SetPoint("TOPRIGHT", descriptionEditFrame, "TOPRIGHT", -30, -60)
+    scrollContainer:SetPoint("BOTTOM", descriptionEditFrame, "BOTTOM", 0, 60)
+    scrollContainer:SetPoint("CENTER")
+    scrollContainer:SetBackdrop(backdrop)
+    scrollContainer:SetBackdropColor(0, 0, 0)
+    scrollContainer:SetFrameStrata("DIALOG")
+    scrollContainer:SetFrameLevel(1000)
+    scrollContainer.Scroll = CreateFrame("ScrollFrame", nil, scrollContainer, "ScrollFrameTemplate")
+    scrollContainer.Scroll.scrollBarX = 6
+    scrollContainer.Scroll.scrollBarTopY = -4
+    scrollContainer.Scroll.scrollBarBottomY = 5
 
+    scrollContainer.Scroll:SetPoint("TOPLEFT", 5, -10)
+    scrollContainer.Scroll:SetPoint("BOTTOMRIGHT", -25, 5)
+
+    scrollContainer.Text = CreateFrame("EditBox", nil, scrollContainer)
+    scrollContainer.Text:SetMultiLine(true)
+    scrollContainer.Text:SetSize(scrollContainer.Scroll:GetWidth(), scrollContainer.Scroll:GetHeight())
+    scrollContainer.Text:SetPoint("TOPLEFT", scrollContainer.SF)
+    scrollContainer.Text:SetPoint("BOTTOMRIGHT", scrollContainer.SF)
+    scrollContainer.Text:SetMaxLetters(99999)
+    scrollContainer.Text:SetFontObject(GameFontNormal)
+    scrollContainer.Text:SetAutoFocus(false)
+    scrollContainer.Scroll:SetScrollChild(scrollContainer.Text)
     -- Raccourcis clavier
-    descriptionEditBox:SetScript("OnKeyDown", function(self, key)
+    scrollContainer.Text:SetScript("OnKeyDown", function(_, key)
         if key == "ENTER" then
             if IsModifierKeyDown() then
                 DescriptionEditor:SaveDescription()
@@ -92,6 +111,9 @@ function DescriptionEditor:CreateDescriptionEditor()
             return
         end
     end)
+    descriptionEditBox = scrollContainer.Text
+    descriptionEditBox.Scroll = scrollContainer.Scroll
+    -- End Scroll EditBox
 
     local frameInset = 20
     local saveButton = CreateFrame("Button", nil, descriptionEditFrame, "UIPanelButtonTemplate")
@@ -115,10 +137,21 @@ function DescriptionEditor:CreateDescriptionEditor()
     end)
 end
 
+local function OnEnter(self)
+    GameTooltip:SetOwner(self, "ANCHOR_CENTER");
+    GameTooltip:ClearLines()
+    GameTooltip:AddLine(L["PetBattle Teams"], 1, 1, 1)
+    GameTooltip:AddLine(L["Show the team roster"], 0,1,0)
+    GameTooltip:Show()
+end
+local function OnLeave(self)
+    GameTooltip:Hide()
+end
+
 function DescriptionEditor:CreateBattleDescriptionFrame()
     battleDescriptionFrame = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
     battleDescriptionFrame:SetSize(380, 200)
-    battleDescriptionFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", -5, -6)
+    battleDescriptionFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", -5, 15)
     if (UIParent:GetWidth() < 1200) then
         battleDescriptionFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", -5, 120)
     end
@@ -126,54 +159,91 @@ function DescriptionEditor:CreateBattleDescriptionFrame()
     battleDescriptionFrame:SetFrameLevel(100)
     battleDescriptionFrame:Hide()
 
-    battleDescriptionFrame:SetBackdrop({
-        bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
-        edgeFile = "Interface\\LFGFRAME\\LFGBorder",
-        tile = true,
-        tileSize = 16,
-        edgeSize = 16,
-        insets = {
-            left = 5,
-            right = 5,
-            top = 5,
-            bottom = 5
-        }
-    })
+    battleDescriptionFrame:SetBackdrop(tinyBackdrop)
+    battleDescriptionFrame:SetBackdropColor(0.1, 0.1, 0.1, 1)
 
     -- Nom de l'équipe (en bas du cadre)
-    local teamNameText = battleDescriptionFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
-    teamNameText:SetPoint("BOTTOMLEFT", battleDescriptionFrame, "BOTTOMLEFT", 10, 10)
-    teamNameText:SetPoint("BOTTOMRIGHT", battleDescriptionFrame, "BOTTOMRIGHT", -10, 10)
+    local teamNameContainer = CreateFrame("Frame", nil, battleDescriptionFrame, BackdropTemplateMixin and "BackdropTemplate")
+    teamNameContainer:SetHeight(25)
+    teamNameContainer:SetPoint("BOTTOMLEFT", battleDescriptionFrame, "BOTTOMLEFT", 4, -15)
+    teamNameContainer:SetPoint("BOTTOMRIGHT", battleDescriptionFrame, "BOTTOMRIGHT", -3, -15)
+    teamNameContainer:SetBackdrop({
+        bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+        tile = true, tileSize = 16, edgeSize = 16,
+        insets = {left = 4, right = 4, top = 4, bottom = 4}
+    })
+    teamNameContainer:SetBackdropColor(0.1, 0.1, 0.1, 1)
+    teamNameContainer:SetFrameStrata("HIGH")
+    teamNameContainer:SetFrameLevel(101)
+
+    local teamNameText = teamNameContainer:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
+    teamNameText:SetPoint("LEFT", teamNameContainer, "LEFT", 10, 0)
+    teamNameText:SetPoint("RIGHT", teamNameContainer, "RIGHT", -10, 0)
     teamNameText:SetTextColor(1.0, 0.82, 0.0)
-    teamNameText:SetJustifyH("LEFT")
     battleDescriptionFrame.teamNameText = teamNameText
 
-    local scrollFrame = CreateFrame("ScrollFrame", nil, battleDescriptionFrame)
-    -- local scrollFrame = CreateFrame("ScrollFrame", nil, battleDescriptionFrame, "UIPanelScrollFrameTemplate")
-    scrollFrame:SetPoint("TOPLEFT", battleDescriptionFrame, "TOPLEFT", 10, -10)
-    scrollFrame:SetPoint("BOTTOMRIGHT", teamNameText, "TOPRIGHT", -20, 5)
-    scrollFrame:SetFrameStrata("DIALOG")
+    battleDescriptionFrame.Scroll = CreateFrame("ScrollFrame", nil, battleDescriptionFrame, "ScrollFrameTemplate")
+    battleDescriptionFrame.Scroll.scrollBarX = 6
+    battleDescriptionFrame.Scroll.scrollBarTopY = -4
+    battleDescriptionFrame.Scroll.scrollBarBottomY = 5
 
-    -- local scrollChild = CreateFrame("Frame")
-    -- scrollFrame:SetScrollChild(scrollChild)
-    -- scrollChild:SetWidth(battleDescriptionFrame:GetWidth())
-    -- scrollChild:SetHeight(battleDescriptionFrame:GetHeight())
+    battleDescriptionFrame.Scroll:SetPoint("TOPLEFT", 9, -10)
+    battleDescriptionFrame.Scroll:SetPoint("BOTTOMRIGHT", -25, 10)
 
-    -- Créer le FontString à l'intérieur du ScrollFrame
-    battleDescriptionText = scrollFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-    battleDescriptionText:SetPoint("TOPLEFT")
-    battleDescriptionText:SetPoint("BOTTOMRIGHT")
-    battleDescriptionText:SetTextColor(0.9, 0.9, 0.9)
-    battleDescriptionText:SetJustifyH("LEFT")
-    battleDescriptionText:SetJustifyV("TOP")
-    battleDescriptionText:SetNonSpaceWrap(true) -- Permet le retour à la ligne automatique
-    battleDescriptionText:SetMaxLines(14)
+    local scrollContentFrame = CreateFrame("Frame", nil, battleDescriptionFrame.Scroll)
+    scrollContentFrame:SetPoint("TOPLEFT", 0, 0)
+    scrollContentFrame:SetWidth(battleDescriptionFrame.Scroll:GetWidth())
+    scrollContentFrame:SetHeight(1)
+    battleDescriptionFrame.Scroll:SetScrollChild(scrollContentFrame)
+    battleDescriptionFrame.ScrollContent = scrollContentFrame
+
+    battleDescriptionFrame.Text = scrollContentFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    battleDescriptionFrame.Text:SetPoint("TOPLEFT", scrollContentFrame, "TOPLEFT", 0, 0)
+    battleDescriptionFrame.Text:SetWidth(scrollContentFrame:GetWidth())
+    battleDescriptionFrame.Text:SetJustifyH("LEFT")
+    battleDescriptionFrame.Text:SetJustifyV("TOP")
+    battleDescriptionFrame.Text:SetWordWrap(true)
+    battleDescriptionFrame.SetText = function (self, text)
+        self.Text:SetText(text or "")
+        self.ScrollContent:SetHeight(self.Text:GetHeight()) -- Nécessaire à l'update car FontString
+        self.Scroll:SetVerticalScroll(0)
+    end
+
+    local button = CreateFrame("BUTTON", nil, battleDescriptionFrame)
+    button:SetSize(33,33)
+    button:ClearAllPoints()
+    button:SetPoint("LEFT", teamNameText, "LEFT", -20, 0)
+
+    button.icon = button:CreateTexture("PetBattleTeambuttonButtonIcon","ARTWORK")
+    button.icon:SetTexture("Interface\\Icons\\INV_PET_BATTLEPETTRAINING")
+    button.icon:SetSize(25,25)
+    button.icon:ClearAllPoints()
+    button.icon:SetPoint("TOPLEFT",button,"TOPLEFT",7,-6)
+
+    button.overlay = button:CreateTexture("PetBattleTeambuttonButtonIcon","OVERLAY")
+    button.overlay:SetTexture("Interface\\MiniMap\\MiniMap-TrackingBorder")
+    button.overlay:SetSize(60,60)
+    button.overlay:ClearAllPoints()
+    button.overlay:SetPoint("TOPLEFT",button,"TOPLEFT")
+
+    button:SetFrameStrata("HIGH")
+    button:SetFrameLevel(battleDescriptionFrame:GetFrameLevel() + 1)
+
+    button:SetHighlightTexture("Interface\\MiniMap\\UI-MiniMap-ZoomButton-Highlight","ADD")
+    button:RegisterForClicks("LeftButtonUp","RightButtonUp")
+    button:SetScript("OnClick", function(_,_)
+        -- GameTooltip:Hide()
+        ToggleCollectionsJournal(COLLECTIONS_JOURNAL_TAB_INDEX_PETS)
+    end)
+    button:SetScript("OnEnter",OnEnter)
+    button:SetScript("OnLeave",OnLeave)
 end
 
 function DescriptionEditor:RegisterEvents()
     battleDescriptionFrame:RegisterEvent("PET_BATTLE_OPENING_START")
     battleDescriptionFrame:RegisterEvent("PET_BATTLE_CLOSE")
-    battleDescriptionFrame:SetScript("OnEvent", function(self, event, ...)
+    battleDescriptionFrame:SetScript("OnEvent", function(_, event, ...)
         if event == "PET_BATTLE_OPENING_START" then
             DescriptionEditor:ShowBattleDescription()
         elseif event == "PET_BATTLE_CLOSE" then
@@ -189,7 +259,13 @@ function DescriptionEditor:ShowEditor(teamIndex)
 
     local currentDescription = TeamManager:GetTeamDescription(teamIndex)
     local name, _, customName = TeamManager:GetTeamName(teamIndex)
-    descriptionEditBox:SetText(currentDescription or "")
+    if currentDescription ~= descriptionEditBox:GetText() then
+        descriptionEditBox:SetText(currentDescription or "")
+        C_Timer.After(0.1, function()
+            local verticalScrollRange = descriptionEditBox.Scroll:GetVerticalScrollRange()
+            descriptionEditBox.Scroll:SetVerticalScroll(verticalScrollRange)
+        end)
+    end
     teamNameEditorText:SetText(customName or name)
 
     descriptionEditFrame:Show()
@@ -217,19 +293,22 @@ function DescriptionEditor:SaveDescription()
     self:HideEditor()
 end
 
-function DescriptionEditor:ShowBattleDescription()
-    if not TeamManager:GetShowBattleDescription() then
+function DescriptionEditor:ShowBattleDescription(selectedTeam)
+    if selectedTeam == nil and not TeamManager:GetShowBattleDescription() then
         return
     end
 
-    local selectedTeam = TeamManager:GetSelected()
+    selectedTeam = selectedTeam or TeamManager:GetSelected()
     if selectedTeam and selectedTeam > 0 then
         local description = TeamManager:GetTeamDescription(selectedTeam)
         if description and description ~= "" then
-            battleDescriptionText:SetText(description)
+            battleDescriptionFrame.ScrollContent:SetHeight(battleDescriptionFrame.Text:GetHeight())
+            battleDescriptionFrame:SetText(description)
             local name, _, customName = TeamManager:GetTeamName(selectedTeam)
             battleDescriptionFrame.teamNameText:SetText(customName or name)
             battleDescriptionFrame:Show()
+        else
+            battleDescriptionFrame:Hide()
         end
     end
 end

@@ -134,9 +134,15 @@ function PetBattleTeamsFrame:New()
     teamDescriptionButton:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
-    teamDescriptionButton:SetScript("OnClick", function(self)
+
+    teamDescriptionButton:RegisterForClicks("LeftButtonUp","RightButtonUp")
+    teamDescriptionButton:SetScript("OnClick", function(self, mouseButton)
         local parent = self:GetParent()
-        parent:ShowDescriptionEditor()
+        if mouseButton == "RightButton" and IsModifierKeyDown() then
+            parent:DebugBattleDescription()
+        else
+            parent:ShowDescriptionEditor()
+        end
     end)
 
     petBattleTeamsFrame.selectedTexture = petBattleTeamsFrame:CreateTexture(nil,"OVERLAY")
@@ -257,3 +263,12 @@ function PetBattleTeamsFrame:ShowDescriptionEditor()
     end
 end
 
+function PetBattleTeamsFrame:DebugBattleDescription()
+    DEFAULT_CHAT_FRAME:AddMessage(L["PetBattle Teams"].." - debug note for team #" .. (self.teamIndex or ""), .5, .8, 1)
+    if not self.teamIndex then return end
+
+    local globalEditor = PetBattleTeams:GetModule("DescriptionEditor")
+    if globalEditor then
+        globalEditor:ShowBattleDescription(self.teamIndex)
+    end
+end

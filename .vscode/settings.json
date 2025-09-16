@@ -47,7 +47,8 @@
         "Add",
         "GetPetTypeTexture",
         "SetCollectionsJournalShown",
-        "COLLECTIONS_JOURNAL_TAB_INDEX_PETS"
+        "COLLECTIONS_JOURNAL_TAB_INDEX_PETS",
+        "ToggleCollectionsJournal"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#cf5018",

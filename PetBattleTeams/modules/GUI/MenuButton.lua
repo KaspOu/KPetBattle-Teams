@@ -44,7 +44,7 @@ function GUI:CreateMenuButton()
 
     button:SetHighlightTexture("Interface\\MiniMap\\UI-MiniMap-ZoomButton-Highlight","ADD")
     button:RegisterForClicks("LeftButtonUp","RightButtonUp")
-    button:SetScript("OnClick", function(self,mouseButton)
+    button:SetScript("OnClick", function(self, mouseButton)
         GameTooltip:Hide()
         if mouseButton == "LeftButton" then
             GUI:ToggleMinimize(not GUI:GetIsMinimized())
