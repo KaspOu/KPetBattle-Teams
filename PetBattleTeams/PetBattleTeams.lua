@@ -25,7 +25,7 @@ function PetBattleTeams.slashHandler(msg, chatPromptFrame)
         local Config = self:GetModule("Config")
         Config:OpenConfig()
     elseif msg == "show" then
-        ToggleCollectionsJournal(2)
+        SetCollectionsJournalShown(true, COLLECTIONS_JOURNAL_TAB_INDEX_PETS)
     elseif msg == "lock frame" then
         GUI:SetLocked(true)
         print("PetBattleTeams: Frame Locked")
@@ -76,7 +76,7 @@ function PetBattleTeams.slashHandler(msg, chatPromptFrame)
         print("/pbt","min", ": Minimize PetBattleTeams frame")
         print("/pbt","reset teams" , ": Deletes all teams, Warning no confirmation is given")
         print("/pbt","reset ui", ": Resets the UI to its default configuration")
-        ToggleCollectionsJournal(2)
+        SetCollectionsJournalShown(true, COLLECTIONS_JOURNAL_TAB_INDEX_PETS)
     end
 end
 

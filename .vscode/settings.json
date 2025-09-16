@@ -46,7 +46,8 @@
         "LibStub",
         "Add",
         "GetPetTypeTexture",
-        "ToggleCollectionsJournal"
+        "SetCollectionsJournalShown",
+        "COLLECTIONS_JOURNAL_TAB_INDEX_PETS"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#cf5018",
@@ -84,5 +85,6 @@
     },
     "Lua.workspace.library": [
         "c:\\Users\\Utilisateur\\.cursor\\extensions\\ketho.wow-api-0.20.7\\Annotations\\Core"
-    ]
+    ],
+    "Lua.type.weakUnionCheck": true
 }

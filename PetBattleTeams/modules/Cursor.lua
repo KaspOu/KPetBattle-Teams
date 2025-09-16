@@ -115,7 +115,7 @@ end
 function Cursor:PickupPet(teamIndex,petIndex)
     assert(type(teamIndex) == "number")
     assert(type(petIndex) == "number" and petIndex <= PETS_PER_TEAM and petIndex > 0)
-    if IsControlKeyDown() then
+    if IsControlKeyDown() and not teamManager:GetSortTeams() then
         Cursor:PickupTeam(teamIndex)
         return
     end

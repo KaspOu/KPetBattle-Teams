@@ -26,6 +26,18 @@ local COLOR_WHITE = {1, 1, 1}
 local COLOR_DISABLED = {.5, .5, .5}
 local PET_ABILITIES = 3
 
+local function tooltipText()
+    local fullHelpText = L["Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team."]
+    if teamManager:GetSortTeams() then
+        local lastNPosInReversed = fullHelpText:reverse():find("n|")
+        if lastNPosInReversed then
+            local len = #fullHelpText
+            local originalStartPos = len - lastNPosInReversed - 1
+            fullHelpText = fullHelpText:sub(1, originalStartPos) .. "|n".. GetColor(1) .. fullHelpText:sub(originalStartPos + 3) .. "|r"
+        end
+    end
+    return fullHelpText
+end
 
 function Tooltip:OnInitialize()
 
@@ -69,7 +81,7 @@ function Tooltip:OnInitialize()
     --Helper Text
     tooltip.helpText = tooltip:CreateFontString("PetBattleTeamTooltipHelperText","OVERLAY","GameFontNormalSmall")
     tooltip.helpText:SetJustifyH("LEFT")
-    tooltip.helpText:SetText(L["Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team."])
+    tooltip.helpText:SetText(tooltipText())
     tooltip.helpText:SetTextColor(0,1,0)
     tooltip.helpText:SetSize(0,0)
     tooltip.helpText:SetFont("Fonts\\FRIZQT__.TTF",12,"OUTLINE")
@@ -319,6 +331,7 @@ function Tooltip:SetUnit(petID,abilities,teamName)
     if Tooltip:GetShowHelpText() then
         tooltip:SetHeight(FRAME_HEIGHT_WITH_TT)
         tooltip.Delimiter2:Show()
+        tooltip.helpText:SetText(tooltipText())
         tooltip.helpText:Show()
     else
         tooltip.Delimiter2:Hide()
