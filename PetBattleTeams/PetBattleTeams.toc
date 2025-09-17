@@ -57,6 +57,7 @@ classes\PetUnitFrame.lua
 classes\TeamFrame.lua
 
 modules\GUI\DescriptionEditor.lua
+modules\GUI\ScriptEditor.lua
 modules\GUI\LockTeamsButton.lua
 modules\GUI\AddTeamButton.lua
 modules\GUI\ReviveButton.lua

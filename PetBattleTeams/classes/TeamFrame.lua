@@ -201,6 +201,49 @@ function PetBattleTeamsFrame:New()
         petBattleTeamsFrame:ShowNpcEditor()
     end)
 
+
+    local ScriptEditor = PetBattleTeams:GetModule("ScriptEditor")
+    if ScriptEditor:IsLoaded() then
+
+        local teamScriptIcon = petBattleTeamsFrame:CreateTexture(nil, "OVERLAY")
+        petBattleTeamsFrame.teamScriptIcon = teamScriptIcon
+        teamScriptIcon:SetSize(16, 16)
+        teamScriptIcon:SetTexture("Interface\\Icons\\INV_Letter_15")
+        teamScriptIcon:SetPoint("BOTTOMRIGHT", petBattleTeamsFrame.unitFrames[3], "TOPRIGHT", 16, 0)
+        teamScriptIcon:SetAtlas("ui-hud-minimap-mail-up", true)
+        teamScriptIcon:SetAlpha(.2)
+        teamScriptIcon:SetDesaturated(true)
+
+        local teamScriptButton = CreateFrame("Button", nil, petBattleTeamsFrame)
+        petBattleTeamsFrame.teamScriptButton = teamScriptButton
+        teamScriptButton:SetSize(16, 16)
+        teamScriptButton:SetPoint("CENTER", teamScriptIcon, "CENTER")
+        teamScriptButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
+        teamScriptButton:SetScript("OnEnter", function(self)
+            local teamIndex = self:GetParent().teamIndex
+            local script = TeamManager:GetTeamScript(teamIndex)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            GameTooltip:ClearLines()
+            local displayName = TeamManager:GetTeamName(teamIndex)
+            GameTooltip:AddLine(displayName, 1, 1, 1)
+            if script and script ~= "" then
+                GameTooltip:AddLine(script, 0.8, 0.8, 0.8, false)
+            else
+                GameTooltip:AddLine("> "..L["Add Description"].." <")
+            end
+            GameTooltip:Show()
+        end)
+        teamScriptButton:SetScript("OnLeave", function(self)
+            GameTooltip:Hide()
+        end)
+
+        teamScriptButton:RegisterForClicks("LeftButtonUp","RightButtonUp")
+        teamScriptButton:SetScript("OnClick", function(self, mouseButton)
+            local parent = self:GetParent()
+            parent:ShowScriptEditor()
+        end)
+    end
+
     petBattleTeamsFrame.selectedTexture = petBattleTeamsFrame:CreateTexture(nil,"OVERLAY")
     petBattleTeamsFrame.selectedTexture:SetSize(36,36)
     petBattleTeamsFrame.selectedTexture:SetTexture("Interface\\PetBattles\\PetJournal")
@@ -347,5 +390,14 @@ function PetBattleTeamsFrame:DebugBattleDescription()
     local globalEditor = PetBattleTeams:GetModule("DescriptionEditor")
     if globalEditor then
         globalEditor:ShowBattleDescription(self.teamIndex)
+    end
+end
+
+function PetBattleTeamsFrame:ShowScriptEditor()
+    if not self.teamIndex then return end
+
+    local scriptEditor = PetBattleTeams:GetModule("ScriptEditor")
+    if scriptEditor then
+        scriptEditor:ShowEditor(self.teamIndex)
     end
 end

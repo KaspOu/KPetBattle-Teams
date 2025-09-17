@@ -419,6 +419,23 @@ function TeamManager:SetNpcFromTarget(teamIndex)
     end
 end
 
+function TeamManager:SetTeamScript(teamIndex, script)
+    assert(type(teamIndex) == "number" and (type(script) == "string" or script == nil))
+    if self.teams[teamIndex] then
+        self.teams[teamIndex].script = script
+    end
+    self.callbacks:Fire("TEAM_UPDATED", teamIndex)
+end
+
+function TeamManager:GetTeamScript(teamIndex)
+    if type(teamIndex) ~= "number" then return nil end
+
+    if self.teams[teamIndex] and self.teams[teamIndex].script then
+        return self.teams[teamIndex].script
+    end
+    return nil
+end
+
 function TeamManager:SetAutoSwitchOnTarget(enabled)
     assert(type(enabled)== "boolean")
     self.db.global.autoSwitchOnTarget = enabled
