@@ -33,7 +33,7 @@ menuFrame.menu = {
         StaticPopup_Show("PBT_TEAM_RENAME", displayName, nil, teamIndex)
     end,
     },
-    { text = L["Edit Description"], notCheckable = true, func = function()
+    { text = L["Edit Note"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex
         -- Utiliser l'éditeur global
         local globalEditor = PetBattleTeams:GetModule("DescriptionEditor")
