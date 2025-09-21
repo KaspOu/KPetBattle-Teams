@@ -59,7 +59,7 @@ Config.options = {
         },
         ShowBattleDescription = {
             order = 6,
-            name = L["Show team description during pet battles"],
+            name = L["Show team note during pet battles"],
             type = "toggle",
             width = "full",
             set = function(info,val)

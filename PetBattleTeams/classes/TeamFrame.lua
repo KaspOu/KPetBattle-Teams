@@ -127,7 +127,7 @@ function PetBattleTeamsFrame:New()
         if description and description ~= "" then
             GameTooltip:AddLine(description, 0.8, 0.8, 0.8, false)
         else
-            GameTooltip:AddLine("> "..L["Add Description"].." <")
+            GameTooltip:AddLine("> "..L["Add Note"].." <")
         end
         GameTooltip:Show()
     end)
@@ -229,7 +229,7 @@ function PetBattleTeamsFrame:New()
             if script and script ~= "" then
                 GameTooltip:AddLine(script, 0.8, 0.8, 0.8, false)
             else
-                GameTooltip:AddLine("> "..L["Add Description"].." <")
+                GameTooltip:AddLine("> "..L["Add Note"].." <")
             end
             GameTooltip:Show()
         end)
@@ -316,6 +316,10 @@ function PetBattleTeamsFrame:Update()
     self.teamDescriptionButton:SetShown(showTeamName)
     self.teamNPCIcon:SetShown(showTeamName and TeamManager:GetAutoSwitchOnTarget())
     self.teamNPCButton:SetShown(showTeamName and TeamManager:GetAutoSwitchOnTarget())
+    if self.teamScriptIcon then
+        self.teamScriptIcon:SetShown(showTeamName)
+        self.teamScriptButton:SetShown(showTeamName)
+    end
 
     self:SetHeight(CalculateTeamHeight(self.teamIndex))
 
@@ -377,9 +381,10 @@ end
 function PetBattleTeamsFrame:ShowDescriptionEditor()
     if not self.teamIndex then return end
 
-    local globalEditor = PetBattleTeams:GetModule("DescriptionEditor")
-    if globalEditor then
-        globalEditor:ShowEditor(self.teamIndex)
+    self:HideEditors()
+    local descriptionEditor = PetBattleTeams:GetModule("DescriptionEditor")
+    if descriptionEditor then
+        descriptionEditor:ShowEditor(self.teamIndex)
     end
 end
 
@@ -387,17 +392,33 @@ function PetBattleTeamsFrame:DebugBattleDescription()
     DEFAULT_CHAT_FRAME:AddMessage(L["PetBattle Teams"].." - debug note for team #" .. (self.teamIndex or ""), .5, .8, 1)
     if not self.teamIndex then return end
 
-    local globalEditor = PetBattleTeams:GetModule("DescriptionEditor")
-    if globalEditor then
-        globalEditor:ShowBattleDescription(self.teamIndex)
+    local descriptionEditor = PetBattleTeams:GetModule("DescriptionEditor")
+    if descriptionEditor then
+        descriptionEditor:ShowBattleDescription(self.teamIndex)
     end
 end
 
 function PetBattleTeamsFrame:ShowScriptEditor()
     if not self.teamIndex then return end
 
+    self:HideEditors()
+
     local scriptEditor = PetBattleTeams:GetModule("ScriptEditor")
     if scriptEditor then
         scriptEditor:ShowEditor(self.teamIndex)
+    end
+end
+
+
+function PetBattleTeamsFrame:HideEditors()
+    if not self.teamIndex then return end
+
+    local descriptionEditor = PetBattleTeams:GetModule("DescriptionEditor")
+    if descriptionEditor then
+        descriptionEditor:HideEditor(self.teamIndex)
+    end
+    local scriptEditor = PetBattleTeams:GetModule("ScriptEditor")
+    if scriptEditor then
+        scriptEditor:HideEditor(self.teamIndex)
     end
 end

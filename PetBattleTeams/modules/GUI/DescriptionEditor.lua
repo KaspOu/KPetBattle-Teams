@@ -57,7 +57,7 @@ function DescriptionEditor:CreateDescriptionEditor()
     infoTextEditor:SetPoint("TOPLEFT", self.editorTitle, "BOTTOMLEFT", 0, -7)
     infoTextEditor:SetPoint("TOPRIGHT", self.editorTitle, "BOTTOMRIGHT", 0, -7)
     infoTextEditor:SetTextColor(0.7, 0.7, 0.7)
-    infoTextEditor:SetText(L["Press Ctrl+Enter to save the description"])
+    infoTextEditor:SetText(L["Press Ctrl+Enter to save the note"])
     infoTextEditor:SetJustifyH("LEFT")
 
     -- Scroll EditBox

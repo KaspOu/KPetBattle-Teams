@@ -109,6 +109,11 @@ local function OnUpdate(self,elapsed)
         end
     elseif self.step == FINISHED then
         self:SetScript("OnUpdate",nil)
+        -- Team #selected is now loaded
+        local ScriptEditor = PetBattleTeams:GetModule("ScriptEditor")
+        if ScriptEditor:IsLoaded() then
+            ScriptEditor:PBS_SetTeamID(selected)
+        end
     end
 end
 
