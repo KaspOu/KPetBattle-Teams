@@ -6,16 +6,16 @@ local GUI = PetBattleTeams:GetModule("GUI")
 local _, addon = ...
 local L = addon.L
 
-local descriptionEditFrame
-local descriptionEditBox
+local scriptEditFrame
+local scriptEditBox
 local editorCurrentTeamIndex
 local teamNameEditorText
 
 function ScriptEditor:OnInitialize()
+    self:CreateDescriptionEditor()
     if not ScriptEditor:IsLoaded() then
         return
     end
-    -- self:CreateDescriptionEditor()
     -- self:CreateBattleDescriptionFrame()
     -- self:RegisterEvents()
 end
@@ -26,12 +26,7 @@ end
 
 
 
-function ScriptEditor:ShowEditor(teamIndex)
-    if not teamIndex then return end
-
-    editorCurrentTeamIndex = teamIndex
-    local currentScript = TeamManager:GetTeamScript(teamIndex) or ""
-
+function ScriptEditor:CreateDescriptionEditor(teamIndex)
     local frame = CreateFrame("Frame", "MyScriptEditor", UIParent, "BasicFrameTemplateWithInset")
     frame:SetSize(400, 300)
     frame:SetPoint("CENTER")
@@ -44,7 +39,7 @@ function ScriptEditor:ShowEditor(teamIndex)
     frame.title = frame:CreateFontString(nil, "OVERLAY")
     frame.title:SetFontObject("GameFontHighlight")
     frame.title:SetPoint("LEFT", frame.TitleBg, "LEFT", 5, 0)
-    frame.title:SetText("Éditeur de script pour l'équipe "..teamIndex)
+    frame.title:SetText("Éditeur de script pour l'équipe ")
 
     -- local editBox = CreateFrame("EditBox", nil, frame, "InputBoxTemplate")
     -- editBox:SetMultiLine(true)
@@ -99,15 +94,16 @@ function ScriptEditor:ShowEditor(teamIndex)
     scrollContainer.Text:SetScript("OnKeyDown", function(_, key)
         if key == "ENTER" then
             if IsModifierKeyDown() then
-                DescriptionEditor:SaveDescription()
+                ScriptEditor:SaveDescription()
             end
         elseif key == "ESCAPE" then
-            DescriptionEditor:HideEditor()
+            ScriptEditor:HideEditor()
             return
         end
     end)
-    editBox = scrollContainer.Text
-    editBox.Scroll = scrollContainer.Scroll
+    scriptEditBox = scrollContainer.Text
+    scriptEditBox.Scroll = scrollContainer.Scroll
+    teamNameEditorText = frame.title
     -- End Scroll EditBox
 
     -- Bouton Enregistrer
@@ -116,21 +112,41 @@ function ScriptEditor:ShowEditor(teamIndex)
     saveButton:SetSize(120, 25)
     saveButton:SetText("Enregistrer")
     saveButton:SetScript("OnClick", function()
-        local text = editBox:GetText()
+        local text = scriptEditBox:GetText()
         self.teams[teamIndex].script = text
         self:RegisterScriptWithPBS(teamIndex) -- Met à jour PetBattleScripts
         frame:Hide()
     end)
-    descriptionEditFrame = frame
-    descriptionEditBox = editBox
+    scriptEditFrame = frame
+    -- scriptEditBox = editBox
 
-    descriptionEditFrame:Show()
-    descriptionEditBox:SetFocus()
+    scriptEditFrame:Hide()
+end
+
+
+function ScriptEditor:ShowEditor(teamIndex)
+    if not teamIndex then return end
+
+    editorCurrentTeamIndex = teamIndex
+
+    local currentScript = TeamManager:GetTeamScript(teamIndex)
+    local name, _, customName = TeamManager:GetTeamName(teamIndex)
+    if currentScript ~= scriptEditBox:GetText() then
+        scriptEditBox:SetText(currentScript or "")
+        C_Timer.After(0.1, function()
+            local verticalScrollRange = scriptEditBox.Scroll:GetVerticalScrollRange()
+            scriptEditBox.Scroll:SetVerticalScroll(verticalScrollRange)
+        end)
+    end
+    teamNameEditorText:SetText(customName or name)
+
+    scriptEditFrame:Show()
+    scriptEditBox:SetFocus()
 end
 
 function ScriptEditor:Hide()
-    descriptionEditFrame:Hide()
-    descriptionEditBox:ClearFocus()
+    scriptEditFrame:Hide()
+    scriptEditBox:ClearFocus()
     teamNameEditorText:SetText("")
 
     editorCurrentTeamIndex = nil
@@ -139,7 +155,7 @@ end
 function ScriptEditor:Save()
     if not editorCurrentTeamIndex then ScriptEditor:Hide(); return end
 
-    local newScript = descriptionEditBox:GetText()
+    local newScript = scriptEditBox:GetText()
     -- isBlank description.trim()
     if newScript and string.gsub(newScript, "^%s*(.-)%s*$", "%1") == "" then
         newScript = nil
