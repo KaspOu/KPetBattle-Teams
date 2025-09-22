@@ -189,6 +189,7 @@ end
 function TeamManager:SetSortTeams(enabled)
     assert(type(enabled)== "boolean")
     self.db.global.sortTeams = enabled
+    self:SortTeamsByName()
 end
 
 function TeamManager:SetAutomaticallySaveTeams(enabled)
@@ -518,6 +519,7 @@ function TeamManager:SortTeamsByName()
 		if self:GetNumTeams() > 0 and (self:GetSelected() <= 0 or self:GetSelected() > self:GetNumTeams()) then
 			self:SetSelected(1)
 		end
+        self.callbacks:Fire("TEAM_UPDATED",teamIndex)
 	end
 end
 

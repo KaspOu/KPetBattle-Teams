@@ -41,6 +41,11 @@ function DescriptionEditor:CreateDescriptionEditor()
     descriptionEditFrame:SetFrameStrata("DIALOG")
     descriptionEditFrame:SetBackdrop(tinyBackdrop)
     descriptionEditFrame:SetBackdropColor(0.1, 0.1, 0.1, 1)
+    descriptionEditFrame:SetMovable(true)
+    descriptionEditFrame:EnableMouse(true)
+    descriptionEditFrame:RegisterForDrag("LeftButton")
+    descriptionEditFrame:SetScript("OnDragStart", descriptionEditFrame.StartMoving)
+    descriptionEditFrame:SetScript("OnDragStop", descriptionEditFrame.StopMovingOrSizing)
     descriptionEditFrame:Hide();
 
     -- Nom de l'équipe (au-dessus de l'EditBox)
