@@ -134,6 +134,44 @@ StaticPopupDialogs["PBT_TEAM_RENAME"] = {
     enterClicksFirstButton = true,
 }
 
+StaticPopupDialogs["PBT_TEAM_EDITNPCID"] = {
+    preferredIndex = STATICPOPUP_NUMDIALOGS,
+    text = "PetBattleTeams:|nEnter a NPC ID for |cffffd200%s|r.",
+    hasEditBox = 1,
+    button1 = OKAY,
+    button2 = DEFAULT,
+    OnShow = function(self)
+        local editBox = self.editBox or self:GetEditBox()
+        local teamManager = PetBattleTeams:GetModule("TeamManager")
+        local teamNpcID = teamManager:GetTeamNpcID(self.data)
+        if teamNpcID then
+            editBox:SetText(teamNpcID)
+        end
+        editBox:SetAutoFocus(1)
+    end,
+    OnAccept = function(self)
+        local editBox = self.editBox or self:GetEditBox()
+        local text = editBox:GetText()
+        local teamManager = PetBattleTeams:GetModule("TeamManager")
+        local npcID = text and tonumber(text:match("(%d+)")) or 0
+        if npcID == 0 or (text == "") then
+            text = nil
+        end
+        teamManager:SetTeamNpcID(self.data, text)
+    end,
+    OnCancel = function(self)
+        local teamManager = PetBattleTeams:GetModule("TeamManager")
+        teamManager:SetTeamNpcID(self.data, nil)
+    end,
+    EditBoxOnEnterPressed = function(self)
+        StaticPopup_OnClick(self:GetParent(), 1)
+    end,
+    timeout = 0,
+    exclusive = 1,
+    hideOnEscape = 1,
+    enterClicksFirstButton = true,
+}
+
 
 
 StaticPopupDialogs["PBT_IMPORT_TEAMS"] = {
@@ -198,6 +236,7 @@ function addon:RegisterLocale(locale, tbl)
 
         StaticPopupDialogs["PBT_TEAM_DELETE"].text = self.L["PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?"]
         StaticPopupDialogs["PBT_TEAM_RENAME"].text = self.L["PetBattleTeams:|nEnter a name for |cffffd200%s|r."]
+        StaticPopupDialogs["PBT_TEAM_EDITNPCID"].text = self.L["PetBattleTeams:|nEnter a NPC ID for |cffffd200%s|r."]
         StaticPopupDialogs["PBT_IMPORT_TEAMS"].text = self.L["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"]
         StaticPopupDialogs["PBT_RESET_TEAMS"].text = self.L["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"]
     end

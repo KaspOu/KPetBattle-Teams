@@ -1,8 +1,8 @@
 TODO:
-AutoSwitch (NPC ID detection)
 PetBattleScript integration
 
 alpha:
+AutoSwitch (NPC ID detection)
 
 beta:
 

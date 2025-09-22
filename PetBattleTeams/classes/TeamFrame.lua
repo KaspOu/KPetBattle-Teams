@@ -145,6 +145,62 @@ function PetBattleTeamsFrame:New()
         end
     end)
 
+
+    local teamNPCIcon = petBattleTeamsFrame:CreateTexture(nil, "OVERLAY")
+    petBattleTeamsFrame.teamNPCIcon = teamNPCIcon
+    teamNPCIcon:SetSize(10, 10)
+    teamNPCIcon:SetTexture("Interface\\UIEditorIcons\\UIEditorIcons")
+    teamNPCIcon:SetPoint("RIGHT", teamDescriptionIcon, "LEFT", 1)
+    local v = select(4, GetBuildInfo())
+    if v < 60000 then -- Until Pandaria (5)
+        teamNPCIcon:SetSize(26, 26)
+        teamNPCIcon:SetPoint("RIGHT", teamDescriptionIcon, "LEFT", 13, -6)
+    end
+    teamNPCIcon:SetAlpha(.2)
+    teamNPCIcon:SetDesaturated(true)
+
+    local teamNPCButton = CreateFrame("Button", nil, petBattleTeamsFrame)
+    petBattleTeamsFrame.teamNPCButton = teamNPCButton
+    teamNPCButton:SetSize(10, 10)
+    teamNPCButton:SetPoint("RIGHT", teamDescriptionIcon, "LEFT", 1)
+    teamNPCButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
+    teamNPCButton:SetScript("OnEnter", function(self)
+        local teamIndex = self:GetParent().teamIndex
+        local npcID = TeamManager:GetTeamNpcID(teamIndex)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:ClearLines()
+        local displayName = TeamManager:GetTeamName(teamIndex)
+        GameTooltip:AddLine(displayName, 1, 1, 1)
+        if npcID and npcID ~= "" then
+            GameTooltip:AddLine(string.format(L["Linked to NPC: %s"], npcID))
+            GameTooltip:AddLine(" ")
+        end
+        local tooltip = L["Click: %s|nRight-click: %s|nCtrl-Right-click: Clear NPC ID"]
+        tooltip = string.format(tooltip, L["Edit NPC ID for AutoSwitch"], L["Set NPC ID from current Target"])
+        GameTooltip:AddLine(tooltip, 0,1,0)
+        GameTooltip:Show()
+    end)
+    teamNPCButton:SetScript("OnLeave", function(self)
+        GameTooltip:Hide()
+    end)
+
+    teamNPCButton:RegisterForClicks("LeftButtonUp","RightButtonUp")
+    teamNPCButton:SetScript("OnClick", function(self, mouseButton)
+        if mouseButton == "RightButton" then
+            local onEnterScript = petBattleTeamsFrame.teamNPCButton:GetScript("OnEnter")
+            local teamIndex = self:GetParent().teamIndex
+            if IsControlKeyDown() then
+                TeamManager:SetTeamNpcID(teamIndex, nil)
+                 onEnterScript(petBattleTeamsFrame.teamNPCButton)
+                return
+            end
+            TeamManager:SetNpcFromTarget(teamIndex)
+            onEnterScript(petBattleTeamsFrame.teamNPCButton)
+            return
+        end
+        petBattleTeamsFrame:ShowNpcEditor()
+    end)
+
     petBattleTeamsFrame.selectedTexture = petBattleTeamsFrame:CreateTexture(nil,"OVERLAY")
     petBattleTeamsFrame.selectedTexture:SetSize(36,36)
     petBattleTeamsFrame.selectedTexture:SetTexture("Interface\\PetBattles\\PetJournal")
@@ -175,6 +231,22 @@ function PetBattleTeamsFrame:New()
 end
 PetBattleTeams.PetBattleTeamsFrame = PetBattleTeamsFrame
 
+local function toggleIcon(icon, state)
+    if state then
+        icon:SetAlpha(1)
+        icon:SetDesaturated(false)
+    else
+        icon:SetAlpha(.2)
+        icon:SetDesaturated(true)
+    end
+end
+
+function PetBattleTeamsFrame:ShowNpcEditor()
+    if not self.teamIndex then return end
+
+    local displayName = TeamManager:GetTeamName(self.teamIndex)
+    StaticPopup_Show("PBT_TEAM_EDITNPCID", displayName, nil, self.teamIndex)
+end
 
 function PetBattleTeamsFrame:Update()
     local isSelected = (self.teamIndex == TeamManager:GetSelected())
@@ -186,16 +258,21 @@ function PetBattleTeamsFrame:Update()
         self.teamNameText:SetText(displayName)
 
         local description = TeamManager:GetTeamDescription(self.teamIndex)
-        if description and description ~= "" and showTeamName then
-            self.teamDescriptionIcon:SetAlpha(1)
-            self.teamDescriptionIcon:SetDesaturated(false)
-        else
-            self.teamDescriptionIcon:SetAlpha(.2)
-            self.teamDescriptionIcon:SetDesaturated(true)
+        toggleIcon(self.teamDescriptionIcon, description and description ~= "")
+
+        if self.teamScriptIcon then
+            local script = TeamManager:GetTeamScript(self.teamIndex)
+            toggleIcon(self.teamScriptIcon, script and script ~= "")
         end
+
+        local npcID = TeamManager:GetTeamNpcID(self.teamIndex)
+        toggleIcon(self.teamNPCIcon, npcID and npcID ~= "")
     end
     self.teamNameText:SetShown(showTeamName)
     self.teamDescriptionIcon:SetShown(showTeamName)
+    self.teamDescriptionButton:SetShown(showTeamName)
+    self.teamNPCIcon:SetShown(showTeamName and TeamManager:GetAutoSwitchOnTarget())
+    self.teamNPCButton:SetShown(showTeamName and TeamManager:GetAutoSwitchOnTarget())
 
     self:SetHeight(CalculateTeamHeight(self.teamIndex))
 
