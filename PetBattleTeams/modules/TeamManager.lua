@@ -510,11 +510,31 @@ end
 
 function TeamManager:SortTeamsByName()
 	if self:GetSortTeams() then
-		table.sort(self.teams, function(a, b)
-			local nameA = a.name or ""
-			local nameB = b.name or ""
-			return string.lower(nameA) < string.lower(nameB)
+        -- Temporary table with indexes, for remembering relative order
+		local indexedTeams = {}
+		for i, team in ipairs(self.teams) do
+			table.insert(indexedTeams, {team = team, originalIndex = i})
+		end
+
+        -- Then sort
+		table.sort(indexedTeams, function(wrapperA, wrapperB)
+			local lowerNameA = string.lower(wrapperA.team.name or "")
+			local lowerNameB = string.lower(wrapperB.team.name or "")
+
+			if lowerNameA ~= lowerNameB then
+				return lowerNameA < lowerNameB
+			else
+				-- Same names: user originalIndex, maintains stability and unexpected swaps.
+				return wrapperA.originalIndex < wrapperB.originalIndex
+			end
 		end)
+
+        -- Then rebuilt teams
+		self.teams = {}
+		for _, wrapper in ipairs(indexedTeams) do
+			table.insert(self.teams, wrapper.team)
+		end
+        indexedTeams = nil
 
 		if self:GetNumTeams() > 0 and (self:GetSelected() <= 0 or self:GetSelected() > self:GetNumTeams()) then
 			self:SetSelected(1)
