@@ -10,6 +10,7 @@ Fired when ever the GUI options are changed
 
 local PetBattleTeams = LibStub("AceAddon-3.0"):GetAddon("PetBattleTeams")
 local GUI = PetBattleTeams:NewModule("GUI")
+local TeamManager = PetBattleTeams:GetModule("TeamManager")
 local LibPetJournal = LibStub("LibPetJournal-2.0")
 local eventFrame = CreateFrame("frame")
 
@@ -32,12 +33,19 @@ local function OnEvent(self,event,...)
             self:UnregisterEvent("PET_BATTLE_CLOSE")
         end
     end
+
+    if event == "PLAYER_TARGET_CHANGED" then
+        if not GUI.delayedInit then
+            TeamManager:DetectTarget()
+        end
+    end
 end
 
 eventFrame:SetScript("OnEvent",OnEvent)
 eventFrame:RegisterEvent("PET_JOURNAL_LIST_UPDATE")
 eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
 eventFrame:RegisterEvent("PET_BATTLE_CLOSE")
+eventFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
 eventFrame:RegisterEvent("ADDON_LOADED")
 
 function GUI:OnInitialize()

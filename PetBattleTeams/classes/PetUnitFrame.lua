@@ -42,6 +42,18 @@ menuFrame.menu = {
         end
     end,
     },
+    { text = L["Edit NPC ID for AutoSwitch"], notCheckable = true, func = function()
+        local teamIndex = menuFrame.teamIndex
+        local displayName = TeamManager:GetTeamName(teamIndex)
+        StaticPopup_Show("PBT_TEAM_EDITNPCID", displayName, nil, teamIndex)
+    end
+    },
+    { text = L["Set NPC ID from current Target"], notCheckable = true, func = function()
+        local teamIndex = menuFrame.teamIndex
+        TeamManager:SetNpcFromTarget(teamIndex)
+    end,
+    icon = "Interface\\UIEditorIcons\\UIEditorIcons"
+    },
     { text = L["Delete Team"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex
         local displayName = TeamManager:GetTeamName(teamIndex)
@@ -55,6 +67,7 @@ menuFrame.menu = {
     end,
     },
 }
+
 
 --event handler for widget
 local function OnEvent(self,event,...)

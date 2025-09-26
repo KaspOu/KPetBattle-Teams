@@ -121,6 +121,74 @@ function TeamManager:ApplyTeam(teamIndex)
     self.frame:SetScript("OnUpdate",OnUpdate)
 end
 
+
+local npcIDToTeamMap = nil
+
+function TeamManager:RebuildNpcIDCache()
+    if npcIDToTeamMap == nil then
+        npcIDToTeamMap = {}
+    end
+    for k in pairs(npcIDToTeamMap) do
+        npcIDToTeamMap[k] = nil
+    end
+    local numTeams = TeamManager:GetNumTeams()
+    for i = 1, numTeams do
+        local team = TeamManager.teams[i]
+        if team and team.npcID then
+            local numericNpcID = tonumber(string.match(team.npcID, "(%d+)"))
+            if numericNpcID then
+                if npcIDToTeamMap[numericNpcID] then
+                    local existingTeamIndex = npcIDToTeamMap[numericNpcID]
+                    local existingTeamDisplayName = select(1, TeamManager:GetTeamName(existingTeamIndex))
+                    local currentTeamDisplayName = select(1, TeamManager:GetTeamName(i))
+                    DEFAULT_CHAT_FRAME:AddMessage(string.format(L["Attention : L'ID PNJ %s est lié à plusieurs équipes : %s et %s.|nSeule la dernière équipe sera choisie pour l'autoswitch."], numericNpcID, existingTeamDisplayName, currentTeamDisplayName), 1.0, 0.7, 0.0)
+                end
+                npcIDToTeamMap[numericNpcID] = i
+            end
+        end
+    end
+end
+
+function TeamManager:GetTeamIndexForNPC(npcID)
+    if npcIDToTeamMap == nil then
+        self:RebuildNpcIDCache()
+    end
+    return npcIDToTeamMap[npcID]
+end
+
+local lastTarget = nil
+function TeamManager:DetectTarget()
+    if not self:GetAutoSwitchOnTarget() then
+        return
+    end
+    if InCombatLockdown() or (PetBattleFrame and PetBattleFrame:IsShown()) then
+        return
+    end
+    -- if not UnitCanAttack("player", "target") then
+    --     return
+    -- end
+    local guid = UnitGUID("target")
+    local npcID = guid and tonumber(guid:match("-(%d+)-%x+$"))
+    if npcID and self:GetTeamIndexForNPC(npcID) then
+        local teamIndex = self:GetTeamIndexForNPC(npcID)
+        if guid == lastTarget then
+            return
+        end
+        TeamManager:SetSelected(teamIndex)
+        local name = UnitName("target") or npcID
+        local teamName = TeamManager:GetTeamName(teamIndex)
+        TeamManager:SetSelected(teamIndex)
+        DEFAULT_CHAT_FRAME:AddMessage(string.format("PetBattleTeams: |cffffd200%s|r found, autoswitch to team: |cffffd200%s|r", name, teamName))
+
+        -- if ID only: autocomplete with name
+        if TeamManager:GetTeamNpcID(teamIndex) == tostring(npcID) then
+            TeamManager:SetNpcFromTarget(teamIndex)
+        end
+    end
+    lastTarget = guid or lastTarget
+end
+
+
 function TeamManager:IsWorking()
     return self.frame.step < DESUMMON_PET
 end
@@ -184,12 +252,14 @@ function TeamManager:ResetUI()
     self:SetAutomaticallySaveTeams(true)
     self:SetLockStateAllTeams(false)
     self:SetSelected(1)
+    self:SetAutoSwitchOnTarget(true)
 end
 
 function TeamManager:SetSortTeams(enabled)
     assert(type(enabled)== "boolean")
     self.db.global.sortTeams = enabled
     self:SortTeamsByName()
+    self:RebuildNpcIDCache()
 end
 
 function TeamManager:SetAutomaticallySaveTeams(enabled)
@@ -283,7 +353,8 @@ function TeamManager:SetTeamName(teamIndex,name)
     if  self.teams[teamIndex] then
         self.teams[teamIndex].name = name
     end
-	TeamManager:SortTeamsByName()
+	self:SortTeamsByName()
+    self:RebuildNpcIDCache()
     self.callbacks:Fire("TEAM_UPDATED",teamIndex)
 end
 
@@ -317,6 +388,44 @@ function TeamManager:GetTeamDescription(teamIndex)
         return self.teams[teamIndex].description
     end
     return nil
+end
+
+function TeamManager:SetTeamNpcID(teamIndex, name)
+    assert(type(teamIndex) == "number"  and  (type(name) == "string" or name == nil))
+
+    if  self.teams[teamIndex] then
+        self.teams[teamIndex].npcID = name
+    end
+    self:RebuildNpcIDCache()
+    self.callbacks:Fire("TEAM_UPDATED", teamIndex)
+end
+function TeamManager:GetTeamNpcID(teamIndex)
+    if type(teamIndex) ~= "number" then return nil end
+
+    if self.teams[teamIndex] and self.teams[teamIndex].npcID then
+        return self.teams[teamIndex].npcID
+    end
+    return nil
+end
+function TeamManager:SetNpcFromTarget(teamIndex)
+    if type(teamIndex) ~= "number" then return nil end
+
+    local guid = UnitGUID("target")
+    local npcID = guid and tonumber(guid:match("-(%d+)-%x+$"))
+    if npcID then
+        local name = UnitName("target")
+        name = name and (" ("..name..")") or ""
+        TeamManager:SetTeamNpcID(teamIndex, npcID..name)
+    end
+end
+
+function TeamManager:SetAutoSwitchOnTarget(enabled)
+    assert(type(enabled)== "boolean")
+    self.db.global.autoSwitchOnTarget = enabled
+    self.callbacks:Fire("TEAM_UPDATED")
+end
+function TeamManager:GetAutoSwitchOnTarget()
+    return self.db.global.autoSwitchOnTarget
 end
 
 function TeamManager:TeamExists(teamIndex)
@@ -461,7 +570,8 @@ function TeamManager:MoveTeam(teamIndexSource,teamIndexDesintation)
                 self:SetSelected(selected + adjust)
             end
 
-			TeamManager:SortTeamsByName()
+			self:SortTeamsByName()
+            self:RebuildNpcIDCache()
             self.callbacks:Fire("TEAM_UPDATED")
         end
     end
@@ -572,7 +682,8 @@ function TeamManager:CreateTeam()
     end
 
     table.insert(self.teams, self:GetSelected() + 1, team)
-	TeamManager:SortTeamsByName()
+	self:SortTeamsByName()
+    self:RebuildNpcIDCache()
     self.callbacks:Fire("TEAM_CREATED", self:GetSelected() + 1)
     self.callbacks:Fire("TEAM_UPDATED", self:GetSelected() + 1)
     self:SetSelected(self:GetSelected() + 1)
@@ -616,6 +727,7 @@ function TeamManager.UpdateCurrentTeam()
         end
 
 		TeamManager:SortTeamsByName()
+        TeamManager:RebuildNpcIDCache()
         TeamManager.callbacks:Fire("TEAM_UPDATED", selected)
     end
 end
@@ -640,6 +752,7 @@ function TeamManager:OnInitialize()
             sortTeams = false,
             automaticallySaveTeams = true,
             ignoreEmptyPets = false,
+            autoSwitchOnTarget = true,
         }
     }
 
@@ -734,7 +847,8 @@ function TeamManager:ReconstructTeams()
             end
         end
     end
-	TeamManager:SortTeamsByName()
+	self:SortTeamsByName()
+    self:RebuildNpcIDCache()
     TeamManager.callbacks:Fire("TEAM_UPDATED")
 end
 
@@ -833,6 +947,7 @@ function TeamManager:FixTeams()
         end
     end
 
-	TeamManager:SortTeamsByName()
+	self:SortTeamsByName()
+    self:RebuildNpcIDCache()
     self.callbacks:Fire("TEAM_UPDATED")
 end

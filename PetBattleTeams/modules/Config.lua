@@ -187,10 +187,21 @@ Config.options = {
             get = function(info) return Tooltip:GetShowBreedInfo() end
         },
         TeamFunctionsHeading = {
-            order = 98,
+            order = 97,
             name = L["Team Management"],
             width = "full",
             type = "header",
+        },
+        AutoSwitchOnTarget = {
+            order = 98,
+            name = L["Autoswitch team feature"],
+            desc = L["When enabled, you can associate teams with NPC IDs, and your team will automatically switch when you target them."],
+            type = "toggle",
+            width = "full",
+            set = function(_,val)
+                TeamManager:SetAutoSwitchOnTarget(val)
+            end,
+            get = function(_) return TeamManager:GetAutoSwitchOnTarget() end
         },
         SortTeams = {
             order = 99,
