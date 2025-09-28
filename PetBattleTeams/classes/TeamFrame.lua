@@ -103,45 +103,45 @@ function PetBattleTeamsFrame:New()
     teamNameText:SetJustifyH("LEFT")
     teamNameText:Hide()
 
-    local teamDescriptionIcon = petBattleTeamsFrame:CreateTexture(nil, "OVERLAY")
-    petBattleTeamsFrame.teamDescriptionIcon = teamDescriptionIcon
-    teamDescriptionIcon:SetSize(16, 16)
-    teamDescriptionIcon:SetTexture("Interface\\Icons\\INV_Letter_15")
-    teamDescriptionIcon:SetPoint("BOTTOMRIGHT", petBattleTeamsFrame.unitFrames[3], "TOPRIGHT", 0, 0)
-    teamDescriptionIcon:SetAtlas("ui-hud-minimap-mail-up", true)
-    teamDescriptionIcon:SetAlpha(.2)
-    teamDescriptionIcon:SetDesaturated(true)
+    local teamNoteIcon = petBattleTeamsFrame:CreateTexture(nil, "OVERLAY")
+    petBattleTeamsFrame.teamNoteIcon = teamNoteIcon
+    teamNoteIcon:SetSize(16, 16)
+    teamNoteIcon:SetTexture("Interface\\Icons\\INV_Letter_15")
+    teamNoteIcon:SetPoint("BOTTOMRIGHT", petBattleTeamsFrame.unitFrames[3], "TOPRIGHT", 0, 0)
+    teamNoteIcon:SetAtlas("ui-hud-minimap-mail-up", true)
+    teamNoteIcon:SetAlpha(.2)
+    teamNoteIcon:SetDesaturated(true)
 
-    local teamDescriptionButton = CreateFrame("Button", nil, petBattleTeamsFrame)
-    petBattleTeamsFrame.teamDescriptionButton = teamDescriptionButton
-    teamDescriptionButton:SetSize(16, 16)
-    teamDescriptionButton:SetPoint("CENTER", teamDescriptionIcon, "CENTER")
-    teamDescriptionButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
-    teamDescriptionButton:SetScript("OnEnter", function(self)
+    local teamNoteButton = CreateFrame("Button", nil, petBattleTeamsFrame)
+    petBattleTeamsFrame.teamNoteButton = teamNoteButton
+    teamNoteButton:SetSize(16, 16)
+    teamNoteButton:SetPoint("CENTER", teamNoteIcon, "CENTER")
+    teamNoteButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
+    teamNoteButton:SetScript("OnEnter", function(self)
         local teamIndex = self:GetParent().teamIndex
-        local description = TeamManager:GetTeamDescription(teamIndex)
+        local note = TeamManager:GetTeamNote(teamIndex)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:ClearLines()
         local displayName = TeamManager:GetTeamName(teamIndex)
         GameTooltip:AddLine(displayName, 1, 1, 1)
-        if description and description ~= "" then
-            GameTooltip:AddLine(description, 0.8, 0.8, 0.8, false)
+        if note and note ~= "" then
+            GameTooltip:AddLine(note, 0.8, 0.8, 0.8, false)
         else
             GameTooltip:AddLine("> "..L["Add Note"].." <")
         end
         GameTooltip:Show()
     end)
-    teamDescriptionButton:SetScript("OnLeave", function(self)
+    teamNoteButton:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    teamDescriptionButton:RegisterForClicks("LeftButtonUp","RightButtonUp")
-    teamDescriptionButton:SetScript("OnClick", function(self, mouseButton)
+    teamNoteButton:RegisterForClicks("LeftButtonUp","RightButtonUp")
+    teamNoteButton:SetScript("OnClick", function(self, mouseButton)
         local parent = self:GetParent()
         if mouseButton == "RightButton" and IsModifierKeyDown() then
-            parent:DebugBattleDescription()
+            parent:DebugBattleNote()
         else
-            parent:ShowDescriptionEditor()
+            parent:ShowNoteEditor()
         end
     end)
 
@@ -150,11 +150,11 @@ function PetBattleTeamsFrame:New()
     petBattleTeamsFrame.teamNPCIcon = teamNPCIcon
     teamNPCIcon:SetSize(10, 10)
     teamNPCIcon:SetTexture("Interface\\UIEditorIcons\\UIEditorIcons")
-    teamNPCIcon:SetPoint("RIGHT", teamDescriptionIcon, "LEFT", 1)
+    teamNPCIcon:SetPoint("RIGHT", teamNoteIcon, "LEFT", 1)
     local v = select(4, GetBuildInfo())
     if v < 60000 then -- Until Pandaria (5)
         teamNPCIcon:SetSize(26, 26)
-        teamNPCIcon:SetPoint("RIGHT", teamDescriptionIcon, "LEFT", 13, -6)
+        teamNPCIcon:SetPoint("RIGHT", teamNoteIcon, "LEFT", 13, -6)
     end
     teamNPCIcon:SetAlpha(.2)
     teamNPCIcon:SetDesaturated(true)
@@ -162,7 +162,7 @@ function PetBattleTeamsFrame:New()
     local teamNPCButton = CreateFrame("Button", nil, petBattleTeamsFrame)
     petBattleTeamsFrame.teamNPCButton = teamNPCButton
     teamNPCButton:SetSize(10, 10)
-    teamNPCButton:SetPoint("RIGHT", teamDescriptionIcon, "LEFT", 1)
+    teamNPCButton:SetPoint("RIGHT", teamNoteIcon, "LEFT", 1)
     teamNPCButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
     teamNPCButton:SetScript("OnEnter", function(self)
         local teamIndex = self:GetParent().teamIndex
@@ -300,8 +300,8 @@ function PetBattleTeamsFrame:Update()
         local displayName = TeamManager:GetTeamName(self.teamIndex)
         self.teamNameText:SetText(displayName)
 
-        local description = TeamManager:GetTeamDescription(self.teamIndex)
-        toggleIcon(self.teamDescriptionIcon, description and description ~= "")
+        local note = TeamManager:GetTeamNote(self.teamIndex)
+        toggleIcon(self.teamNoteIcon, note and note ~= "")
 
         if self.teamScriptIcon then
             local script = TeamManager:GetTeamScript(self.teamIndex)
@@ -312,8 +312,8 @@ function PetBattleTeamsFrame:Update()
         toggleIcon(self.teamNPCIcon, npcID and npcID ~= "")
     end
     self.teamNameText:SetShown(showTeamName)
-    self.teamDescriptionIcon:SetShown(showTeamName)
-    self.teamDescriptionButton:SetShown(showTeamName)
+    self.teamNoteIcon:SetShown(showTeamName)
+    self.teamNoteButton:SetShown(showTeamName)
     self.teamNPCIcon:SetShown(showTeamName and TeamManager:GetAutoSwitchOnTarget())
     self.teamNPCButton:SetShown(showTeamName and TeamManager:GetAutoSwitchOnTarget())
     if self.teamScriptIcon then
@@ -378,23 +378,23 @@ function PetBattleTeamsFrame:BATTLE_PET_CURSOR_CHANGED(event,operation , petID, 
     self.teamMovementFrame:SetShown(show)
 end
 
-function PetBattleTeamsFrame:ShowDescriptionEditor()
+function PetBattleTeamsFrame:ShowNoteEditor()
     if not self.teamIndex then return end
 
     self:HideEditors()
-    local descriptionEditor = PetBattleTeams:GetModule("DescriptionEditor")
-    if descriptionEditor then
-        descriptionEditor:ShowEditor(self.teamIndex)
+    local noteEditor = PetBattleTeams:GetModule("NoteEditor")
+    if noteEditor then
+        noteEditor:ShowEditor(self.teamIndex)
     end
 end
 
-function PetBattleTeamsFrame:DebugBattleDescription()
+function PetBattleTeamsFrame:DebugBattleNote()
     DEFAULT_CHAT_FRAME:AddMessage(L["PetBattle Teams"].." - debug note for team #" .. (self.teamIndex or ""), .5, .8, 1)
     if not self.teamIndex then return end
 
-    local descriptionEditor = PetBattleTeams:GetModule("DescriptionEditor")
-    if descriptionEditor then
-        descriptionEditor:ShowBattleDescription(self.teamIndex)
+    local noteEditor = PetBattleTeams:GetModule("NoteEditor")
+    if noteEditor then
+        noteEditor:ShowBattleNote(self.teamIndex)
     end
 end
 
@@ -413,9 +413,9 @@ end
 function PetBattleTeamsFrame:HideEditors()
     if not self.teamIndex then return end
 
-    local descriptionEditor = PetBattleTeams:GetModule("DescriptionEditor")
-    if descriptionEditor then
-        descriptionEditor:HideEditor(self.teamIndex)
+    local noteEditor = PetBattleTeams:GetModule("NoteEditor")
+    if noteEditor then
+        noteEditor:HideEditor(self.teamIndex)
     end
     local scriptEditor = PetBattleTeams:GetModule("ScriptEditor")
     if scriptEditor then

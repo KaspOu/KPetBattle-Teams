@@ -26,7 +26,7 @@ function ScriptEditor:OnInitialize()
     if not self:IsLoaded() then
         return
     end
-    -- self:CreateBattleDescriptionFrame()
+    -- self:CreateBattleNoteFrame()
     -- self:RegisterEvents()
 end
 
@@ -81,7 +81,7 @@ function ScriptEditor:CreateEditor(teamIndex)
         },
     }
     local scrollContainer = CreateFrame("Frame", nil, self.editor,"BackdropTemplate")
-    --  descriptionEditFrame:SetSize(410, 317)
+    --  noteEditFrame:SetSize(410, 317)
     scrollContainer:SetPoint("TOPLEFT", self.editor, "TOPLEFT", 30, -60)
     scrollContainer:SetPoint("TOPRIGHT", self.editor, "TOPRIGHT", -30, -60)
     scrollContainer:SetPoint("BOTTOM", self.editor, "BOTTOM", 0, 60)
@@ -177,7 +177,7 @@ function ScriptEditor:SaveEditor()
     if not self.currentTeamIndex then self:HideEditor(); return end
 
     local newScript = self.editBox:GetText()
-    -- isBlank description.trim()
+    -- isBlank note.trim()
     if newScript and string.gsub(newScript, "^%s*(.-)%s*$", "%1") == "" then
         newScript = nil
     end

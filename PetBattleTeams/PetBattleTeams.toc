@@ -56,7 +56,7 @@ modules\Config.lua
 classes\PetUnitFrame.lua
 classes\TeamFrame.lua
 
-modules\GUI\DescriptionEditor.lua
+modules\GUI\NoteEditor.lua
 modules\GUI\ScriptEditor.lua
 modules\GUI\LockTeamsButton.lua
 modules\GUI\AddTeamButton.lua

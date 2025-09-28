@@ -1,5 +1,5 @@
 local PetBattleTeams = LibStub("AceAddon-3.0"):GetAddon("PetBattleTeams")
-local DescriptionEditor = PetBattleTeams:NewModule("DescriptionEditor")
+local NoteEditor = PetBattleTeams:NewModule("NoteEditor")
 local TeamManager = PetBattleTeams:GetModule("TeamManager")
 local GUI = PetBattleTeams:GetModule("GUI")
 
@@ -22,13 +22,13 @@ local tinyBackdrop = {
     }
 }
 
-function DescriptionEditor:OnInitialize()
-    self:CreateDescriptionEditor()
+function NoteEditor:OnInitialize()
+    self:CreateNoteEditor()
     self:CreateBattleFrame()
     self:RegisterEvents()
 end
 
-function DescriptionEditor:CreateDescriptionEditor()
+function NoteEditor:CreateNoteEditor()
     self.editor = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
     self.editor:SetSize(430, 317)
     -- self.editor:SetSize(500, 317)
@@ -149,7 +149,7 @@ local function OnLeave(self)
     GameTooltip:Hide()
 end
 
-function DescriptionEditor:CreateBattleFrame()
+function NoteEditor:CreateBattleFrame()
     self.battleFrame = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
     self.battleFrame:SetSize(380, 200)
     self.battleFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", -5, 15)
@@ -241,27 +241,27 @@ function DescriptionEditor:CreateBattleFrame()
     button:SetScript("OnLeave",OnLeave)
 end
 
-function DescriptionEditor:RegisterEvents()
+function NoteEditor:RegisterEvents()
     self.battleFrame:RegisterEvent("PET_BATTLE_OPENING_START")
     self.battleFrame:RegisterEvent("PET_BATTLE_CLOSE")
     self.battleFrame:SetScript("OnEvent", function(_, event, ...)
         if event == "PET_BATTLE_OPENING_START" then
-            self:ShowBattleDescription()
+            self:ShowBattleNote()
         elseif event == "PET_BATTLE_CLOSE" then
-            self:HideBattleDescription()
+            self:HideBattleNote()
         end
     end)
 end
 
-function DescriptionEditor:ShowEditor(teamIndex)
+function NoteEditor:ShowEditor(teamIndex)
     if not teamIndex then return end
 
     self.currentTeamIndex = teamIndex
 
-    local currentDescription = TeamManager:GetTeamDescription(teamIndex)
+    local currentNote = TeamManager:GetTeamNote(teamIndex)
     local name, _, customName = TeamManager:GetTeamName(teamIndex)
-    if currentDescription ~= self.editBox:GetText() then
-        self.editBox:SetText(currentDescription or "")
+    if currentNote ~= self.editBox:GetText() then
+        self.editBox:SetText(currentNote or "")
         C_Timer.After(0.1, function()
             local verticalScrollRange = self.editBox.Scroll:GetVerticalScrollRange()
             self.editBox.Scroll:SetVerticalScroll(verticalScrollRange)
@@ -273,7 +273,7 @@ function DescriptionEditor:ShowEditor(teamIndex)
     self.editBox:SetFocus()
 end
 
-function DescriptionEditor:HideEditor()
+function NoteEditor:HideEditor()
     self.editor:Hide()
     self.editBox:ClearFocus()
     self.editorTitle:SetText("")
@@ -281,30 +281,30 @@ function DescriptionEditor:HideEditor()
     self.currentTeamIndex = nil
 end
 
-function DescriptionEditor:SaveEditor()
+function NoteEditor:SaveEditor()
     if not self.currentTeamIndex then self:HideEditor(); return end
 
-    local newDescription = self.editBox:GetText()
-    -- isBlank description.trim()
-    if newDescription and string.gsub(newDescription, "^%s*(.-)%s*$", "%1") == "" then
-        newDescription = nil
+    local newNote = self.editBox:GetText()
+    -- isBlank note.trim()
+    if newNote and string.gsub(newNote, "^%s*(.-)%s*$", "%1") == "" then
+        newNote = nil
     end
 
-    TeamManager:SetTeamDescription(self.currentTeamIndex, newDescription)
+    TeamManager:SetTeamNote(self.currentTeamIndex, newNote)
     self:HideEditor()
 end
 
-function DescriptionEditor:ShowBattleDescription(selectedTeam)
-    if selectedTeam == nil and not TeamManager:GetShowBattleDescription() then
+function NoteEditor:ShowBattleNote(selectedTeam)
+    if selectedTeam == nil and not TeamManager:GetShowBattleNote() then
         return
     end
 
     selectedTeam = selectedTeam or TeamManager:GetSelected()
     if selectedTeam and selectedTeam > 0 then
-        local description = TeamManager:GetTeamDescription(selectedTeam)
-        if description and description ~= "" then
+        local note = TeamManager:GetTeamNote(selectedTeam)
+        if note and note ~= "" then
             self.battleFrame.ScrollContent:SetHeight(self.battleFrame.Text:GetHeight())
-            self.battleFrame:SetText(description)
+            self.battleFrame:SetText(note)
             local name, _, customName = TeamManager:GetTeamName(selectedTeam)
             self.battleFrame.teamNameText:SetText(customName or name)
             self.battleFrame:Show()
@@ -314,6 +314,6 @@ function DescriptionEditor:ShowBattleDescription(selectedTeam)
     end
 end
 
-function DescriptionEditor:HideBattleDescription()
+function NoteEditor:HideBattleNote()
     self.battleFrame:Hide()
 end

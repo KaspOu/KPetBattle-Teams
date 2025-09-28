@@ -36,7 +36,7 @@ menuFrame.menu = {
     { text = L["Edit Note"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex
         -- Utiliser l'éditeur global
-        local globalEditor = PetBattleTeams:GetModule("DescriptionEditor")
+        local globalEditor = PetBattleTeams:GetModule("NoteEditor")
         if globalEditor then
             globalEditor:ShowEditor(teamIndex)
         end
