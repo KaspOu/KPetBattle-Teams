@@ -11,6 +11,7 @@ local baseLocale = {
     ["Display team name above the team"] = "Display team name above the team",
     ["Show team note during pet battles"] = "Show team note during pet battles",
     ["Press Ctrl+Enter to save the note"] = "Press Ctrl+Enter to save the note",
+    ["Press Ctrl+Enter to save the script"] = "Press Ctrl+Enter to save the script",
     ["Enable mouse wheel scrolling for the selected team"] = "Enable mouse wheel scrolling for the selected team",
     ["When enabled allows you to change the selected team by using the mouse wheel on the selected team (above the roster)"] = "When enabled allows you to change the selected team by using the mouse wheel on the selected team (above the roster)",
     ["Main"] = "Main",
@@ -53,6 +54,7 @@ local baseLocale = {
     ["Rename Team"] = "Rename Team",
     ["Edit Note"] = "Edit Note",
     ["Add Note"] = "Add Note",
+    ["Edit Script"] = "Edit Script",
     ["Edit NPC ID for AutoSwitch"] = "Edit NPC ID for AutoSwitch",
     ["Set NPC ID from current Target"] = "Set NPC ID from current Target",
     ["Linked to NPC: %s"] = "Linked to NPC: %s",
@@ -63,11 +65,20 @@ local baseLocale = {
     ["Click to add a new team"] = "Click to add a new team",
     ["Right-click to show options menu.|nClick to toggle teams frame."] = "Right-click to show options menu.|nClick to toggle teams frame.",
     ["Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team."] = "Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team.",
+
+    ["Team '|cffffd200%s|r': script loaded"] = "Team '|cffffd200%s|r': script loaded",
+    ["PetBattleTeams: Warning: NPC ID %s is linked to multiple teams: %s and %s.|nOnly the last team will be chosen for autoswitch."] = "PetBattleTeams:|nWarning: NPC ID %s is linked to multiple teams: %s and %s.|nOnly the last team will be chosen for autoswitch.",
+    ["PetBattleTeams: |cffffd200%s|r found, autoswitch to team: |cffffd200%s|r"] = "PetBattleTeams: |cffffd200%s|r found, autoswitch to team: |cffffd200%s|r",
+    ["PetBattleTeams:\nAutoswitch to team: |cffffd200%s|r"] = "PetBattleTeams:\nAutoswitch to team: |cffffd200%s|r",
+    ["SCRIPT: %s"] = "SCRIPT: %s",
+
     ["PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?"] = "PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?",
     ["PetBattleTeams:|nEnter a name for |cffffd200%s|r."] = "PetBattleTeams:|nEnter a name for |cffffd200%s|r.",
     ["PetBattleTeams:|nEnter a NPC ID for |cffffd200%s|r."] = "PetBattleTeams:|nEnter a NPC ID for |cffffd200%s|r.",
     ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?",
     ["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"] = "PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?",
+    ["PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles."] = "PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles.",
+    ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"
 }
 
 

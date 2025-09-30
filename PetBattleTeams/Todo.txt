@@ -1,8 +1,7 @@
 TODO:
-PetBattleScript integration
 
 alpha:
-AutoSwitch (NPC ID detection)
+PetBattleScript integration
 
 beta:
 
@@ -11,6 +10,7 @@ post release:
 add detached frame compact mode
 
 Done:
+11.2.008 added: AutoSwitch (NPC ID detection)
 11.2.006 added: Team note scrollable
 11.2.004 added: Strong / Weak icons
 11.2.003 added: Teams notes

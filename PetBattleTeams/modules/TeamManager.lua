@@ -109,11 +109,6 @@ local function OnUpdate(self,elapsed)
         end
     elseif self.step == FINISHED then
         self:SetScript("OnUpdate",nil)
-        -- Team #selected is now loaded
-        local ScriptEditor = PetBattleTeams:GetModule("ScriptEditor")
-        if ScriptEditor:IsLoaded() then
-            ScriptEditor:PBS_SetTeamID(selected)
-        end
     end
 end
 
@@ -146,7 +141,7 @@ function TeamManager:RebuildNpcIDCache()
                     local existingTeamIndex = npcIDToTeamMap[numericNpcID]
                     local existingTeamDisplayName = select(1, TeamManager:GetTeamName(existingTeamIndex))
                     local currentTeamDisplayName = select(1, TeamManager:GetTeamName(i))
-                    DEFAULT_CHAT_FRAME:AddMessage(string.format(L["Attention : L'ID PNJ %s est lié à plusieurs équipes : %s et %s.|nSeule la dernière équipe sera choisie pour l'autoswitch."], numericNpcID, existingTeamDisplayName, currentTeamDisplayName), 1.0, 0.7, 0.0)
+                    DEFAULT_CHAT_FRAME:AddMessage(string.format(L["PetBattleTeams: Warning: NPC ID %s is linked to multiple teams: %s and %s.|nOnly the last team will be chosen for autoswitch."], numericNpcID, existingTeamDisplayName, currentTeamDisplayName), 1.0, 0.7, 0.0)
                 end
                 npcIDToTeamMap[numericNpcID] = i
             end
@@ -183,7 +178,8 @@ function TeamManager:DetectTarget()
         local name = UnitName("target") or npcID
         local teamName = TeamManager:GetTeamName(teamIndex)
         TeamManager:SetSelected(teamIndex)
-        DEFAULT_CHAT_FRAME:AddMessage(string.format("PetBattleTeams: |cffffd200%s|r found, autoswitch to team: |cffffd200%s|r", name, teamName))
+        DEFAULT_CHAT_FRAME:AddMessage(string.format(L["PetBattleTeams: |cffffd200%s|r found, autoswitch to team: |cffffd200%s|r"], name, teamName))
+        -- UIErrorsFrame:AddMessage(string.format(L["PetBattleTeams:\nAutoswitch to team: |cffffd200%s|r"], teamName, name))
 
         -- if ID only: autocomplete with name
         if TeamManager:GetTeamNpcID(teamIndex) == tostring(npcID) then
@@ -395,11 +391,11 @@ function TeamManager:GetTeamNote(teamIndex)
     return nil
 end
 
-function TeamManager:SetTeamNpcID(teamIndex, name)
-    assert(type(teamIndex) == "number"  and  (type(name) == "string" or name == nil))
+function TeamManager:SetTeamNpcID(teamIndex, npcIDAndName)
+    assert(type(teamIndex) == "number"  and  (type(npcIDAndName) == "string" or type(npcIDAndName) == "number" or npcIDAndName == nil))
 
     if  self.teams[teamIndex] then
-        self.teams[teamIndex].npcID = name
+        self.teams[teamIndex].npcID = npcIDAndName
     end
     self:RebuildNpcIDCache()
     self.callbacks:Fire("TEAM_UPDATED", teamIndex)
@@ -417,10 +413,11 @@ function TeamManager:SetNpcFromTarget(teamIndex)
 
     local guid = UnitGUID("target")
     local npcID = guid and tonumber(guid:match("-(%d+)-%x+$"))
-    if npcID then
+    if npcID and npcID > 0 then
         local name = UnitName("target")
         name = name and (" ("..name..")") or ""
         TeamManager:SetTeamNpcID(teamIndex, npcID..name)
+        -- TODO SetSelected?
     end
 end
 
@@ -521,7 +518,7 @@ function TeamManager:SetSelected(teamIndex)
     local prevSelected = self.db.global.selected
     self.db.global.selected = teamIndex
     TeamManager.callbacks:Fire("TEAM_UPDATED",prevSelected)
-    self.callbacks:Fire("SELECTED_TEAM_CHANGED",teamIndex)
+    TeamManager.callbacks:Fire("SELECTED_TEAM_CHANGED",teamIndex)
     self:ApplyTeam(teamIndex)
 end
 

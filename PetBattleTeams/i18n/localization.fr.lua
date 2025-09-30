@@ -15,6 +15,7 @@ local baseLocale = {
     ["Display team note in tooltip"] = "Afficher la note d'\195\169quipe dans l'infobulle",
     ["Show team note during pet battles"] = "Afficher la note d'\195\169quipe pendant les combats de mascottes",
     ["Press Ctrl+Enter to save the note"] = "Appuyez sur Ctrl+Entr\195\169e pour sauvegarder la note d'\195\169quipe",
+    ["Press Ctrl+Enter to save the script"] = "Appuyez sur Ctrl+Entr\195\169e pour sauvegarder le script d'\195\169quipe",
     ["Enable mouse wheel scrolling for the selected team"] = "Activer le d\195\169filement de la molette de la souris pour l'\195\169quipe s\195\169lectionn\195\169e",
     ["When enabled allows you to change the selected team by using the mouse wheel on the selected team (above the roster)"] = "Lorsqu'activ\195\169, permet de changer l'\195\169quipe s\195\169lectionn\195\169e en utilisant la molette de la souris sur l'affichage de l'\195\169quipe (au-dessus de la liste).",
     ["Main"] = "Principal",
@@ -57,6 +58,7 @@ local baseLocale = {
     ["Rename Team"] = "Renommer l'\195\169quipe",
     ["Edit Note"] = "Editer la note",
     ["Add Note"] = "Ajouter une note",
+    ["Edit Script"] = "Editer le Script",
     ["Edit NPC ID for AutoSwitch"] = "Editer l'ID PNJ pour le changement automatique",
     ["Set NPC ID from current Target"] = "D\195\169finir l'ID PNJ \195\160 partir de la cible actuelle",
     ["Linked to NPC: %s"] = "Li\195\169e au PNJ : %s",
@@ -67,11 +69,20 @@ local baseLocale = {
     ["Click to add a new team"] = "Ajouter une nouvelle \195\169quipe",
     ["Right-click to show options menu.|nClick to toggle teams frame."] = "Clic droit pour afficher le menu des options.|nClic gauche pour afficher/masquer les \195\169quipes.",
     ["Drag to swap pets between teams.|nShift-Drag to copy pet to a new team.|nControl-Drag to move team."] = "Glisser pour \195\169changer les mascottes entre les \195\169quipes.|nMaj+Glisser pour copier la mascotte dans une nouvelle \195\169quipe.|nCtrl+Glisser pour d\195\169placer l'\195\169quipe.",
+
+    ["Team '|cffffd200%s|r': script loaded"] = "\195\137quipe '|cffffd200%s|r' : script charg\195\169",
+    ["PetBattleTeams: Warning: NPC ID %s is linked to multiple teams: %s and %s.|nOnly the last team will be chosen for autoswitch."] = "PetBattleTeams: Attention : L'ID PNJ %s est li\195\169 \195\160 plusieurs \195\169quipes : %s et %s.|nSeule la derni\195\168re \195\169quipe sera choisie pour l'autoswitch.",
+    ["PetBattleTeams: |cffffd200%s|r found, autoswitch to team: |cffffd200%s|r"] = "PetBattleTeams : |cffffd200%s|r trouv\195\169, chargement automatique de l'\195\169quipe : |cffffd200%s|r",
+    ["PetBattleTeams:\nAutoswitch to team: |cffffd200%s|r"] = "PetBattleTeams :\nChargement automatique de l'\195\169quipe : |cffffd200%s|r",
+    ["SCRIPT: %s"] = "SCRIPT: %s",
+
     ["PetBattleTeams:|nAre you sure you want to delete |cffffd200%s|r?"] = "PetBattleTeams:|n\195\138tes-vous s\195\187r de vouloir|nsupprimer |cffffd200%s|r ?",
     ["PetBattleTeams:|nEnter a name for |cffffd200%s|r."] = "PetBattleTeams:|nEntrez un nom pour |cffffd200%s|r.",
     ["PetBattleTeams:|nEnter a NPC ID for |cffffd200%s|r."] = "PetBattleTeams:|nEntrez un ID de PNJ pour |cffffd200%s|r.",
     ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "PetBattleTeams:|nSouhaitez-vous importer vos mascottes depuis les versions pr\195\169c\195\169dentes de PetBattleTeams ?",
     ["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"] = "PetBattleTeams:|n\195\138tes-vous s\195\187r de vouloir|n|cffffd200r\195\169initialiser toutes les \195\169quipes|r?",
+    ["PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles."] = "PetBattleTeams:|nL'addon '|cffffd200Pet Battle Scripts|r' est requis.\n\n\195\142crivez des scripts pour automatiser les combats de mascottes.",
+    ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "PetBattleTeams:|n|cffffd200Script invalide (non sauvegard\195\169)|r:\n%s"
 }
 
 addon:RegisterLocale('frFR', baseLocale)

@@ -3,6 +3,9 @@ local ScriptEditor = PetBattleTeams:NewModule("ScriptEditor")
 local TeamManager = PetBattleTeams:GetModule("TeamManager")
 local GUI = PetBattleTeams:GetModule("GUI")
 
+-- PetBattle Scripts
+local PBS_Core, PBS_Director
+
 local _, addon = ...
 local L = addon.L
 
@@ -22,20 +25,46 @@ local tinyBackdrop = {
 }
 
 function ScriptEditor:OnInitialize()
-    self:CreateEditor()
-    if not self:IsLoaded() then
+    self.isScriptEditorReady = false
+
+    if C_AddOns.IsAddOnLoaded("tdBattlePetScript") then
+        ScriptEditor:Load()
         return
     end
-    -- self:CreateBattleNoteFrame()
-    -- self:RegisterEvents()
+    self:RegisterEvents()
 end
 
+-- To be called by RegisterEvents
+function ScriptEditor:Load()
+    PBS_Core = LibStub("AceAddon-3.0"):GetAddon("PetBattleScripts")
+    PBS_Director = PBS_Core:GetModule("Director")
+    self:CreateEditor()
+    self.isScriptEditorReady = true
+end
 function ScriptEditor:IsLoaded()
-    return C_AddOns.IsAddOnLoaded("tdBattlePetScript")
+    return self.isScriptEditorReady or false
 end
 
+-- Events:
+--  - Detect tdBattlePetScript Loading (then Loads itself)
+--  - Autolaunch Pet Battle Script (if loaded)
+function ScriptEditor:RegisterEvents()
+    self.eventsFrame = CreateFrame("Frame", nil, UIParent)
+    self.eventsFrame:SetScript("OnEvent", function(self, event, name)
+        if event == "ADDON_LOADED" and name == "tdBattlePetScript" then
+            self:UnregisterEvent("ADDON_LOADED")
+            if ScriptEditor:IsLoaded() then return end
+            ScriptEditor:Load()
+        end
+        if event == "PET_BATTLE_OPENING_START" and ScriptEditor:IsLoaded() then
+            ScriptEditor:AutoLoad_PBS_Script()
+        end
+    end)
+    self.eventsFrame:RegisterEvent("ADDON_LOADED")
+    self.eventsFrame:RegisterEvent("PET_BATTLE_OPENING_START")
+end
 
-function ScriptEditor:CreateEditor(teamIndex)
+function ScriptEditor:CreateEditor()
     self.editor = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
     self.editor:SetSize(630, 417)
     self.editor:SetPoint("CENTER", UIParent, "CENTER")
@@ -63,7 +92,7 @@ function ScriptEditor:CreateEditor(teamIndex)
     infoTextEditor:SetPoint("TOPLEFT", self.editorTitle, "BOTTOMLEFT", 0, -7)
     infoTextEditor:SetPoint("TOPRIGHT", self.editorTitle, "BOTTOMRIGHT", 0, -7)
     infoTextEditor:SetTextColor(0.7, 0.7, 0.7)
-    infoTextEditor:SetText(L["Press Ctrl+Enter to save the note"])
+    infoTextEditor:SetText(L["Press Ctrl+Enter to save the script"])
     infoTextEditor:SetJustifyH("LEFT")
 
     -- Scroll EditBox
@@ -146,7 +175,9 @@ end
 
 
 function ScriptEditor:ShowEditor(teamIndex)
+    assert(type(teamIndex) == "number", "ShowEditor: teamIndex doit être un nombre")
     if not teamIndex then return end
+    if not self:IsLoaded() then StaticPopup_Show("PBT_SCRIPT_NOTLOADED") return end
 
     self.currentTeamIndex = teamIndex
 
@@ -159,7 +190,7 @@ function ScriptEditor:ShowEditor(teamIndex)
             self.editBox.Scroll:SetVerticalScroll(verticalScrollRange)
         end)
     end
-    self.editorTitle:SetText("SCRIPT: "..(customName or name))
+    self.editorTitle:SetText(string.format(L["SCRIPT: %s"], (customName or name)))
 
     self.editor:Show()
     self.editBox:SetFocus()
@@ -176,113 +207,91 @@ end
 function ScriptEditor:SaveEditor()
     if not self.currentTeamIndex then self:HideEditor(); return end
 
-    local newScript = self.editBox:GetText()
+    local newScript = self.editBox:GetText() or ""
     -- isBlank note.trim()
-    if newScript and string.gsub(newScript, "^%s*(.-)%s*$", "%1") == "" then
+    newScript = string.gsub(newScript, "^%s*(.-)%s*$", "%1")
+    if newScript  == "" then
         newScript = nil
     end
-    -- FIXME:
-    -- local isValid, err = self:PBS_ValidateScript(newScript)
-    -- if not isValid then
-    --     print(err)
-    --     StaticPopup_Show("SCRIPT_ERROR_POPUP", err)
-    --     return
-    -- end
-    -- -- FIXME:
+    if newScript then
+        local isSuccess, err = self:PBS_ValidateScript(newScript)
+        if not isSuccess then
+            StaticPopup_Show("PBT_SCRIPT_ERROR", err)
+            -- STOP ON ERROR
+            return
+        end
+    end
 
+    local selectedTeamIndex = TeamManager:GetSelected()
     TeamManager:SetTeamScript(self.currentTeamIndex, newScript)
-    -- self:PBS_SaveScript(self:GetTeamID(self.currentTeamIndex))
+    if self.currentTeamIndex == selectedTeamIndex then
+        ScriptEditor:AutoLoad_PBS_Script()
+    end
     self:HideEditor()
 end
 
-function ScriptEditor:PBS_ValidateScript(script)
-    local engine = PetBattleScripts.GetScriptEngine and PetBattleScripts:GetScriptEngine() or nil
-    if not engine then
-        return false, "Moteur de script non disponible"
-    end
-
-    local isValid, err = engine:CheckScript(script)
-    if (not isValid) then
-        err = "Invalid script:"..err
-    end
-    return isValid, err
+local PBSScript = function(code)
+    local ScriptClass = PBS_Core:GetClass("Script")
+    return ScriptClass:New({ code = code }, nil, nil)
 end
 
+function ScriptEditor:PBS_ValidateScript(code)
+    assert(type(code) == "string", "PBS_ValidateScript: code doit être une chaine")
+    local PBSObject = PBSScript()
+    local isSuccess, err = PBSObject:SetCode(code)
+    PBSObject = nil
+    return isSuccess, err
+end
 
-function ScriptEditor:GetTeamID(teamIndex)
-    -- "PetBattleTeams"..teamIndex
-    local name, _, customName = TeamManager:GetTeamName(teamIndex)
-    return customName or name
-end
-function ScriptEditor:PBS_SetTeamID(teamIndex)
-    local teamID = self:GetTeamID(teamIndex)
-    PetBattleScripts:SetCurrentTeamID(teamID)
-end
-function ScriptEditor:PBS_DeleteTeam(teamIndex)
-    local teamID = self:GetTeamID(teamIndex)
-    if PetBattleScripts:GetScript(teamID) then
-        PetBattleScripts:DeleteScript(teamID)
-        print("Script PBS deleted for team "..teamIndex)
+function ScriptEditor:PBS_SetScript(code)
+    assert(code == nil or type(code) == "string", "PBS_SetScript: code doit être une chaine")
+    if not code then
+        PBS_Director:SetScript(nil)
+        return
     else
-        print("Team not found: "..teamID)
+        PBS_Director:SetScript(PBSScript(code))
     end
 end
 
---- Enregistrement pour PetBattleScripts, fonctionnement:
---- * 1. Si un script est enregistré pour l’ennemi, il l'utilise (par ID ou nom de PNJ),
---- * 2. Sinon, si un script est lié à l’équipe active, il l'utilise
---- ! il faut PetBattleScripts:SetCurrentTeamID(teamID)
-function ScriptEditor:PBS_SaveScript(teamIndex)
-    local team = self.teams[teamIndex]
-    if not team then
-        print("Équipe invalide.")
-        return
-    end
 
-    local teamID = self:GetTeamID(teamIndex)
-    local scriptName = "Script de l'équipe "..teamIndex
-    local script = TeamManager:GetTeamScript(teamIndex)
-    if not script or script:trim() == "" then
-        print("Aucun script défini pour cette équipe.")
-        return
-    end
+function ScriptEditor:AutoLoad_PBS_Script()
+    local teamIndex = TeamManager:GetSelected()
+    if not teamIndex or teamIndex <= 0 then return end
 
-    -- FIXME:
-    local isValid, err = self:ValidateScript(script)
-    if not isValid then
-        print(err)
-        return
+    local code = TeamManager:GetTeamScript(teamIndex)
+    if code and code ~= "" then
+        local teamName = TeamManager:GetTeamName(teamIndex)
+        UIErrorsFrame:AddMessage(string.format(L["Team '|cffffd200%s|r': script loaded"], teamName))
+        ScriptEditor:PBS_SetScript(code)
     end
-    -- FIXME:
-    PetBattleScripts:Save(teamID, script, scriptName)
-    print("Script enregistré dans PetBattleScripts.")
 end
 
 
+--@do-not-package@
+--[[
 
-function ScriptEditor:SetTargetNpcID(teamIndex)
-    if not teamIndex then return end
-
-    local unitGuid = UnitGUID("target")
-    if unitGuid == nil then
-        TeamManager:SetNpcID(teamIndex, nil)
-        print("Debug: No target, Team association removed")
+-- Code for SetScript with ScriptWrapper
+local scriptParse, err = PBS_Director:BuildScript(code)
+if not scriptParse then
+    print(string.format("Error while building script: %s", err))
+end
+local scriptWrapper = {
+    _parsedScript = scriptParse,
+    GetScript = function(self)
+        return self._parsedScript
     end
-    local npcID = unitGuid:match("-(%d+)-%x+$")
-    TeamManager:SetNpcID(teamIndex, npcID)
-    print("Debug: Team associated to #"..npcID.." - "..UnitName("target"))
-end
-
-function ScriptEditor:EditNpcID(teamIndex)
-    local teamIndex = menuFrame.teamIndex
-    local displayName = TeamManager:GetTeamName(teamIndex)
-    StaticPopup_Show("PBT_TEAM_EDITNPCID", displayName, nil, teamIndex)
-end
-
-StaticPopupDialogs["SCRIPT_ERROR_POPUP"] = {
-    text = "Error in script :\n%s",
-    button1 = "OK",
-    timeout = 0,
-    whileDead = true,
-    hideOnEscape = true,
 }
+PBS_Director:SetScript(scriptWrapper)
+
+
+-- Future button?
+function ScriptEditor:PBS_Run()
+    local selectedTeamID = TeamManager:GetSelected()
+    local script = TeamManager:GetTeamScript(selectedTeamID)
+    if script ~= nil then
+        ScriptEditor:PBS_SetScript(script)
+        PBS_Director:Run()
+    end
+end
+--]]
+--@end-do-not-package@

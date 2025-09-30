@@ -49,7 +49,9 @@
         "SetCollectionsJournalShown",
         "COLLECTIONS_JOURNAL_TAB_INDEX_PETS",
         "ToggleCollectionsJournal",
-        "PetBattleFrame"
+        "PetBattleFrame",
+        "KEY_BINDINGS",
+        "UIErrorsFrame"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#cf5018",

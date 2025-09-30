@@ -225,11 +225,11 @@ function PetBattleTeamsFrame:New()
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
             GameTooltip:ClearLines()
             local displayName = TeamManager:GetTeamName(teamIndex)
-            GameTooltip:AddLine(displayName, 1, 1, 1)
+            GameTooltip:AddLine(string.format(L["SCRIPT: %s"], displayName), 1, 1, 1)
             if script and script ~= "" then
                 GameTooltip:AddLine(script, 0.8, 0.8, 0.8, false)
             else
-                GameTooltip:AddLine("> "..L["Add Note"].." <")
+                GameTooltip:AddLine("> "..L["Edit Script"].." <")
             end
             GameTooltip:Show()
         end)
