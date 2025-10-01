@@ -81,11 +81,11 @@ local baseLocale = {
     ["PetBattleTeams:|nEnter a NPC ID for |cffffd200%s|r."] = "PetBattleTeams:|nEntrez un ID de PNJ pour |cffffd200%s|r.",
     ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "PetBattleTeams:|nSouhaitez-vous importer vos mascottes depuis les versions pr\195\169c\195\169dentes de PetBattleTeams ?",
     ["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"] = "PetBattleTeams:|n\195\138tes-vous s\195\187r de vouloir|n|cffffd200r\195\169initialiser toutes les \195\169quipes|r?",
-    ["PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles."] = "PetBattleTeams:|nL'addon '|cffffd200Pet Battle Scripts|r' est requis.\n\n\195\142crivez des scripts pour automatiser les combats de mascottes.",
+    ["PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles."] = "PetBattleTeams:|nL'addon '|cffffd200Pet Battle Scripts|r' est requis.\n\nEcrivez des scripts pour automatiser les combats de mascottes.",
     ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "PetBattleTeams:|n|cffffd200Script invalide (non sauvegard\195\169)|r:\n%s"
 }
 
-addon:RegisterLocale('frFR', baseLocale)
+addon:RegisterLocale(GetLocale(), baseLocale)
 
 --@do-not-package@
 -- https://code.google.com/archive/p/mangadmin/wikis/SpecialCharacters.wiki
