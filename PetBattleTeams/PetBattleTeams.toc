@@ -1,14 +1,27 @@
 ## Interface: 110200, 110205, 50500, 50501
 ## Title: PetBattleTeams Reloaded by |cff00ff00Kallye|r
 ## Title-frFR: PetBattleTeams Reloaded, par |cff00ff00Kallye|r
-## Version: 11.2.009
+## Title-deDE: PetBattleTeams Reloaded von |cff00ff00Kallye|r
+## Title-esES: PetBattleTeams Reloaded por |cff00ff00Kallye|r
+## Title-itIT: PetBattleTeams Reloaded di |cff00ff00Kallye|r
+## Title-koKR: PetBattleTeams Reloaded 제작: |cff00ff00Kallye|r
+## Title-zhCN: PetBattleTeams Reloaded 作者：|cff00ff00Kallye|r
+## Title-zhTW: PetBattleTeams Reloaded 作者：|cff00ff00Kallye|r
+## Version: 11.2.500
 ## Author: |cff00ff00Kallye|r (EU-Elune)
-## Notes: Create unlimited teams of pets and quickly switch between them in the Pet Journal
-## Notes-frFR: Créez des équipes de mascottes illimitées et passez rapidement de l'une à l'autre dans le Journal des Mascottes
+## Notes: Create teams of pets, and quickly switch between them in the Pet Journal. Manage teams: Note, Script, and Auto-switch target.
+## Notes-frFR: Créez des équipes de mascottes et basculez rapidement entre elles dans le Journal des mascottes. Gérez les notes, les scripts et la cible d'auto-switch.
+## Notes-ruRU: Создавайте команды питомцев и быстро переключайтесь между ними в Журнале питомцев. Управляйте командами: заметки, скрипты и цель автопереключения.
+## Notes-deDE: Erstelle Haustier-Teams und wechsle schnell zwischen ihnen im Haustierjournal. Verwalte Teams: Notiz, Skript und Ziel für automatischen Wechsel.
+## Notes-esES: Crea equipos de mascotas y cambia rápidamente entre ellos en el Diario de mascotas. Gestiona equipos: Nota, Script y objetivo de cambio automático.
+## Notes-itIT: Crea squadre di mascotte e passa rapidamente da una all'altra nel Diario delle mascotte. Gestisci le squadre: Nota, Script e bersaglio di cambio automatico.
+## Notes-koKR: 무제한의 애완동물 팀을 생성하고 애완동물 도감에서 빠르게 전환하세요. 메모, 스크립트, 자동 전환 대상을 관리합니다.
+## Notes-zhCN: 创建无限的宠物队伍，并在宠物手册中快速切换。管理队伍：备注、脚本和自动切换目标。
+## Notes-zhTW: 建立無限的寵物隊伍，並在寵物日誌中快速切換。管理隊伍：備註、腳本和自動切換目標。
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## X-Category: Pet Battles
-## X-Localizations: enUS, frFR, ruRU
+## X-Localizations: enUS, frFR, ruRU, deDE, esES, esMX, itIT, koKR, zhCN, zhTW
 ## SavedVariables: PetBattleTeamsDB, PetBattleTeamsSettings
 ## IconTexture: Interface\Icons\INV_Pet_BabyMurlocs_Blue
 

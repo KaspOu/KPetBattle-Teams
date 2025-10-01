@@ -84,4 +84,4 @@ local baseLocale = {
 }
 
 
-addon:RegisterLocale('ruRU', baseLocale)
+addon:RegisterLocale(GetLocale(), baseLocale)
