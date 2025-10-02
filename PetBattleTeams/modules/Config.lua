@@ -57,15 +57,15 @@ Config.options = {
             end,
             get = function(info) return TeamManager:GetShowTeamName()  end
         },
-        ShowBattleDescription = {
+        ShowBattleNote = {
             order = 6,
-            name = L["Show team description during pet battles"],
+            name = L["Show team note during pet battles"],
             type = "toggle",
             width = "full",
             set = function(info,val)
-                TeamManager:SetShowBattleDescription(val)
+                TeamManager:SetShowBattleNote(val)
             end,
-            get = function(info) return TeamManager:GetShowBattleDescription()  end
+            get = function(info) return TeamManager:GetShowBattleNote()  end
         },
         SelectedTeamScrolling = {
             order = 7,

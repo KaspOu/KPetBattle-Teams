@@ -204,6 +204,21 @@ StaticPopupDialogs["PBT_RESET_TEAMS"] = {
     hideOnEscape = 1,
 }
 
+StaticPopupDialogs["PBT_SCRIPT_NOTLOADED"] = {
+    text = "PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles.",
+    button1 = "OK",
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+}
+StaticPopupDialogs["PBT_SCRIPT_ERROR"] = {
+    text = "PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s",
+    button1 = "OK",
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+}
+
 --[[-------------------------------------------------------------------------
 --  Localization
 -------------------------------------------------------------------------]]--
@@ -239,5 +254,7 @@ function addon:RegisterLocale(locale, tbl)
         StaticPopupDialogs["PBT_TEAM_EDITNPCID"].text = self.L["PetBattleTeams:|nEnter a NPC ID for |cffffd200%s|r."]
         StaticPopupDialogs["PBT_IMPORT_TEAMS"].text = self.L["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"]
         StaticPopupDialogs["PBT_RESET_TEAMS"].text = self.L["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"]
+        StaticPopupDialogs["PBT_SCRIPT_NOTLOADED"].text = self.L["PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles."]
+        StaticPopupDialogs["PBT_SCRIPT_ERROR"].text = self.L["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"]
     end
 end

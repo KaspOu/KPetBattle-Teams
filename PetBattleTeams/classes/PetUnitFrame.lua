@@ -33,12 +33,11 @@ menuFrame.menu = {
         StaticPopup_Show("PBT_TEAM_RENAME", displayName, nil, teamIndex)
     end,
     },
-    { text = L["Edit Description"], notCheckable = true, func = function()
+    { text = L["Edit Note"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex
-        -- Utiliser l'éditeur global
-        local globalEditor = PetBattleTeams:GetModule("DescriptionEditor")
-        if globalEditor then
-            globalEditor:ShowEditor(teamIndex)
+        local noteEditor = PetBattleTeams:GetModule("NoteEditor")
+        if noteEditor then
+            noteEditor:ShowEditor(teamIndex)
         end
     end,
     },
@@ -53,6 +52,14 @@ menuFrame.menu = {
         TeamManager:SetNpcFromTarget(teamIndex)
     end,
     icon = "Interface\\UIEditorIcons\\UIEditorIcons"
+    },
+    { text = L["Edit Script"], notCheckable = true, func = function()
+        local teamIndex = menuFrame.teamIndex
+        local scriptEditor = PetBattleTeams:GetModule("ScriptEditor")
+        if scriptEditor then
+            scriptEditor:ShowEditor(teamIndex)
+        end
+    end,
     },
     { text = L["Delete Team"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex

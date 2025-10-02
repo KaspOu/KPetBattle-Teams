@@ -141,7 +141,7 @@ function TeamManager:RebuildNpcIDCache()
                     local existingTeamIndex = npcIDToTeamMap[numericNpcID]
                     local existingTeamDisplayName = select(1, TeamManager:GetTeamName(existingTeamIndex))
                     local currentTeamDisplayName = select(1, TeamManager:GetTeamName(i))
-                    DEFAULT_CHAT_FRAME:AddMessage(string.format(L["Attention : L'ID PNJ %s est lié à plusieurs équipes : %s et %s.|nSeule la dernière équipe sera choisie pour l'autoswitch."], numericNpcID, existingTeamDisplayName, currentTeamDisplayName), 1.0, 0.7, 0.0)
+                    DEFAULT_CHAT_FRAME:AddMessage(string.format(L["PetBattleTeams: Warning: NPC ID %s is linked to multiple teams: %s and %s.|nOnly the last team will be chosen for autoswitch."], numericNpcID, existingTeamDisplayName, currentTeamDisplayName), 1.0, 0.7, 0.0)
                 end
                 npcIDToTeamMap[numericNpcID] = i
             end
@@ -178,7 +178,8 @@ function TeamManager:DetectTarget()
         local name = UnitName("target") or npcID
         local teamName = TeamManager:GetTeamName(teamIndex)
         TeamManager:SetSelected(teamIndex)
-        DEFAULT_CHAT_FRAME:AddMessage(string.format("PetBattleTeams: |cffffd200%s|r found, autoswitch to team: |cffffd200%s|r", name, teamName))
+        DEFAULT_CHAT_FRAME:AddMessage(string.format(L["PetBattleTeams: |cffffd200%s|r found, autoswitch to team: |cffffd200%s|r"], name, teamName))
+        -- UIErrorsFrame:AddMessage(string.format(L["PetBattleTeams:\nAutoswitch to team: |cffffd200%s|r"], teamName, name))
 
         -- if ID only: autocomplete with name
         if TeamManager:GetTeamNpcID(teamIndex) == tostring(npcID) then
@@ -199,8 +200,8 @@ function TeamManager:GetShowTeamName()
     return self.db.global.showTeamName
 end
 
-function TeamManager:GetShowBattleDescription()
-    return self.db.global.showBattleDescription
+function TeamManager:GetShowBattleNote()
+    return self.db.global.showBattleNote
 end
 
 function TeamManager:GetShowXpInLevel()
@@ -217,9 +218,9 @@ function TeamManager:SetShowTeamName(enabled)
     self.callbacks:Fire("TEAM_UPDATED")
 end
 
-function TeamManager:SetShowBattleDescription(enabled)
+function TeamManager:SetShowBattleNote(enabled)
     assert(type(enabled) == "boolean")
-    self.db.global.showBattleDescription = enabled
+    self.db.global.showBattleNote = enabled
 end
 
 function TeamManager:SetShowXpInLevel(enabled)
@@ -245,7 +246,7 @@ end
 
 function TeamManager:ResetUI()
     self:SetShowTeamName(true)
-    self:SetShowBattleDescription(true)
+    self:SetShowBattleNote(true)
     self:SetShowXpInLevel(true)
     self:SetShowXpInHealthBar(false)
     self:SetSortTeams(false)
@@ -373,28 +374,28 @@ function TeamManager:GetTeamName(teamIndex)
     return displayName, name, customName
 end
 
-function TeamManager:SetTeamDescription(teamIndex, description)
-    assert(type(teamIndex) == "number" and (type(description) == "string" or description == nil))
+function TeamManager:SetTeamNote(teamIndex, note)
+    assert(type(teamIndex) == "number" and (type(note) == "string" or note == nil))
     if self.teams[teamIndex] then
-        self.teams[teamIndex].description = description
+        self.teams[teamIndex].note = note
     end
     self.callbacks:Fire("TEAM_UPDATED", teamIndex)
 end
 
-function TeamManager:GetTeamDescription(teamIndex)
+function TeamManager:GetTeamNote(teamIndex)
     if type(teamIndex) ~= "number" then return nil end
 
-    if self.teams[teamIndex] and self.teams[teamIndex].description then
-        return self.teams[teamIndex].description
+    if self.teams[teamIndex] and self.teams[teamIndex].note then
+        return self.teams[teamIndex].note
     end
     return nil
 end
 
-function TeamManager:SetTeamNpcID(teamIndex, name)
-    assert(type(teamIndex) == "number"  and  (type(name) == "string" or name == nil))
+function TeamManager:SetTeamNpcID(teamIndex, npcIDAndName)
+    assert(type(teamIndex) == "number"  and  (type(npcIDAndName) == "string" or type(npcIDAndName) == "number" or npcIDAndName == nil))
 
     if  self.teams[teamIndex] then
-        self.teams[teamIndex].npcID = name
+        self.teams[teamIndex].npcID = npcIDAndName
     end
     self:RebuildNpcIDCache()
     self.callbacks:Fire("TEAM_UPDATED", teamIndex)
@@ -412,11 +413,29 @@ function TeamManager:SetNpcFromTarget(teamIndex)
 
     local guid = UnitGUID("target")
     local npcID = guid and tonumber(guid:match("-(%d+)-%x+$"))
-    if npcID then
+    if npcID and npcID > 0 then
         local name = UnitName("target")
         name = name and (" ("..name..")") or ""
         TeamManager:SetTeamNpcID(teamIndex, npcID..name)
+        -- TODO SetSelected?
     end
+end
+
+function TeamManager:SetTeamScript(teamIndex, script)
+    assert(type(teamIndex) == "number" and (type(script) == "string" or script == nil))
+    if self.teams[teamIndex] then
+        self.teams[teamIndex].script = script
+    end
+    self.callbacks:Fire("TEAM_UPDATED", teamIndex)
+end
+
+function TeamManager:GetTeamScript(teamIndex)
+    if type(teamIndex) ~= "number" then return nil end
+
+    if self.teams[teamIndex] and self.teams[teamIndex].script then
+        return self.teams[teamIndex].script
+    end
+    return nil
 end
 
 function TeamManager:SetAutoSwitchOnTarget(enabled)
@@ -499,7 +518,7 @@ function TeamManager:SetSelected(teamIndex)
     local prevSelected = self.db.global.selected
     self.db.global.selected = teamIndex
     TeamManager.callbacks:Fire("TEAM_UPDATED",prevSelected)
-    self.callbacks:Fire("SELECTED_TEAM_CHANGED",teamIndex)
+    TeamManager.callbacks:Fire("SELECTED_TEAM_CHANGED",teamIndex)
     self:ApplyTeam(teamIndex)
 end
 
@@ -659,8 +678,10 @@ end
 function TeamManager:CreateTeam()
     local numTeams = self:GetNumTeams()
     local team = {}
-    team.name = nil;
-    team.description = nil;
+    team.name = nil
+    team.note = nil
+    team.npcID = nil
+    team.script = nil
     team.enabled = {}
 
     for i = 1,PETS_PER_TEAM do
@@ -732,6 +753,53 @@ function TeamManager.UpdateCurrentTeam()
     end
 end
 
+
+function TeamManager:ConvertDeprecated()
+    -- 11.2.009: convert description to note
+    if self.db.global.showBattleDescription ~= nil then
+        self.db.global.showBattleNote = (self.db.global.showBattleDescription == true)
+        self.db.global.showBattleDescription = nil
+    end
+    for i=1,#self.teams do
+        if self.teams[i].description ~= nil then
+            self.teams[i].note = tostring(self.teams[i].description)
+            self.teams[i].description = nil
+        end
+    end
+
+    -- convert numbered petID's to new hex strings
+    local noConversion = false -- avoid unnecessary loops
+    for i=1,#self.teams do
+        for j=1,3 do
+            if self.teams[i][j] and self.teams[i][j].petID and type(self.teams[i][j].petID) == "number" then
+                self.teams[i][j].petID = string.format("%0#18x",  self.teams[i][j].petID)
+            else
+                noConversion = true
+                break
+            end
+        end
+        if noConversion then
+            break
+        end
+    end
+
+    -- convert hex petIds to Wod ID's
+    noConversion = false -- avoid unnecessary loops
+    for i=1,#self.teams do
+        for j=1,3 do
+            if self.teams[i][j] and self.teams[i][j].petID and self.teams[i][j].petID:match("^0x") then -- if petID is from MOP: 0x000 ...
+                self.teams[i][j].petID = format("BattlePet-0-%s", self.teams[i][j].petID:match("0x0000(%x+)")) -- convert id to BattlePet-0-00...
+            else
+                noConversion = true
+                break
+            end
+        end
+        if noConversion then
+            break
+        end
+    end
+end
+
 --Initialization functions
 function TeamManager:OnInitialize()
     self.callbacks = LibStub("CallbackHandler-1.0"):New(self)
@@ -746,7 +814,7 @@ function TeamManager:OnInitialize()
             hasImported = false,
             userLocked = false,
             showTeamName = true,
-            showBattleDescription = true,
+            showBattleNote = true,
             showXpInLevel = true,
             showXpInHealthBar = false,
             sortTeams = false,
@@ -763,23 +831,7 @@ function TeamManager:OnInitialize()
 
     self.teams = self.db.global.teams
 
-    --convert numbered petID's to new hex strings
-    for i=1,#self.teams do
-        for j=1,3 do
-            if self.teams[i][j] and self.teams[i][j].petID and type(self.teams[i][j].petID) == "number" then
-                self.teams[i][j].petID = string.format("%0#18x",  self.teams[i][j].petID)
-            end
-        end
-    end
-
-    --convert hex petIds to Wod ID's
-    for i=1,#self.teams do
-        for j=1,3 do
-            if self.teams[i][j] and self.teams[i][j].petID and self.teams[i][j].petID:match("^0x") then -- if petID is from MOP: 0x000 ...
-                self.teams[i][j].petID = format("BattlePet-0-%s", self.teams[i][j].petID:match("0x0000(%x+)")) -- convert id to BattlePet-0-00...
-            end
-        end
-    end
+    self:ConvertDeprecated()
 
     if #self.teams == 0 then
         self:CreateTeam()
@@ -804,6 +856,7 @@ function TeamManager:OnInitialize()
     Cursor.RegisterCallback(self,"BATTLE_PET_CURSOR_CHANGED")
     LibPetJournal.RegisterCallback(self,"PetListUpdated", "setupSpeciesIDRunOnce")
 end
+
 
 function TeamManager:setupSpeciesIDRunOnce()
     local numTeams = self:GetNumTeams()
