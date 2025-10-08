@@ -7,17 +7,17 @@
 ## Title-koKR: PetBattleTeams Reloaded 제작: |cff00ff00Kallye|r
 ## Title-zhCN: PetBattleTeams Reloaded 作者：|cff00ff00Kallye|r
 ## Title-zhTW: PetBattleTeams Reloaded 作者：|cff00ff00Kallye|r
-## Version: 11.2.500
+## Version: 11.2.501
 ## Author: |cff00ff00Kallye|r (EU-Elune)
-## Notes: Create teams of pets, and quickly switch between them in the Pet Journal. Manage teams: Note, Script, and Auto-switch target.
-## Notes-frFR: Créez des équipes de mascottes et basculez rapidement entre elles dans le Journal des mascottes. Gérez les notes, les scripts et la cible d'auto-switch.
-## Notes-ruRU: Создавайте команды питомцев и быстро переключайтесь между ними в Журнале питомцев. Управляйте командами: заметки, скрипты и цель автопереключения.
-## Notes-deDE: Erstelle Haustier-Teams und wechsle schnell zwischen ihnen im Haustierjournal. Verwalte Teams: Notiz, Skript und Ziel für automatischen Wechsel.
-## Notes-esES: Crea equipos de mascotas y cambia rápidamente entre ellos en el Diario de mascotas. Gestiona equipos: Nota, Script y objetivo de cambio automático.
-## Notes-itIT: Crea squadre di mascotte e passa rapidamente da una all'altra nel Diario delle mascotte. Gestisci le squadre: Nota, Script e bersaglio di cambio automatico.
-## Notes-koKR: 무제한의 애완동물 팀을 생성하고 애완동물 도감에서 빠르게 전환하세요. 메모, 스크립트, 자동 전환 대상을 관리합니다.
-## Notes-zhCN: 创建无限的宠物队伍，并在宠物手册中快速切换。管理队伍：备注、脚本和自动切换目标。
-## Notes-zhTW: 建立無限的寵物隊伍，並在寵物日誌中快速切換。管理隊伍：備註、腳本和自動切換目標。
+## Notes: Create teams of pets, switch between them easily, and enhance them with combat notes, PBS scripts, and automatic switching based on target.
+## Notes-frFR: Créez des équipes de mascottes, basculez facilement entre elles et améliorez-les avec des notes de combat, des scripts PBS et le changement automatique selon la cible.
+## Notes-ruRU: Создавайте команды питомцев, легко переключайтесь между ними и улучшайте их с помощью боевых заметок, скриптов PBS и автоматического переключения на основе цели.
+## Notes-deDE: Erstelle Haustier-Teams, wechsle einfach zwischen ihnen und erweitere sie mit Kampfnotizen, PBS-Skripten und automatischem Wechsel basierend auf dem Ziel.
+## Notes-esES: Crea equipos de mascotas, cambia fácilmente entre ellos y mejóralos con notas de combate, scripts PBS y cambio automático basado en el objetivo.
+## Notes-itIT: Crea squadre di mascotte, passa facilmente da una all'altra e migliorale con note di combattimento, script PBS e cambio automatico basato sul bersaglio.
+## Notes-koKR: 애완동물 팀을 생성하고 쉽게 전환하며 전투 메모, PBS 스크립트, 대상 기반 자동 전환으로 강화하세요.
+## Notes-zhCN: 创建宠物队伍，轻松切换，并用战斗备注、PBS脚本以及基于目标的自动切换功能增强它们。
+## Notes-zhTW: 建立寵物隊伍，輕鬆切換，並用戰鬥備註、PBS腳本以及基於目標的自動切換功能強化它們。
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## X-Category: Pet Battles

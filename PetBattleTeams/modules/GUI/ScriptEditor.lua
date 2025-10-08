@@ -190,7 +190,7 @@ function ScriptEditor:ShowEditor(teamIndex)
             self.editBox.Scroll:SetVerticalScroll(verticalScrollRange)
         end)
     end
-    self.editorTitle:SetText(string.format(L["SCRIPT: %s"], (customName or name)))
+    self.editorTitle:SetText(string.format("|cff00e680"..L["SCRIPT: %s"], "|r"..(customName or name)))
 
     self.editor:Show()
     self.editBox:SetFocus()
@@ -222,8 +222,8 @@ function ScriptEditor:SaveEditor()
         end
     end
 
-    local selectedTeamIndex = TeamManager:GetSelected()
     TeamManager:SetTeamScript(self.currentTeamIndex, newScript)
+    local selectedTeamIndex = TeamManager:GetSelected()
     if self.currentTeamIndex == selectedTeamIndex then
         ScriptEditor:AutoLoad_PBS_Script()
     end

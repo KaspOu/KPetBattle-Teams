@@ -51,7 +51,10 @@
         "ToggleCollectionsJournal",
         "PetBattleFrame",
         "KEY_BINDINGS",
-        "UIErrorsFrame"
+        "UIErrorsFrame",
+        "RESET",
+        "KEY_BACKSPACE_MAC",
+        "REMOVE"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#cf5018",
@@ -89,5 +92,6 @@
     },
     "Lua.workspace.library": [
         "c:\\Users\\Utilisateur\\.cursor\\extensions\\ketho.wow-api-0.20.7\\Annotations\\Core"
-    ]
+    ],
+    "Lua.type.weakUnionCheck": true
 }

@@ -291,6 +291,10 @@ function NoteEditor:SaveEditor()
     end
 
     TeamManager:SetTeamNote(self.currentTeamIndex, newNote)
+    local selectedTeamIndex = TeamManager:GetSelected()
+    if self.currentTeamIndex == selectedTeamIndex and PetBattleFrame and PetBattleFrame:IsShown() then
+        self:ShowBattleNote(selectedTeamIndex)
+    end
     self:HideEditor()
 end
 

@@ -102,7 +102,8 @@ StaticPopupDialogs["PBT_TEAM_RENAME"] = {
     text = "PetBattleTeams:|nEnter a name for |cffffd200%s|r.",
     hasEditBox = 1,
     button1 = OKAY,
-    button2 = DEFAULT,
+    button2 = CANCEL,
+    button3 = RESET,
     OnShow = function(self)
         local editBox = self.editBox or self:GetEditBox()
         local teamManager = PetBattleTeams:GetModule("TeamManager")
@@ -110,7 +111,17 @@ StaticPopupDialogs["PBT_TEAM_RENAME"] = {
         if customName then
             editBox:SetText(customName)
         end
+        editBox:SetSize(300, 30)
         editBox:SetAutoFocus(1)
+        local button3 = self:GetButton3()
+        if button3 then button3:GetFontString():SetTextColor(.0, 0.9, 0.5) end
+    end,
+    OnHide = function(self)
+        -- back to default
+        local r, g, b = 1, .82, 0
+        local button2, button3 = self:GetButton2(), self:GetButton3()
+        if button2 then r, g, b = button2:GetFontString():GetTextColor() end
+        if button3 then button3:GetFontString():SetTextColor(r, g, b) end
     end,
     OnAccept = function(self)
         local editBox = self.editBox or self:GetEditBox()
@@ -121,7 +132,9 @@ StaticPopupDialogs["PBT_TEAM_RENAME"] = {
         end
         teamManager:SetTeamName(self.data, text)
     end,
-    OnCancel = function(self)
+    OnButton2 = function()
+    end,
+    OnButton3 = function(self)
         local teamManager = PetBattleTeams:GetModule("TeamManager")
         teamManager:SetTeamName(self.data, nil)
     end,
@@ -132,6 +145,7 @@ StaticPopupDialogs["PBT_TEAM_RENAME"] = {
     exclusive = 1,
     hideOnEscape = 1,
     enterClicksFirstButton = true,
+    selectCallbackByIndex = true,
 }
 
 StaticPopupDialogs["PBT_TEAM_EDITNPCID"] = {
@@ -139,7 +153,8 @@ StaticPopupDialogs["PBT_TEAM_EDITNPCID"] = {
     text = "PetBattleTeams:|nEnter a NPC ID for |cffffd200%s|r.",
     hasEditBox = 1,
     button1 = OKAY,
-    button2 = DEFAULT,
+    button2 = CANCEL,
+    button3 = RESET,
     OnShow = function(self)
         local editBox = self.editBox or self:GetEditBox()
         local teamManager = PetBattleTeams:GetModule("TeamManager")
@@ -147,7 +162,17 @@ StaticPopupDialogs["PBT_TEAM_EDITNPCID"] = {
         if teamNpcID then
             editBox:SetText(teamNpcID)
         end
+        editBox:SetSize(300, 30)
         editBox:SetAutoFocus(1)
+        local button3 = self:GetButton3()
+        if button3 then button3:GetFontString():SetTextColor(.0, 0.9, 0.5) end
+    end,
+    OnHide = function(self)
+        -- back to default
+        local r, g, b = 1, .82, 0
+        local button2, button3 = self:GetButton2(), self:GetButton3()
+        if button2 then r, g, b = button2:GetFontString():GetTextColor() end
+        if button3 then button3:GetFontString():SetTextColor(r, g, b) end
     end,
     OnAccept = function(self)
         local editBox = self.editBox or self:GetEditBox()
@@ -159,7 +184,9 @@ StaticPopupDialogs["PBT_TEAM_EDITNPCID"] = {
         end
         teamManager:SetTeamNpcID(self.data, text)
     end,
-    OnCancel = function(self)
+    OnButton2 = function()
+    end,
+    OnButton3 = function(self)
         local teamManager = PetBattleTeams:GetModule("TeamManager")
         teamManager:SetTeamNpcID(self.data, nil)
     end,
@@ -170,6 +197,7 @@ StaticPopupDialogs["PBT_TEAM_EDITNPCID"] = {
     exclusive = 1,
     hideOnEscape = 1,
     enterClicksFirstButton = true,
+    selectCallbackByIndex = true,
 }
 
 
