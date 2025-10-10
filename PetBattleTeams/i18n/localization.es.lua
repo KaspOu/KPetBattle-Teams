@@ -2,8 +2,6 @@
 -- Spanish localization (ChatGPT)
 -------------------------------------------------------------------------------
 
-if (GetLocale() ~= "esES" and GetLocale() ~= "esMX") then return end
-
 local _, addon = ...
 local baseLocale = {
     ["Selected Team"] = "Equipo seleccionado",
@@ -12,7 +10,6 @@ local baseLocale = {
     ["Display pets xp as part of the pets level"] = "Mostrar la experiencia de las mascotas como parte de su nivel",
     ["Display pets xp instead of the health bar"] = "Mostrar la experiencia de las mascotas en lugar de la barra de salud",
     ["Display team name above the team"] = "Mostrar el nombre del equipo encima del equipo",
-    ["Display team note in tooltip"] = "Mostrar la nota del equipo en la descripci\195\179n",
     ["Show team note during pet battles"] = "Mostrar la nota del equipo durante los duelos de mascotas",
     ["Press Ctrl+Enter to save the note"] = "Pulsa Ctrl+Enter para guardar la nota",
     ["Press Ctrl+Enter to save the script"] = "Pulsa Ctrl+Enter para guardar el script",

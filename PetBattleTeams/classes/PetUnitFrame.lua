@@ -40,6 +40,7 @@ menuFrame.menu = {
             noteEditor:ShowEditor(teamIndex)
         end
     end,
+    icon = "Interface/MINIMAP/TRACKING/Mailbox.PNG"
     },
     { text = L["Edit NPC ID for AutoSwitch"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex
@@ -51,7 +52,7 @@ menuFrame.menu = {
         local teamIndex = menuFrame.teamIndex
         TeamManager:SetNpcFromTarget(teamIndex)
     end,
-    icon = "Interface\\UIEditorIcons\\UIEditorIcons"
+    icon = "Interface/MINIMAP/TRACKING/None.PNG"
     },
     { text = L["Edit Script"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex
@@ -60,6 +61,7 @@ menuFrame.menu = {
             scriptEditor:ShowEditor(teamIndex)
         end
     end,
+    icon = "Interface/ICONS/Pet_Type_Dragon.PNG"
     },
     { text = L["Delete Team"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex
@@ -174,7 +176,7 @@ function PetBattleTeamsUnitFrame:CreateWidget()
     petBattleTeamsUnitFrameWidget.level:SetJustifyH("RIGHT")
     petBattleTeamsUnitFrameWidget.level:SetText("00")
     petBattleTeamsUnitFrameWidget.level:SetSize(0,0)
-    petBattleTeamsUnitFrameWidget.level:SetFont("Fonts\\FRIZQT__.TTF",11,"OUTLINE")
+    petBattleTeamsUnitFrameWidget.level:SetFont(L["FONT"],L["FONT_SIZE_11"],"OUTLINE")
     petBattleTeamsUnitFrameWidget.level:SetPoint("BOTTOMRIGHT",petBattleTeamsUnitFrameWidget.Icon,"BOTTOMRIGHT",0,10)
 
     petBattleTeamsUnitFrameWidget:SetScript("OnLoad",nil)

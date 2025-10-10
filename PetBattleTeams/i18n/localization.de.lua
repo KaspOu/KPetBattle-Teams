@@ -2,8 +2,6 @@
 -- German localization (ChatGPT)
 -------------------------------------------------------------------------------
 
-if (GetLocale() ~= "deDE") then return end
-
 
 local _, addon = ...
 local baseLocale = {
@@ -13,7 +11,6 @@ local baseLocale = {
     ["Display pets xp as part of the pets level"] = "Haustier-EP als Teil des Haustierlevels anzeigen",
     ["Display pets xp instead of the health bar"] = "Haustier-EP anstelle der Gesundheitsleiste anzeigen",
     ["Display team name above the team"] = "Teamnamen \195\188ber dem Team anzeigen",
-    ["Display team note in tooltip"] = "Teamnotiz im Tooltip anzeigen",
     ["Show team note during pet battles"] = "Teamnotiz w\195\164hrend Haustierk\195\164mpfen anzeigen",
     ["Press Ctrl+Enter to save the note"] = "Strg+Enter dr\195\188cken, um die Notiz zu speichern",
     ["Press Ctrl+Enter to save the script"] = "Strg+Enter dr\195\188cken, um das Skript zu speichern",

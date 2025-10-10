@@ -1,10 +1,12 @@
 -------------------------------------------------------------------------------
 -- Russian localization ZamestoTV
 -------------------------------------------------------------------------------
-if (GetLocale() ~= "ruRU") then return end
 
 local _, addon = ...
 local baseLocale = {
+    ["FONT"] = "Fonts\\FRIZQT___CYR.TTF",
+    ["FONT_SIZE_12"] = "11",
+    ["FONT_SIZE_11"] = "9",
     ["Selected Team"] = "Выбранная команда",
     ["Team Roster"] = "Состав команды",
     ["Teams and Pets"] = "Команды и питомцы",

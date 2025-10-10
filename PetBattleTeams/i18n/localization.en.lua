@@ -3,6 +3,9 @@
 -------------------------------------------------------------------------------
 local _, addon = ...
 local baseLocale = {
+    ["FONT"] = "Fonts\\FRIZQT__.TTF",
+    ["FONT_SIZE_12"] = "12",
+    ["FONT_SIZE_11"] = "11",
     ["Selected Team"] = "Selected Team",
     ["Team Roster"] = "Team Roster",
     ["Teams and Pets"] = "Teams and Pets",

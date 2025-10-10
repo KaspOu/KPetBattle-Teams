@@ -2,17 +2,17 @@
 -- zhCN localization (ChatGPT)
 -------------------------------------------------------------------------------
 
-if (GetLocale() ~= "zhCN" and GetLocale() ~= "zhTW") then return end
-
 local _, addon = ...
 local baseLocale = {
+    ["FONT"] = "Fonts\\ARKai_T.TTF",
+    ["FONT_SIZE_12"] = "14",
+    ["FONT_SIZE_11"] = "12",
     ["Selected Team"] = "已选队伍",
     ["Team Roster"] = "队伍列表",
     ["Teams and Pets"] = "队伍与宠物",
     ["Display pets xp as part of the pets level"] = "在宠物等级中显示宠物经验",
     ["Display pets xp instead of the health bar"] = "显示宠物经验而非生命条",
     ["Display team name above the team"] = "在队伍上方显示队伍名称",
-    ["Display team note in tooltip"] = "在提示框中显示队伍备注",
     ["Show team note during pet battles"] = "在宠物对战中显示队伍备注",
     ["Press Ctrl+Enter to save the note"] = "按Ctrl+回车保存备注",
     ["Press Ctrl+Enter to save the script"] = "按Ctrl+回车保存脚本",

@@ -1,18 +1,16 @@
 -------------------------------------------------------------------------------
--- French localization
+-- Korean localization (ChatGPT)
 -------------------------------------------------------------------------------
-
-if (GetLocale() ~= "koKR") then return end
 
 local _, addon = ...
 local baseLocale = {
+    ["FONT"] = "Fonts\\2002.TTF",
     ["Selected Team"] = "선택된 팀",
     ["Team Roster"] = "팀 명단",
     ["Teams and Pets"] = "팀 및 애완동물",
     ["Display pets xp as part of the pets level"] = "애완동물 레벨에 경험치 표시",
     ["Display pets xp instead of the health bar"] = "생명력 바 대신 애완동물 경험치 표시",
     ["Display team name above the team"] = "팀 위에 팀 이름 표시",
-    ["Display team note in tooltip"] = "툴팁에 팀 메모 표시",
     ["Show team note during pet battles"] = "애완동물 전투 중 팀 메모 표시",
     ["Press Ctrl+Enter to save the note"] = "Ctrl+Enter를 눌러 메모 저장",
     ["Press Ctrl+Enter to save the script"] = "Ctrl+Enter를 눌러 스크립트 저장",

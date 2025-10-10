@@ -2,8 +2,6 @@
 -- French localization
 -------------------------------------------------------------------------------
 
-if (GetLocale() ~= "frFR") then return end
-
 local _, addon = ...
 local baseLocale = {
     ["Selected Team"] = "\195\137quipe s\195\169lectionn\195\169e",
@@ -12,7 +10,6 @@ local baseLocale = {
     ["Display pets xp as part of the pets level"] = "Afficher l'exp\195\169rience des mascottes dans leur niveau",
     ["Display pets xp instead of the health bar"] = "Afficher l'exp\195\169rience des mascottes \195\160 la place de la barre de sant\195\169",
     ["Display team name above the team"] = "Afficher le nom de l'\195\169quipe au-dessus de l'\195\169quipe",
-    ["Display team note in tooltip"] = "Afficher la note d'\195\169quipe dans l'infobulle",
     ["Show team note during pet battles"] = "Afficher la note d'\195\169quipe pendant les combats de mascottes",
     ["Press Ctrl+Enter to save the note"] = "Appuyez sur Ctrl+Entr\195\169e pour sauvegarder la note d'\195\169quipe",
     ["Press Ctrl+Enter to save the script"] = "Appuyez sur Ctrl+Entr\195\169e pour sauvegarder le script d'\195\169quipe",
