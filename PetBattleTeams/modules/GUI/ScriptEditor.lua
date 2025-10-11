@@ -197,6 +197,7 @@ function ScriptEditor:ShowEditor(teamIndex)
 end
 
 function ScriptEditor:HideEditor()
+    if not ScriptEditor:IsLoaded() then return end
     self.editor:Hide()
     self.editBox:ClearFocus()
     self.editorTitle:SetText("")
