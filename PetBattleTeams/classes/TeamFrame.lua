@@ -94,7 +94,7 @@ function PetBattleTeamsFrame:New()
     helperText:SetJustifyH("CENTER")
     helperText:Hide()
 
-    local teamNameText = petBattleTeamsFrame:CreateFontString(nil,"OVERLAY","GameFontHighlight")
+    local teamNameText = petBattleTeamsFrame:CreateFontString(nil,"ARTWORK","GameFontHighlight")
     petBattleTeamsFrame.teamNameText = teamNameText
 
     teamNameText:SetText("")
