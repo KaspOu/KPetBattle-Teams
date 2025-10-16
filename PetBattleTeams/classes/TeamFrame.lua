@@ -94,7 +94,7 @@ function PetBattleTeamsFrame:New()
     helperText:SetJustifyH("CENTER")
     helperText:Hide()
 
-    local teamNameText = petBattleTeamsFrame:CreateFontString(nil,"OVERLAY","GameFontHighlight")
+    local teamNameText = petBattleTeamsFrame:CreateFontString(nil,"ARTWORK","GameFontHighlight")
     petBattleTeamsFrame.teamNameText = teamNameText
 
     teamNameText:SetText("")
@@ -416,7 +416,7 @@ function PetBattleTeamsFrame:HideEditors()
         noteEditor:HideEditor(self.teamIndex)
     end
     local scriptEditor = PetBattleTeams:GetModule("ScriptEditor")
-    if scriptEditor then
+    if scriptEditor and scriptEditor:IsLoaded() then
         scriptEditor:HideEditor(self.teamIndex)
     end
 end
