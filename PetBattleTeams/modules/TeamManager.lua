@@ -168,6 +168,10 @@ function TeamManager:DetectTarget()
     --     return
     -- end
     local guid = UnitGUID("target")
+    -- Since Midnight (12)
+    if issecretvalue and issecretvalue(guid) then
+        return
+    end
     local npcID = guid and tonumber(guid:match("-(%d+)-%x+$"))
     if npcID and self:GetTeamIndexForNPC(npcID) then
         local teamIndex = self:GetTeamIndexForNPC(npcID)
