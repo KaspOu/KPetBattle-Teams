@@ -1,4 +1,4 @@
-## Interface: 120000, 120001, 110205, 110207, 50501, 50502
+## Interface: 120000, 120001, 110205, 110207, 50503
 ## Title: PetBattleTeams Reloaded by |cff00ff00Kallye|r
 ## Title-frFR: PetBattleTeams Reloaded, par |cff00ff00Kallye|r
 ## Title-deDE: PetBattleTeams Reloaded von |cff00ff00Kallye|r
