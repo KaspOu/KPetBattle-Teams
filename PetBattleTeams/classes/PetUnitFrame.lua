@@ -176,7 +176,7 @@ function PetBattleTeamsUnitFrame:CreateWidget()
     petBattleTeamsUnitFrameWidget.level:SetJustifyH("RIGHT")
     petBattleTeamsUnitFrameWidget.level:SetText("00")
     petBattleTeamsUnitFrameWidget.level:SetSize(0,0)
-    petBattleTeamsUnitFrameWidget.level:SetFont(L["FONT"],L["FONT_SIZE_11"],"OUTLINE")
+    petBattleTeamsUnitFrameWidget.level:SetFont(L["FONT"],tonumber(L["FONT_SIZE_11"]),"OUTLINE")
     petBattleTeamsUnitFrameWidget.level:SetPoint("BOTTOMRIGHT",petBattleTeamsUnitFrameWidget.Icon,"BOTTOMRIGHT",0,10)
 
     petBattleTeamsUnitFrameWidget:SetScript("OnLoad",nil)
