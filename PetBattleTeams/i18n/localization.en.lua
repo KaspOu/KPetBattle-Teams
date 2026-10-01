@@ -81,7 +81,38 @@ local baseLocale = {
     ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?",
     ["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"] = "PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?",
     ["PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles."] = "PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles.",
-    ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"
+    ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s",
+
+    -- Import / Export
+    ["Export Team"] = "Export Team",
+    ["Import Teams"] = "Import Teams",
+    ["Export Teams"] = "Export Teams",
+    ["Copy the text below (Ctrl+C) to share or back up your teams. Compatible with ReMatch."] = "Copy the text below (Ctrl+C) to share or back up your teams. Compatible with ReMatch.",
+    ["Paste team strings (one team per line, ReMatch compatible), then click Import."] = "Paste team strings (one team per line, ReMatch compatible), then click Import.",
+    ["Import"] = "Import",
+    ["Overwrite existing teams that have the same name"] = "Overwrite existing teams that have the same name",
+    ["PetBattleTeams import: %d imported, %d updated, %d unchanged, %d skipped, %d ignored, %d error(s)"] = "PetBattleTeams import: %d imported, %d updated, %d unchanged, %d skipped, %d ignored, %d error(s)",
+    ["PetBattleTeams import: ... more entries not shown"] = "PetBattleTeams import: ... more entries not shown",
+    ["  line %d '%s' [%s] %s"] = "  line %d '%s' [%s] %s",
+    ["imported"] = "imported",
+    ["updated"] = "updated",
+    ["unchanged"] = "unchanged",
+    ["skipped"] = "skipped",
+    ["ignored"] = "ignored",
+    ["error"] = "error",
+    ["does not match Name:npcIDs:tag:tag:tag:"] = "does not match Name:npcIDs:tag:tag:tag:",
+    ["team name is empty"] = "team name is empty",
+    ["NPC id '%s' is not valid base32 and was ignored"] = "NPC id '%s' is not valid base32 and was ignored",
+    ["trailing data is neither P: preferences nor N: notes and was ignored"] = "trailing data is neither P: preferences nor N: notes and was ignored",
+    ["slot %d: tag '%s' cannot be represented by PetBattleTeams; slot left empty, tag kept for export"] = "slot %d: tag '%s' cannot be represented by PetBattleTeams; slot left empty, tag kept for export",
+    ["slot %d: species %d is unknown; slot left empty, tag kept for export"] = "slot %d: species %d is unknown; slot left empty, tag kept for export",
+    ["slot %d: no owned pet of species %d; slot left empty, tag kept for export"] = "slot %d: no owned pet of species %d; slot left empty, tag kept for export",
+    ["group header (groups are not supported)"] = "group header (groups are not supported)",
+    ["identical team already present"] = "identical team already present",
+    ["the existing team is locked"] = "the existing team is locked",
+    ["existing team replaced"] = "existing team replaced",
+    ["a team with this name already exists and differs (choose overwrite to update it)"] = "a team with this name already exists and differs (choose overwrite to update it)",
+    ["name already used, imported as a copy"] = "name already used, imported as a copy"
 }
 
 

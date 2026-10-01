@@ -63,6 +63,14 @@ menuFrame.menu = {
     end,
     icon = "Interface/ICONS/Pet_Type_Dragon.PNG"
     },
+    { text = L["Export Team"], notCheckable = true, func = function()
+        PetBattleTeams:GetModule("ImportExport"):ShowExport(menuFrame.teamIndex)
+    end,
+    },
+    { text = L["Import Teams"], notCheckable = true, func = function()
+        PetBattleTeams:GetModule("ImportExport"):ShowImport()
+    end,
+    },
     { text = L["Delete Team"], notCheckable = true, func = function()
         local teamIndex = menuFrame.teamIndex
         local displayName = TeamManager:GetTeamName(teamIndex)

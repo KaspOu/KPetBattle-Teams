@@ -70,6 +70,10 @@ i18n\Localization.ru.lua [AllowLoadTextLocale ruRU]
 i18n\Localization.zh.lua [AllowLoadTextLocale zhCN, zhTW]
 
 modules\TeamManager.lua
+modules\RematchImporter.lua
+modules\RematchExporter.lua
+modules\TeamModel.lua
+modules\ImportExport.lua
 modules\TeamManagerUnitTests.lua
 modules\Tooltip.lua
 modules\Cursor.lua

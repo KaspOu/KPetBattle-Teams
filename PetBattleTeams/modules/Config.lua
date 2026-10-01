@@ -17,6 +17,10 @@ L["Selected Team"] = L["Selected Team"]..devVer
 L["Team Roster"] = L["Team Roster"]..devVer
 --@end-do-not-package@
 
+local MenuOptions = {
+    ImportTeams = true,
+    ExportTeams = true,
+}
 Config.options = {
     name = L["PetBattle Teams"]..devVer,
     type = 'group',
@@ -238,16 +242,24 @@ Config.options = {
         },
         ImportTeams = {
             order = 102,
-            name = L["Reconstruct teams"],
+            name = L["Import Teams"],
             width = "double",
             type = "execute",
-            desc = L["Attempts to reconstuct teams with invalid pets"],
             func = function()
-                TeamManager:ReconstructTeams()
+                PetBattleTeams:GetModule("ImportExport"):ShowImport()
+            end,
+        },
+        ExportTeams = {
+            order = 103,
+            name = L["Export Teams"],
+            width = "double",
+            type = "execute",
+            func = function()
+                PetBattleTeams:GetModule("ImportExport"):ShowExport()
             end,
         },
         UnlockTeams = {
-            order = 103,
+            order = 107,
             name = L["Unlock all existing teams"],
             width = "double",
             type = "execute",
@@ -258,7 +270,7 @@ Config.options = {
             end,
         },
         LockAllTeams = {
-            order = 103,
+            order = 108,
             name = L["Lock all existing teams"],
             width = "double",
             type = "execute",
@@ -266,6 +278,16 @@ Config.options = {
             func = function()
                 TeamManager:SetLockStateAllTeams(true)
                 print("PetBattle Teams: Teams locked")
+            end,
+        },
+        ReconstructTeams = {
+            order = 109,
+            name = L["Reconstruct teams"],
+            width = "double",
+            type = "execute",
+            desc = L["Attempts to reconstuct teams with invalid pets"],
+            func = function()
+                TeamManager:ReconstructTeams()
             end,
         },
         ResetTeams = {
@@ -307,27 +329,19 @@ function Config:OpenConfig()
 end
 
 function Config:GetEasyMenu()
-    --bad bubble sort hack
-    local function GetNextOptions(options,lastOrder)
-        if not lastOrder or not options then return end
-        local option
-        local minOrder = 10000
-        for k,v in pairs(options) do
-            if v.order > lastOrder and v.order < minOrder then
-                option = k
-                minOrder = v.order
-            end
-        end
-        return option,minOrder
+    local keys = {}
+    for k in pairs(self.options.args) do
+        table.insert(keys, k)
     end
+    local args = self.options.args
+    table.sort(keys, function(a, b)
+        if args[a].order ~= args[b].order then return args[a].order < args[b].order end
+        return a < b
+    end)
 
     local menu = {}
-    local v
-    local i = 0
-    while(true) do
-        v, i = GetNextOptions(self.options.args, i)
-        if not v then break end
-        v = self.options.args[v]
+    for _, key in ipairs(keys) do
+        local v = args[key]
         local option = {}
         if v.type == "toggle" then
             option.text = v.name
@@ -337,15 +351,25 @@ function Config:GetEasyMenu()
             local func = v.set
             option.func =  function(self, arg1, arg2, checked) func(nil,checked) end
             option.checked = v.get
-        end
-        if v.type == "header" then
+        elseif v.type == "header" then
             option.isTitle = true
             option.text = v.name
             option.notCheckable = true
             option.isNotRadio = true
             option.keepShownOnClick = true
+        elseif v.type == "execute" and MenuOptions[key] then
+            option.text = v.name
+            option.notCheckable = true
+            option.func = function() v.func() end
+            if v.desc then
+                option.tooltipOnButton = true
+                option.tooltipTitle = v.name
+                option.tooltipText = v.desc
+            end
         end
-        table.insert(menu,option)
+        if option.text then
+            table.insert(menu,option)
+        end
     end
 
     return menu

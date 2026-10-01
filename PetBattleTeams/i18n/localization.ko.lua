@@ -80,7 +80,38 @@ local baseLocale = {
     ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "PetBattleTeams:|n이전 버전의 PetBattleTeams에서 애완동물을 가져오시겠습니까?",
     ["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"] = "PetBattleTeams:|n모든 팀을 |cffffd200초기화|r하시겠습니까?",
     ["PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles."] = "PetBattleTeams:|n'|cffffd200애완동물 전투 스크립트|r' 애드온이 필요합니다.\n\n애완동물 전투를 자동화하는 스크립트를 작성하세요.",
-    ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "PetBattleTeams:|n|cffffd200잘못된 스크립트 (저장되지 않음)|r:\n%s"
+    ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "PetBattleTeams:|n|cffffd200잘못된 스크립트 (저장되지 않음)|r:\n%s",
+
+    -- Import / Export
+    ["Export Team"] = "팀 내보내기",
+    ["Import Teams"] = "팀 가져오기",
+    ["Export Teams"] = "팀 내보내기",
+    ["Copy the text below (Ctrl+C) to share or back up your teams. Compatible with ReMatch."] = "아래 텍스트를 복사(Ctrl+C)하여 팀을 공유하거나 백업하세요. ReMatch와 호환됩니다.",
+    ["Paste team strings (one team per line, ReMatch compatible), then click Import."] = "팀 문자열을 붙여넣은 후(한 줄에 팀 하나, ReMatch 호환) 가져오기를 클릭하세요.",
+    ["Import"] = "가져오기",
+    ["Overwrite existing teams that have the same name"] = "이름이 같은 기존 팀 덮어쓰기",
+    ["PetBattleTeams import: %d imported, %d updated, %d unchanged, %d skipped, %d ignored, %d error(s)"] = "PetBattleTeams 가져오기: %d개 가져옴, %d개 갱신, %d개 변경 없음, %d개 건너뜀, %d개 무시, 오류 %d개",
+    ["PetBattleTeams import: ... more entries not shown"] = "PetBattleTeams 가져오기: ... 나머지 항목은 표시되지 않습니다",
+    ["  line %d '%s' [%s] %s"] = "  %d번째 줄 '%s' [%s] %s",
+    ["imported"] = "가져옴",
+    ["updated"] = "갱신됨",
+    ["unchanged"] = "변경 없음",
+    ["skipped"] = "건너뜀",
+    ["ignored"] = "무시됨",
+    ["error"] = "오류",
+    ["does not match Name:npcIDs:tag:tag:tag:"] = "이름:npcIDs:태그:태그:태그: 형식과 일치하지 않습니다",
+    ["team name is empty"] = "팀 이름이 비어 있습니다",
+    ["NPC id '%s' is not valid base32 and was ignored"] = "NPC ID '%s'은(는) 올바른 base32 값이 아니므로 무시되었습니다",
+    ["trailing data is neither P: preferences nor N: notes and was ignored"] = "뒤따르는 데이터가 P: 설정도 N: 메모도 아니므로 무시되었습니다",
+    ["slot %d: tag '%s' cannot be represented by PetBattleTeams; slot left empty, tag kept for export"] = "슬롯 %d: 태그 '%s'은(는) PetBattleTeams에서 표현할 수 없어 슬롯을 비워 두고 내보내기용으로 태그를 유지합니다",
+    ["slot %d: species %d is unknown; slot left empty, tag kept for export"] = "슬롯 %d: 종 %d을(를) 알 수 없어 슬롯을 비워 두고 내보내기용으로 태그를 유지합니다",
+    ["slot %d: no owned pet of species %d; slot left empty, tag kept for export"] = "슬롯 %d: 종 %d의 보유 애완동물이 없어 슬롯을 비워 두고 내보내기용으로 태그를 유지합니다",
+    ["group header (groups are not supported)"] = "그룹 헤더 (그룹은 지원되지 않음)",
+    ["identical team already present"] = "동일한 팀이 이미 있습니다",
+    ["the existing team is locked"] = "기존 팀이 잠겨 있습니다",
+    ["existing team replaced"] = "기존 팀을 교체했습니다",
+    ["a team with this name already exists and differs (choose overwrite to update it)"] = "같은 이름의 팀이 이미 있으며 내용이 다릅니다 (갱신하려면 덮어쓰기를 선택하세요)",
+    ["name already used, imported as a copy"] = "이미 사용 중인 이름이므로 사본으로 가져왔습니다"
 }
 
 addon:RegisterLocale(GetLocale(), baseLocale)
