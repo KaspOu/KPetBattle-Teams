@@ -82,7 +82,38 @@ local baseLocale = {
     ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "宠物对战队伍：|n您想从旧版宠物对战队伍导入您的宠物吗？",
     ["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"] = "宠物对战队伍：|n您确定要 |cffffd200重置所有队伍|r 吗？",
     ["PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles."] = "宠物对战队伍：|n需要'|cffffd200宠物对战脚本|r'插件。\n\n编写脚本以自动化宠物对战。",
-    ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "宠物对战队伍：|n|cffffd200无效脚本（未保存）|r：\n%s"
+    ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "宠物对战队伍：|n|cffffd200无效脚本（未保存）|r：\n%s",
+
+    -- Import / Export
+    ["Export Team"] = "导出队伍",
+    ["Import Teams"] = "导入队伍",
+    ["Export Teams"] = "导出队伍",
+    ["Copy the text below (Ctrl+C) to share or back up your teams. Compatible with ReMatch."] = "复制下方文本（Ctrl+C）以分享或备份您的队伍。与 ReMatch 兼容。",
+    ["Paste team strings (one team per line, ReMatch compatible), then click Import."] = "粘贴队伍字符串（每行一个队伍，兼容 ReMatch），然后点击导入。",
+    ["Import"] = "导入",
+    ["Overwrite existing teams that have the same name"] = "覆盖同名的现有队伍",
+    ["PetBattleTeams import: %d imported, %d updated, %d unchanged, %d skipped, %d ignored, %d error(s)"] = "宠物对战队伍导入：已导入 %d，已更新 %d，未变化 %d，已跳过 %d，已忽略 %d，错误 %d",
+    ["PetBattleTeams import: ... more entries not shown"] = "宠物对战队伍导入：…… 其余条目未显示",
+    ["  line %d '%s' [%s] %s"] = "  第 %d 行 '%s' [%s] %s",
+    ["imported"] = "已导入",
+    ["updated"] = "已更新",
+    ["unchanged"] = "未变化",
+    ["skipped"] = "已跳过",
+    ["ignored"] = "已忽略",
+    ["error"] = "错误",
+    ["does not match Name:npcIDs:tag:tag:tag:"] = "不符合 名称:npcIDs:标签:标签:标签: 格式",
+    ["team name is empty"] = "队伍名称为空",
+    ["NPC id '%s' is not valid base32 and was ignored"] = "NPC ID '%s' 不是有效的 base32 值，已忽略",
+    ["trailing data is neither P: preferences nor N: notes and was ignored"] = "末尾数据既不是 P: 偏好设置也不是 N: 备注，已忽略",
+    ["slot %d: tag '%s' cannot be represented by PetBattleTeams; slot left empty, tag kept for export"] = "栏位 %d：PetBattleTeams 无法表示标签 '%s'；栏位留空，标签将保留用于导出",
+    ["slot %d: species %d is unknown; slot left empty, tag kept for export"] = "栏位 %d：物种 %d 未知；栏位留空，标签将保留用于导出",
+    ["slot %d: no owned pet of species %d; slot left empty, tag kept for export"] = "栏位 %d：没有拥有物种 %d 的宠物；栏位留空，标签将保留用于导出",
+    ["group header (groups are not supported)"] = "分组标题（不支持分组）",
+    ["identical team already present"] = "已存在相同的队伍",
+    ["the existing team is locked"] = "现有队伍已锁定",
+    ["existing team replaced"] = "已替换现有队伍",
+    ["a team with this name already exists and differs (choose overwrite to update it)"] = "已存在同名但内容不同的队伍（勾选覆盖以更新）",
+    ["name already used, imported as a copy"] = "名称已被使用，已作为副本导入"
 }
 
 addon:RegisterLocale(GetLocale(), baseLocale)

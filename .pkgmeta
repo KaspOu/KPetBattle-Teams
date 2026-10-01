@@ -44,6 +44,7 @@ ignore:
     - *\Libs\*\README.*
     - *\Libs\*\tests
     - *\Libs\*\.pkgmeta
+    - .context*
     - .git*
     - changelog
     - *\README.md

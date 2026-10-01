@@ -51,6 +51,10 @@ function PetBattleTeams.slashHandler(msg, chatPromptFrame)
     elseif msg == "min" then
         GUI:ToggleMinimize(true)
         print("PetBattleTeams: Frame Minimized")
+    elseif msg == "import" then
+        PetBattleTeams:GetModule("ImportExport"):ShowImport()
+    elseif msg == "export" then
+        PetBattleTeams:GetModule("ImportExport"):ShowExport()
     elseif msg == "lock teams" then
         TeamManager:SetLockStateAllTeams(true)
         print("PetBattleTeams: Teams Locked")
@@ -66,6 +70,8 @@ function PetBattleTeams.slashHandler(msg, chatPromptFrame)
         self:GetModule("TeamManager"):ResetUI()
     else
         print("/pbt","options",": Show the PetBattleTeams options (/pbto)")
+        print("/pbt","import",": Import teams")
+        print("/pbt","export",": Export all teams")
         print("/pbt","lock frame",": Locks PetBattleTeams when detached preventing it from being moved or resized")
         print("/pbt","unlock frame",": Unlocks PetBattleTeams allowing it to be moved or resized while detached")
         print("/pbt","attach", ": Attach PetBattleTeams to the Pet Journal")
