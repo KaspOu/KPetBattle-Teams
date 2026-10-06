@@ -82,7 +82,38 @@ local baseLocale = {
     ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "PetBattleTeams:|nХотите импортировать питомцев из предыдущих версий PetBattleTeams?",
     ["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"] = "PetBattleTeams:|nВы уверены, что хотите |cffffd200сбросить все команды|r?", -- ChatGPT
     ["PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles."] = "PetBattleTeams:|nТребуется аддон '|cffffd200Pet Battle Scripts|r'.\n\nПишите скрипты для автоматизации питомниковых боев.", -- ChatGPT
-    ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "PetBattleTeams:|n|cffffd200Неверный скрипт (не сохранен)|r:\n%s" -- ChatGPT
+    ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "PetBattleTeams:|n|cffffd200Неверный скрипт (не сохранен)|r:\n%s", -- ChatGPT
+
+    -- Import / Export -- ChatGPT
+    ["Export Team"] = "Экспорт команды",
+    ["Import Teams"] = "Импорт команд",
+    ["Export Teams"] = "Экспорт команд",
+    ["Copy the text below (Ctrl+C) to share or back up your teams. Compatible with ReMatch."] = "Скопируйте текст ниже (Ctrl+C), чтобы поделиться командами или сохранить их копию. Совместимо с ReMatch.",
+    ["Paste team strings (one team per line, ReMatch compatible), then click Import."] = "Вставьте строки команд (одна команда на строку, формат ReMatch), затем нажмите «Импорт».",
+    ["Import"] = "Импорт",
+    ["Overwrite existing teams that have the same name"] = "Перезаписывать существующие команды с тем же названием",
+    ["PetBattleTeams import: %d imported, %d updated, %d unchanged, %d skipped, %d ignored, %d error(s)"] = "Импорт PetBattleTeams: импортировано %d, обновлено %d, без изменений %d, пропущено %d, проигнорировано %d, ошибок %d",
+    ["PetBattleTeams import: ... more entries not shown"] = "Импорт PetBattleTeams: ... остальные записи не показаны",
+    ["  line %d '%s' [%s] %s"] = "  строка %d '%s' [%s] %s",
+    ["imported"] = "импортирована",
+    ["updated"] = "обновлена",
+    ["unchanged"] = "без изменений",
+    ["skipped"] = "пропущена",
+    ["ignored"] = "проигнорирована",
+    ["error"] = "ошибка",
+    ["does not match Name:npcIDs:tag:tag:tag:"] = "не соответствует формату Название:npcIDs:тег:тег:тег:",
+    ["team name is empty"] = "название команды пусто",
+    ["NPC id '%s' is not valid base32 and was ignored"] = "ID NPC '%s' не является допустимым числом base32 и был проигнорирован",
+    ["trailing data is neither P: preferences nor N: notes and was ignored"] = "оставшиеся данные не являются ни настройками P:, ни заметками N: и были проигнорированы",
+    ["slot %d: tag '%s' cannot be represented by PetBattleTeams; slot left empty, tag kept for export"] = "слот %d: PetBattleTeams не поддерживает тег '%s'; слот оставлен пустым, тег сохранен для экспорта",
+    ["slot %d: species %d is unknown; slot left empty, tag kept for export"] = "слот %d: вид %d неизвестен; слот оставлен пустым, тег сохранен для экспорта",
+    ["slot %d: no owned pet of species %d; slot left empty, tag kept for export"] = "слот %d: нет питомца вида %d; слот оставлен пустым, тег сохранен для экспорта",
+    ["group header (groups are not supported)"] = "заголовок группы (группы не поддерживаются)",
+    ["identical team already present"] = "идентичная команда уже существует",
+    ["the existing team is locked"] = "существующая команда заблокирована",
+    ["existing team replaced"] = "существующая команда заменена",
+    ["a team with this name already exists and differs (choose overwrite to update it)"] = "команда с таким названием уже существует и отличается (включите перезапись, чтобы обновить ее)",
+    ["name already used, imported as a copy"] = "название уже используется, импортирована как копия"
 }
 
 

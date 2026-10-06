@@ -80,7 +80,38 @@ local baseLocale = {
     ["PetBattleTeams:|nWould you like to import your pets from previous versions of PetBattleTeams?"] = "PetBattleTeams:|nM\195\182chten Sie Ihre Haustiere aus fr\195\188heren Versionen von PetBattleTeams importieren?",
     ["PetBattleTeams:|nAre you sure you want to |cffffd200reset all teams|r?"] = "PetBattleTeams:|nM\195\182chten Sie wirklich |cffffd200alle Teams zur\195\188cksetzen|r?",
     ["PetBattleTeams:|n'|cffffd200Pet Battle Scripts|r' addon is required.\n\nWrite scripts to automate pet battles."] = "PetBattleTeams:|nDas Addon '|cffffd200Pet Battle Scripts|r' wird ben\195\182tigt.\n\nSchreiben Sie Skripte, um Haustierk\195\164mpfe zu automatisieren.",
-    ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "PetBattleTeams:|n|cffffd200Ung\195\188ltiges Skript (nicht gespeichert)|r:\n%s"
+    ["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"] = "PetBattleTeams:|n|cffffd200Ung\195\188ltiges Skript (nicht gespeichert)|r:\n%s",
+
+    -- Import / Export
+    ["Export Team"] = "Team exportieren",
+    ["Import Teams"] = "Teams importieren",
+    ["Export Teams"] = "Teams exportieren",
+    ["Copy the text below (Ctrl+C) to share or back up your teams. Compatible with ReMatch."] = "Kopiere den Text unten (Strg+C), um deine Teams zu teilen oder zu sichern. Kompatibel mit ReMatch.",
+    ["Paste team strings (one team per line, ReMatch compatible), then click Import."] = "Füge Team-Zeichenfolgen ein (ein Team pro Zeile, ReMatch-kompatibel) und klicke dann auf Importieren.",
+    ["Import"] = "Importieren",
+    ["Overwrite existing teams that have the same name"] = "Vorhandene Teams mit demselben Namen überschreiben",
+    ["PetBattleTeams import: %d imported, %d updated, %d unchanged, %d skipped, %d ignored, %d error(s)"] = "PetBattleTeams-Import: %d importiert, %d aktualisiert, %d unverändert, %d übersprungen, %d ignoriert, %d Fehler",
+    ["PetBattleTeams import: ... more entries not shown"] = "PetBattleTeams-Import: ... weitere Einträge werden nicht angezeigt",
+    ["  line %d '%s' [%s] %s"] = "  Zeile %d '%s' [%s] %s",
+    ["imported"] = "importiert",
+    ["updated"] = "aktualisiert",
+    ["unchanged"] = "unverändert",
+    ["skipped"] = "übersprungen",
+    ["ignored"] = "ignoriert",
+    ["error"] = "Fehler",
+    ["does not match Name:npcIDs:tag:tag:tag:"] = "entspricht nicht dem Format Name:npcIDs:tag:tag:tag:",
+    ["team name is empty"] = "Teamname ist leer",
+    ["NPC id '%s' is not valid base32 and was ignored"] = "NPC-ID '%s' ist kein gültiger Base32-Wert und wurde ignoriert",
+    ["trailing data is neither P: preferences nor N: notes and was ignored"] = "nachfolgende Daten sind weder P:-Einstellungen noch N:-Notizen und wurden ignoriert",
+    ["slot %d: tag '%s' cannot be represented by PetBattleTeams; slot left empty, tag kept for export"] = "Platz %d: Tag '%s' kann von PetBattleTeams nicht dargestellt werden; Platz bleibt leer, Tag wird für den Export behalten",
+    ["slot %d: species %d is unknown; slot left empty, tag kept for export"] = "Platz %d: Art %d ist unbekannt; Platz bleibt leer, Tag wird für den Export behalten",
+    ["slot %d: no owned pet of species %d; slot left empty, tag kept for export"] = "Platz %d: kein Haustier der Art %d vorhanden; Platz bleibt leer, Tag wird für den Export behalten",
+    ["group header (groups are not supported)"] = "Gruppenkopf (Gruppen werden nicht unterstützt)",
+    ["identical team already present"] = "identisches Team bereits vorhanden",
+    ["the existing team is locked"] = "das vorhandene Team ist gesperrt",
+    ["existing team replaced"] = "vorhandenes Team ersetzt",
+    ["a team with this name already exists and differs (choose overwrite to update it)"] = "ein Team mit diesem Namen existiert bereits und unterscheidet sich (Überschreiben aktivieren, um es zu aktualisieren)",
+    ["name already used, imported as a copy"] = "Name bereits vergeben, als Kopie importiert"
 }
 
 addon:RegisterLocale(GetLocale(), baseLocale)
