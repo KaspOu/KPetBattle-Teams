@@ -1,3 +1,4 @@
+---@diagnostic disable: inject-field, undefined-field
 --[[
 Callback events
 
@@ -60,7 +61,9 @@ local function OnUpdate(self,elapsed)
             return
         else
             if not pcall(function()
-                if ability1 ~= abilities[1] then
+                if abilities == nil then
+                    -- nothing
+                elseif ability1 ~= abilities[1] then
                     C_PetJournal.SetAbility(self.step, 1, abilities[1])
                     return
                 elseif ability2 ~= abilities[2] then
@@ -77,7 +80,7 @@ local function OnUpdate(self,elapsed)
             end
         end
 
-        if petID == currentPetID and ability1 == abilities[1] and ability2 == abilities[2] and ability3 == abilities[3] then
+        if petID == currentPetID and abilities ~= nil and ability1 == abilities[1] and ability2 == abilities[2] and ability3 == abilities[3] then
             self.step = self.step +1
             return
         end
@@ -153,7 +156,7 @@ function TeamManager:GetTeamIndexForNPC(npcID)
     if npcIDToTeamMap == nil then
         self:RebuildNpcIDCache()
     end
-    return npcIDToTeamMap[npcID]
+    return npcIDToTeamMap and npcIDToTeamMap[npcID]
 end
 
 local lastTarget = nil
@@ -620,7 +623,7 @@ function TeamManager:UpdateTeamNewPet(petID,teamIndex,petIndex,sourceTeamIndex,s
             local _, sourceAbilities = self:GetPetInfo(sourceTeamIndex,sourcePetIndex)
 
             for i=1,3 do
-                pet.abilities[i] = sourceAbilities[i]
+                pet.abilities[i] = sourceAbilities and sourceAbilities[i]
             end
 
         else

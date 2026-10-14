@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 -- Pure Lua 5.1 tests for RematchImporter / RematchExporter / TeamModel (no WoW API needed).
 -- Run from the repository root:  lua tests/rematch_import_test.lua   (or python tests/run.py)
 

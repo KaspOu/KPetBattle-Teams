@@ -54,7 +54,9 @@
         "UIErrorsFrame",
         "RESET",
         "KEY_BACKSPACE_MAC",
-        "REMOVE"
+        "REMOVE",
+        "PetBattleTeamsFrame",
+        "issecretvalue"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#cf5018",
