@@ -413,10 +413,10 @@ function PetBattleTeamsFrame:HideEditors()
 
     local noteEditor = PetBattleTeams:GetModule("NoteEditor")
     if noteEditor then
-        noteEditor:HideEditor(self.teamIndex)
+        noteEditor:HideEditor()
     end
     local scriptEditor = PetBattleTeams:GetModule("ScriptEditor")
     if scriptEditor and scriptEditor:IsLoaded() then
-        scriptEditor:HideEditor(self.teamIndex)
+        scriptEditor:HideEditor()
     end
 end
