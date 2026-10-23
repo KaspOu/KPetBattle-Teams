@@ -437,7 +437,7 @@ end
 ---------------------------------------------------------------- unnamed teams
 group("unnamed teams")
 do
-    local LABEL = "\195\137quipe : |cff00ffff"
+    local LABEL = "Équipe : |cff00ffff"
     local function UnnamedApi()
         local api = NewApi()
         function api.IsDefaultName(name) return TeamModel.IsDefaultName(name, LABEL) end
@@ -446,14 +446,14 @@ do
 
     check(TeamModel.IsDefaultName("Team 1", LABEL), "'Team 1' is a default name")
     check(TeamModel.IsDefaultName("Team: |cff00ffff12", LABEL), "'Team: <color>12' is a default name")
-    check(TeamModel.IsDefaultName("\195\137quipe - 3", LABEL), "localized name rewritten by the exporter is a default name")
-    check(TeamModel.IsDefaultName("\195\137quipe : |cff00ffff3", LABEL), "localized display name is a default name")
+    check(TeamModel.IsDefaultName("Équipe - 3", LABEL), "localized name rewritten by the exporter is a default name")
+    check(TeamModel.IsDefaultName("Équipe : |cff00ffff3", LABEL), "localized display name is a default name")
     check(not TeamModel.IsDefaultName("Team", LABEL), "'Team' alone is a real name")
     check(not TeamModel.IsDefaultName("Team Rocket 1", LABEL), "'Team Rocket 1' is a real name")
     check(not TeamModel.IsDefaultName("Boss 1", LABEL), "'Boss 1' is a real name")
 
     local api = UnnamedApi()
-    local teams, report = Import("Team 1:36VF:1014V8:ZL:ZI:\n\195\137quipe - 2::0004V8::ZI:\nBoss:::::", nil, api)
+    local teams, report = Import("Team 1:36VF:1014V8:ZL:ZI:\nÉquipe - 2::0004V8::ZI:\nBoss:::::", nil, api)
     eq(report.imported, 3, "three teams imported")
     eq(teams[1].name, nil, "'Team 1' imported without a name")
     eq(teams[2].name, nil, "localized default name imported without a name")
