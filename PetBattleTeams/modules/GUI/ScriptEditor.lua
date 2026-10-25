@@ -58,10 +58,14 @@ function ScriptEditor:RegisterEvents()
         end
         if event == "PET_BATTLE_OPENING_START" and ScriptEditor:IsLoaded() then
             ScriptEditor:AutoLoad_PBS_Script()
+            ScriptEditor:ShowEditScriptButton()
+        elseif event == "PET_BATTLE_CLOSE" then
+            ScriptEditor:HideEditScriptButton()
         end
     end)
     self.eventsFrame:RegisterEvent("ADDON_LOADED")
     self.eventsFrame:RegisterEvent("PET_BATTLE_OPENING_START")
+    self.eventsFrame:RegisterEvent("PET_BATTLE_CLOSE")
 end
 
 function ScriptEditor:CreateEditor()
@@ -266,6 +270,62 @@ function ScriptEditor:AutoLoad_PBS_Script()
         ScriptEditor:PBS_SetScript(code)
     end
 end
+
+function ScriptEditor:ShowEditScriptButton()
+    local teamIndex = TeamManager:GetSelected()
+    if not teamIndex or teamIndex <= 0 then return end
+    if not self:IsLoaded() then return end
+    if not tdBattlePetScriptAutoButton then return end
+
+    if not self.editScriptButton then
+        local button = CreateFrame("Button", nil, tdBattlePetScriptAutoButton, "UIPanelButtonTemplate")
+        button:SetSize(80, 16)
+        button:SetPoint("LEFT", tdBattlePetScriptAutoButton, "RIGHT", 4, 3)
+        button:SetText(L["Edit Script"])
+        local fontString = button:GetFontString()
+        local font, _, flags = fontString:GetFont()
+        fontString:SetFont(font, 8, flags)
+
+        local normalTexture = button:GetNormalTexture()
+        if normalTexture then
+            normalTexture:SetVertexColor(1, 0.25, 0.25)
+        end
+        local pushedTexture = button:GetPushedTexture()
+        if pushedTexture then
+            pushedTexture:SetVertexColor(1, 0.25, 0.25)
+        end
+
+        button:SetScript("OnClick", function()
+            GameTooltip:Hide()
+            local index = TeamManager:GetSelected()
+            if not index or index <= 0 then return end
+            ScriptEditor:ShowEditor(index) -- équipe en cours au moment du clic
+        end)
+
+        button:SetScript("OnEnter", function(btn)
+            local index = TeamManager:GetSelected()
+            if not index or index <= 0 then return end
+            local name, _, customName = TeamManager:GetTeamName(index)
+            GameTooltip:SetOwner(btn, "ANCHOR_RIGHT")
+            GameTooltip:AddLine(L["Edit Script"], 1, 1, 1)
+            GameTooltip:AddLine(customName or name or "", 1, 0.82, 0)
+            GameTooltip:AddLine(L["PetBattle Teams"], 0, 1, 0)
+            GameTooltip:Show()
+        end)
+        button:SetScript("OnLeave", function() GameTooltip:Hide() end)
+
+        self.editScriptButton = button
+    end
+
+    self.editScriptButton:Show()
+end
+
+function ScriptEditor:HideEditScriptButton()
+    if self.editScriptButton then
+        self.editScriptButton:Hide()
+    end
+end
+
 
 
 --@do-not-package@
