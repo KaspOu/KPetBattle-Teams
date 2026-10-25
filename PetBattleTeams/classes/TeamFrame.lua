@@ -108,7 +108,7 @@ function PetBattleTeamsFrame:New()
     teamNoteIcon:SetSize(16, 16)
     -- teamNoteIcon:SetTexture("Interface/Icons/INV_Letter_15")
     teamNoteIcon:SetTexture("Interface/MINIMAP/TRACKING/Mailbox.PNG")
-    teamNoteIcon:SetPoint("BOTTOMRIGHT", petBattleTeamsFrame.unitFrames[3], "TOPRIGHT", 0, 0)
+    teamNoteIcon:SetPoint("BOTTOMRIGHT", petBattleTeamsFrame.unitFrames[3], "TOPRIGHT", -6, 0)
     teamNoteIcon:SetAtlas("ui-hud-minimap-mail-up", false)
     teamNoteIcon:SetAlpha(.2)
     teamNoteIcon:SetDesaturated(true)
@@ -145,6 +145,7 @@ function PetBattleTeamsFrame:New()
             parent:ShowNoteEditor()
         end
     end)
+    teamNoteButton:SetFrameLevel(100)
 
 
     local teamNPCIcon = petBattleTeamsFrame:CreateTexture(nil, "OVERLAY")
@@ -159,7 +160,7 @@ function PetBattleTeamsFrame:New()
     local teamNPCButton = CreateFrame("Button", nil, petBattleTeamsFrame)
     petBattleTeamsFrame.teamNPCButton = teamNPCButton
     teamNPCButton:SetSize(16, 16)
-    teamNPCButton:SetPoint("RIGHT", teamNoteIcon, "LEFT", 1)
+    teamNPCButton:SetPoint("CENTER", teamNPCIcon, "CENTER")
     teamNPCButton:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
     teamNPCButton:SetScript("OnEnter", function(self)
         local teamIndex = self:GetParent().teamIndex
@@ -197,6 +198,7 @@ function PetBattleTeamsFrame:New()
         end
         petBattleTeamsFrame:ShowNpcEditor()
     end)
+    teamNPCButton:SetFrameLevel(100)
 
 
     local ScriptEditor = PetBattleTeams:GetModule("ScriptEditor")
@@ -207,7 +209,7 @@ function PetBattleTeamsFrame:New()
         teamScriptIcon:SetSize(16, 16)
         -- teamScriptIcon:SetTexture("Interface/MINIMAP/Vehicle-Trap-Grey.PNG")
         teamScriptIcon:SetTexture("Interface/ICONS/Pet_Type_Dragon.PNG")
-        teamScriptIcon:SetPoint("BOTTOMRIGHT", petBattleTeamsFrame.unitFrames[3], "TOPRIGHT", 16, 0)
+        teamScriptIcon:SetPoint("LEFT", teamNoteIcon, "RIGHT", 1)
         -- teamScriptIcon:SetAtlas("WildBattlePetCapturable", false)
         teamScriptIcon:SetAlpha(.2)
         teamScriptIcon:SetDesaturated(true)
