@@ -7,6 +7,8 @@ local Cursor =  PetBattleTeams:GetModule("Cursor")
 local Embed = PetBattleTeams.Embed
 local HEIGHT_WITH_NAME = 55
 local HEIGHT = 42
+local ICON_SIZE = 16
+local ICON_SIZE_COMPACT = 12
 local PetBattleTeamsUnitFrame = PetBattleTeams.PetBattleTeamsUnitFrame
 
 local _, addon = ...
@@ -284,6 +286,41 @@ local function toggleIcon(icon, state)
     end
 end
 
+-- The buttons are anchored to the icons ("CENTER"), so only the icons need to be repositioned.
+local function UpdateIconLayout(self, showTeamName)
+    local iconSize = showTeamName and ICON_SIZE or ICON_SIZE_COMPACT
+    local anchorUnit = self.unitFrames[3]
+
+    self.teamNoteIcon:ClearAllPoints()
+    self.teamNPCIcon:ClearAllPoints()
+    self.teamNoteIcon:SetSize(iconSize, iconSize)
+    self.teamNPCIcon:SetSize(iconSize, iconSize)
+    self.teamNoteButton:SetSize(iconSize, iconSize)
+    self.teamNPCButton:SetSize(iconSize, iconSize)
+
+    if self.teamScriptIcon then
+        self.teamScriptIcon:ClearAllPoints()
+        self.teamScriptIcon:SetSize(iconSize, iconSize)
+        self.teamScriptButton:SetSize(iconSize, iconSize)
+    end
+
+    if showTeamName then
+        -- Horizontal, above the third pet icon: NPC - Note - Script
+        self.teamNoteIcon:SetPoint("BOTTOMRIGHT", anchorUnit, "TOPRIGHT", -6, 0)
+        self.teamNPCIcon:SetPoint("RIGHT", self.teamNoteIcon, "LEFT", 1, 0)
+        if self.teamScriptIcon then
+            self.teamScriptIcon:SetPoint("LEFT", self.teamNoteIcon, "RIGHT", 1, 0)
+        end
+    else
+        -- Vertical, right of the team icons: NPC on top, Note in the middle, Script at the bottom
+        self.teamNPCIcon:SetPoint("TOPLEFT", anchorUnit, "TOPRIGHT", 2, 0)
+        self.teamNoteIcon:SetPoint("LEFT", anchorUnit, "RIGHT", 2, 0)
+        if self.teamScriptIcon then
+            self.teamScriptIcon:SetPoint("BOTTOMLEFT", anchorUnit, "BOTTOMRIGHT", 2, 0)
+        end
+    end
+end
+
 function PetBattleTeamsFrame:ShowNpcEditor()
     if not self.teamIndex then return end
 
@@ -296,10 +333,15 @@ function PetBattleTeamsFrame:Update()
     local showTeamName = TeamManager:GetShowTeamName()
     local showLocked = TeamManager:IsTeamLocked(self.teamIndex)
 
+    UpdateIconLayout(self, showTeamName)
+
     if showTeamName then
         local displayName = TeamManager:GetTeamName(self.teamIndex)
         self.teamNameText:SetText(displayName)
+    end
 
+    -- Icons and buttons are always shown, their look reflects whether the team has data.
+    if self.teamIndex then
         local note = TeamManager:GetTeamNote(self.teamIndex)
         toggleIcon(self.teamNoteIcon, note and note ~= "")
 
@@ -312,14 +354,6 @@ function PetBattleTeamsFrame:Update()
         toggleIcon(self.teamNPCIcon, npcID and npcID ~= "")
     end
     self.teamNameText:SetShown(showTeamName)
-    self.teamNoteIcon:SetShown(showTeamName)
-    self.teamNoteButton:SetShown(showTeamName)
-    self.teamNPCIcon:SetShown(showTeamName and TeamManager:GetAutoSwitchOnTarget())
-    self.teamNPCButton:SetShown(showTeamName and TeamManager:GetAutoSwitchOnTarget())
-    if self.teamScriptIcon then
-        self.teamScriptIcon:SetShown(showTeamName)
-        self.teamScriptButton:SetShown(showTeamName)
-    end
 
     self:SetHeight(CalculateTeamHeight(self.teamIndex))
 
