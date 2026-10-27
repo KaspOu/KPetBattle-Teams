@@ -1,6 +1,9 @@
 local PetBattleTeams = LibStub("AceAddon-3.0"):NewAddon("PetBattleTeams")
 local _, addon = ...
 
+
+PetBattleTeamsSettings = PetBattleTeamsSettings or {}
+
 -- luacheck: globals StaticPopup_OnClick
 
 --handles addon stuff instansciates objects

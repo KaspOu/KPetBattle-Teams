@@ -116,4 +116,4 @@ local baseLocale = {
 }
 
 
-addon:RegisterLocale('enUS', baseLocale)
+addon:RegisterLocale('enUS', baseLocale, true)

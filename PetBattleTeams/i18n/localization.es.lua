@@ -1,6 +1,7 @@
 -------------------------------------------------------------------------------
 -- Spanish localization (ChatGPT)
 -------------------------------------------------------------------------------
+if PetBattleTeamsSettings and PetBattleTeamsSettings.ForceEnglish then return end
 
 local _, addon = ...
 local baseLocale = {

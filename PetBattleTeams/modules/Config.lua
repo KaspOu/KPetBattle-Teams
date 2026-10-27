@@ -314,6 +314,24 @@ Config.options = {
                 print("PetBattle Teams: UI Reset")
             end,
         },
+        special = {
+            name = MISCELLANEOUS,
+            type = "header",
+            order = 130
+        },
+        forceEnglish = {
+            name = "Force English",
+            type = "toggle",
+            width = "full",
+            get = function()
+                return PetBattleTeamsSettings.ForceEnglish
+            end,
+            set = function(_, val)
+                PetBattleTeamsSettings.ForceEnglish = val
+            end,
+            desc = "Force english language, will require /reload",
+            order = 133,
+        },
     },
 }
 
