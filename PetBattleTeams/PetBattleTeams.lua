@@ -295,7 +295,3 @@ function addon:RegisterLocale(locale, tbl)
         StaticPopupDialogs["PBT_SCRIPT_ERROR"].text = self.L["PetBattleTeams:|n|cffffd200Invalid script (not saved)|r:\n%s"]
     end
 end
-
-function PBT_AddonCompartmentFunc()
-    SetCollectionsJournalShown(true, COLLECTIONS_JOURNAL_TAB_INDEX_PETS)
-end

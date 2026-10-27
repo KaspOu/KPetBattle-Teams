@@ -112,7 +112,8 @@ local baseLocale = {
     ["the existing team is locked"] = "the existing team is locked",
     ["existing team replaced"] = "existing team replaced",
     ["a team with this name already exists and differs (choose overwrite to update it)"] = "a team with this name already exists and differs (choose overwrite to update it)",
-    ["name already used, imported as a copy"] = "name already used, imported as a copy"
+    ["name already used, imported as a copy"] = "name already used, imported as a copy",
+    ["Display in Addon Compartment (on top right)"] = "Display in Addon Compartment (on top right)",
 }
 
 

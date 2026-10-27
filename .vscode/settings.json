@@ -56,7 +56,10 @@
         "KEY_BACKSPACE_MAC",
         "REMOVE",
         "PetBattleTeamsFrame",
-        "issecretvalue"
+        "issecretvalue",
+        "tdBattlePetScriptAutoButton",
+        "AddonCompartmentFrame",
+        "MISCELLANEOUS"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#cf5018",

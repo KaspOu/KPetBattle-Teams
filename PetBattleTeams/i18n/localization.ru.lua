@@ -114,7 +114,8 @@ local baseLocale = {
     ["the existing team is locked"] = "существующая команда заблокирована",
     ["existing team replaced"] = "существующая команда заменена",
     ["a team with this name already exists and differs (choose overwrite to update it)"] = "команда с таким названием уже существует и отличается (включите перезапись, чтобы обновить ее)",
-    ["name already used, imported as a copy"] = "название уже используется, импортирована как копия"
+    ["name already used, imported as a copy"] = "название уже используется, импортирована как копия",
+    ["Display in Addon Compartment (on top right)"] = "Отображать в области аддонов (вверху справа)",
 }
 
 

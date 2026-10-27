@@ -13,6 +13,7 @@ local GUI = PetBattleTeams:NewModule("GUI")
 local TeamManager = PetBattleTeams:GetModule("TeamManager")
 local LibPetJournal = LibStub("LibPetJournal-2.0")
 local eventFrame = CreateFrame("frame")
+local addonName = ...
 
 -- luacheck: globals PetJournal
 
@@ -23,7 +24,7 @@ local function OnEvent(self,event,...)
             GUI:InitializeGUI()
             self:UnregisterEvent("ADDON_LOADED")
         end
-
+        GUI:RegisterCompartment()
     end
 
     if event == "PLAYER_REGEN_ENABLED" or event == "PET_BATTLE_CLOSE"  then
@@ -67,6 +68,7 @@ function GUI:OnInitialize()
             showRoster = true,
             minimized = false,
             SelectedTeamScrolling = false,
+            compartmentFilter = true,
         }
     }
 
@@ -208,4 +210,25 @@ end
 
 function GUI:GetIsMinimized()
     return self.db.global.minimized
+end
+
+function GUI:GetCompartmentFilter()
+    return self.db.global.compartmentFilter
+end
+function GUI:SetCompartmentFilter(enabled)
+    self.db.global.compartmentFilter = enabled
+    GUI:RegisterCompartment()
+end
+
+local _compartmentRegistered = false
+function GUI:RegisterCompartment()
+    if (AddonCompartmentFrame and self.db.global.compartmentFilter ~= false and not _compartmentRegistered) then
+        AddonCompartmentFrame:RegisterAddon({
+            text = C_AddOns.GetAddOnMetadata(addonName, "Title"),
+            icon = C_AddOns.GetAddOnMetadata(addonName, "IconTexture"),
+            notCheckable = true,
+            func = function () SetCollectionsJournalShown(true, COLLECTIONS_JOURNAL_TAB_INDEX_PETS) end,
+        })
+		_compartmentRegistered = true
+    end
 end

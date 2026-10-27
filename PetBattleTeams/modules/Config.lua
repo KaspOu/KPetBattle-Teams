@@ -126,7 +126,6 @@ Config.options = {
             name = L["Show the selected team indicator"],
             type = "toggle",
             width = "full",
-            desc = "",
             set = function(info,val)
                 GUI:SetComponentPoints(val,nil,nil)
             end,
@@ -137,7 +136,6 @@ Config.options = {
             name = L["Show control buttons"],
             type = "toggle",
             width = "full",
-            desc = "",
             set = function(info,val)
                 GUI:SetComponentPoints(nil,val,nil)
             end,
@@ -148,7 +146,6 @@ Config.options = {
             name = L["Show the team roster"],
             type = "toggle",
             width = "full",
-            desc = "",
             set = function(info,val)
                 GUI:SetComponentPoints(nil,nil,val)
             end,
@@ -319,6 +316,21 @@ Config.options = {
             type = "header",
             order = 130
         },
+        compartmentFilter = {
+            name = L["Display in Addon Compartment (on top right)"],
+            type = "toggle",
+            width = "full",
+            hidden = function()
+                return not AddonCompartmentFrame
+            end,
+            get = function()
+                return GUI:GetCompartmentFilter()
+            end,
+            set = function(_, val)
+                GUI:SetCompartmentFilter(val)
+            end,
+            order = 131,
+        },
         forceEnglish = {
             name = "Force English",
             type = "toggle",
@@ -361,31 +373,34 @@ function Config:GetEasyMenu()
     for _, key in ipairs(keys) do
         local v = args[key]
         local option = {}
-        if v.type == "toggle" then
-            option.text = v.name
-            option.notCheckable = false
-            option.isNotRadio = true
-            option.keepShownOnClick = true
-            local func = v.set
-            option.func =  function(self, arg1, arg2, checked) func(nil,checked) end
-            option.checked = v.get
-        elseif v.type == "header" then
-            option.isTitle = true
-            option.text = v.name
-            option.notCheckable = true
-            option.isNotRadio = true
-            option.keepShownOnClick = true
-        elseif v.type == "execute" and MenuOptions[key] then
-            option.text = v.name
-            option.notCheckable = true
-            option.func = function() v.func() end
-            if v.desc then
+        
+        if not v.hidden or not v.hidden() then
+            if v.type == "toggle" then
+                option.text = v.name
+                option.notCheckable = false
+                option.isNotRadio = true
+                option.keepShownOnClick = true
+                local func = v.set
+                option.func =  function(self, arg1, arg2, checked) func(nil,checked) end
+                option.checked = v.get
+            elseif v.type == "header" then
+                option.isTitle = true
+                option.text = v.name
+                option.notCheckable = true
+                option.isNotRadio = true
+                option.keepShownOnClick = true
+            elseif v.type == "execute" and MenuOptions[key] then
+                option.text = v.name
+                option.notCheckable = true
+                option.func = function() v.func() end
+            end
+        end
+        if option.text then
+            if v.desc and v.desc ~= "" then
                 option.tooltipOnButton = true
                 option.tooltipTitle = v.name
                 option.tooltipText = v.desc
             end
-        end
-        if option.text then
             table.insert(menu,option)
         end
     end

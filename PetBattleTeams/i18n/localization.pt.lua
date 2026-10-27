@@ -111,7 +111,8 @@ local baseLocale = {
     ["the existing team is locked"] = "a equipe existente está bloqueada",
     ["existing team replaced"] = "equipe existente substituída",
     ["a team with this name already exists and differs (choose overwrite to update it)"] = "já existe uma equipe com este nome e ela é diferente (marque sobrescrever para atualizá-la)",
-    ["name already used, imported as a copy"] = "nome já em uso, importada como cópia"
+    ["name already used, imported as a copy"] = "nome já em uso, importada como cópia",
+    ["Display in Addon Compartment (on top right)"] = "Exibir no compartimento de addons (canto superior direito)",
 }
 
 addon:RegisterLocale(GetLocale(), baseLocale)

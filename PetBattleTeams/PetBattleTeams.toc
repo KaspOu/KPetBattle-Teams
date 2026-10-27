@@ -27,7 +27,6 @@
 ## LoadSavedVariablesFirst: 1 
 ## SavedVariables: PetBattleTeamsDB, PetBattleTeamsSettings
 ## IconTexture: Interface\AddOns\PetBattleTeams\icon.png
-## AddonCompartmentFunc: PBT_AddonCompartmentFunc
 
 ## Category-enUS: Pet Battles
 ## Category-deDE: Haustierkämpfe

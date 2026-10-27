@@ -114,7 +114,8 @@ local baseLocale = {
     ["the existing team is locked"] = "现有队伍已锁定",
     ["existing team replaced"] = "已替换现有队伍",
     ["a team with this name already exists and differs (choose overwrite to update it)"] = "已存在同名但内容不同的队伍（勾选覆盖以更新）",
-    ["name already used, imported as a copy"] = "名称已被使用，已作为副本导入"
+    ["name already used, imported as a copy"] = "名称已被使用，已作为副本导入",
+    ["Display in Addon Compartment (on top right)"] = "显示在插件收纳区（右上角）",
 }
 
 addon:RegisterLocale(GetLocale(), baseLocale)

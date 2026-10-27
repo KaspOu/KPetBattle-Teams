@@ -112,7 +112,8 @@ local baseLocale = {
     ["the existing team is locked"] = "기존 팀이 잠겨 있습니다",
     ["existing team replaced"] = "기존 팀을 교체했습니다",
     ["a team with this name already exists and differs (choose overwrite to update it)"] = "같은 이름의 팀이 이미 있으며 내용이 다릅니다 (갱신하려면 덮어쓰기를 선택하세요)",
-    ["name already used, imported as a copy"] = "이미 사용 중인 이름이므로 사본으로 가져왔습니다"
+    ["name already used, imported as a copy"] = "애드온 보관함에 표시 (오른쪽 상단)",
+    ["Display in Addon Compartment (on top right)"] = "칸 필터에 표시",
 }
 
 addon:RegisterLocale(GetLocale(), baseLocale)
