@@ -1,183 +1,204 @@
 # AGENTS.md — PetBattleTeams (KPetBattle-Teams)
 
-Working guide for AI agents (and humans) modifying this addon. It documents the code as it
-exists today — do not "fix" the architecture described here without being asked. See
-`docs/ARCHITECTURE.md` for the full technical reference and `backlog.md` for the 2026-11-13
-security/correctness audit (known defects are listed there, not silently patched here).
+Guide de travail pour les agents IA (et les humains) qui modifient cet addon. Ce document
+décrit le code tel qu'il existe aujourd'hui — ne « réparez » pas l'architecture décrite ici sans
+demander. Voir `docs/ARCHITECTURE.md` pour la référence technique complète et `backlog.md` pour
+l'audit sécurité/correction du 2026-11-13 (les défauts connus y sont listés, pas corrigés
+discrètement ici).
 
-## 1. Technical context
+## 1. Contexte technique
 
-- **Purpose.** Pet-battle team manager: build teams of 3 battle pets, switch the pet loadout
-  between them, drag/drop pets, per-team notes and Pet Battle Scripts (PBS) integration,
-  Rematch-compatible import/export, autoswitch by target NPC ID.
-- **Target clients.** `## Interface: 120100, 120105, 120107` (retail 12.x / Midnight) and
-  `50504` (Mists of Pandaria Classic); `## AllowLoadGameType: standard, mists`
-  (`PetBattleTeams/PetBattleTeams.toc:1-2`). Version `12.1.503` (TOC line 11).
-- **Environment.** WoW-embedded Lua 5.1 (LuaJIT on retail): no `os`/`io`/filesystem, no
-  `require`, event-driven single-threaded, SavedVariables serialized by the client at logout.
-  On retail 12.x the **secret-values system** applies: unit identity APIs return secret values
-  in combat/tainted contexts — see `docs/WoWAddonDevGuide-master/12a_Secret_Safe_APIs.md`.
-- **Embedded libraries** (vendored under `PetBattleTeams/libs/`, declared as externals in
-  `.pkgmeta`): Ace3 subset (AceAddon/AceConfig/AceConfigDialog/AceConfigCmd/AceConfigRegistry/
-  AceConsole/AceDB/AceGUI), LibStub, CallbackHandler-1.0, LibPetJournal-2.0 (KaspOu fork),
-  LibPetBreedInfo-1.0, LibDropDownMenu (Hizuros), LibSharedMedia-3.0 and EmbedHandler-1.0
-  (both loaded by the TOC but **not referenced by first-party code**).
-- **Optional external addon.** `tdBattlePetScript` ("Pet Battle Scripts"): `ScriptEditor`
-  integrates with `GetAddon("PetBattleScripts")` / its `Director` module / `GetClass("Script")`.
-  Without it, script features degrade to a "addon required" popup.
+- **Objectif.** Gestionnaire d'équipes de mascottes de combat : constituer des équipes de 3
+  mascottes de combat, basculer le loadout entre elles, glisser-déposer des mascottes, notes par
+  équipe et intégration Pet Battle Scripts (PBS), import/export compatible Rematch, changement
+  d'équipe automatique selon l'ID du NPC ciblé.
+- **Clients ciblés.** `## Interface: 120100, 120105, 120107` (retail 12.x / Midnight) et
+  `50504` (Mists of Pandaria Classic) ; `## AllowLoadGameType: standard, mists`
+  (`PetBattleTeams/PetBattleTeams.toc:1-2`). Version `12.1.503` (TOC ligne 11).
+- **Environnement.** Lua 5.1 embarqué dans WoW (LuaJIT sur retail) : pas de `os`/`io`/accès
+  filesystem, pas de `require`, programmation événementielle mono-thread, SavedVariables
+  sérialisées par le client à la déconnexion. Sur retail 12.x, le **système de secret values**
+  s'applique : les API d'identité d'unité retournent des valeurs secrètes en combat/contexte
+  teinté — voir `docs/WoWAddonDevGuide-master/12a_Secret_Safe_APIs.md`.
+- **Bibliothèques embarquées** (vendored sous `PetBattleTeams/libs/`, déclarées en externals
+  dans `.pkgmeta`) : sous-ensemble Ace3 (AceAddon/AceConfig/AceConfigDialog/AceConfigCmd/
+  AceConfigRegistry/AceConsole/AceDB/AceGUI), LibStub, CallbackHandler-1.0,
+  LibPetJournal-2.0 (fork KaspOu), LibPetBreedInfo-1.0, LibDropDownMenu (Hizuros),
+  LibSharedMedia-3.0 et EmbedHandler-1.0 (ces deux derniers chargés par le TOC mais **jamais
+  référencés par le code first-party**).
+- **Addon externe optionnel.** `tdBattlePetScript` (« Pet Battle Scripts ») : `ScriptEditor`
+  s'intègre via `GetAddon("PetBattleScripts")` / son module `Director` / `GetClass("Script")`.
+  Sans lui, les fonctionnalités de script dégradent en popup « addon required ».
 
-## 2. Code organization
+## 2. Organisation du code
 
 ```
 KPetBattle-Teams/
-├── PetBattleTeams/            # the addon proper (folder name = addon name)
-│   ├── PetBattleTeams.toc     # load order + metadata (source of truth for loading)
-│   ├── PetBattleTeams.lua     # addon creation, slash handler, StaticPopups, L metatable
-│   ├── i18n/                  # 9 localization files (en first, then 8 translations)
-│   ├── modules/               # AceAddon modules + pure model files
-│   │   ├── TeamManager.lua    # core: team data, loadout applying, autoswitch, persistence
-│   │   ├── RematchImporter.lua / RematchExporter.lua / TeamModel.lua  # pure model layer
-│   │   ├── ImportExport.lua   # runtime glue for import/export dialog
-│   │   ├── TeamManagerUnitTests.lua   # in-game unit tests (shipped, never auto-run)
-│   │   ├── Tooltip.lua / Cursor.lua / Config.lua / Tutorial.lua (dead)
-│   │   └── GUI/               # UI builders + editors (GUI.lua, MainFrame, ScrollFrame, …)
-│   ├── classes/               # mixin UI classes: TeamFrame, PetUnitFrame
-│   └── libs/                  # vendored libraries (upstream code — avoid editing)
-├── .context/                  # dev tooling (run.py, import_test.lua — currently broken)
-├── .pkgmeta                   # BigWigs packager manifest (externals)
-└── .release*.bat              # Windows release wrappers → ../packager/release.sh
+├── PetBattleTeams/            # l'addon lui-même (nom du dossier = nom de l'addon)
+│   ├── PetBattleTeams.toc     # ordre de chargement + métadonnées (source de vérité)
+│   ├── PetBattleTeams.lua     # création addon, slash, StaticPopups, métable L
+│   ├── i18n/                  # 9 fichiers de localisation (en d'abord, puis 8 traductions)
+│   ├── modules/               # modules AceAddon + fichiers modèle purs
+│   │   ├── TeamManager.lua    # cœur : données équipes, application du loadout, autoswitch, SV
+│   │   ├── RematchImporter.lua / RematchExporter.lua / TeamModel.lua  # couche modèle pure
+│   │   ├── ImportExport.lua   # colle runtime du dialogue import/export
+│   │   ├── TeamManagerUnitTests.lua   # tests in-game (livrés, jamais auto-exécutés)
+│   │   ├── Tooltip.lua / Cursor.lua / Config.lua / Tutorial.lua (mort)
+│   │   └── GUI/               # constructeurs UI + éditeurs (GUI.lua, MainFrame, ScrollFrame…)
+│   ├── classes/               # classes UI en mixin : TeamFrame, PetUnitFrame
+│   └── libs/                  # bibliothèques vendored (code amont — ne pas éditer)
+├── .context/                  # outillage dev (run.py, import_test.lua — actuellement cassé)
+├── .pkgmeta                   # manifeste du packager BigWigs (externals)
+└── .release*.bat              # enveloppes release Windows → ../packager/release.sh
 ```
 
-### Module responsibilities and load order
+### Responsabilités des modules et ordre de chargement
 
-`PetBattleTeams.toc` order is mandatory; several files capture module references at file load.
-Critical dependencies:
+L'ordre de `PetBattleTeams.toc` est impératif ; plusieurs fichiers capturent des références de
+modules au chargement du fichier. Dépendances critiques :
 
-1. `PetBattleTeams.lua` **first**: creates the AceAddon object `PetBattleTeams`, the
-   `addon.L` localization metatable, slash handler and StaticPopups.
-2. `i18n/*` next: each file calls `addon:RegisterLocale`; `Localization.en.lua` is the base.
-3. `TeamManager.lua` before anything that calls `GetModule("TeamManager")` at file scope
-   (ImportExport, GUI, Config, classes, …).
-4. Model chain order: `RematchImporter.lua` → `RematchExporter.lua` → `TeamModel.lua` →
-   `ImportExport.lua` (each captures `ns.<Model>` from the private table at file scope).
-5. `classes/*.lua` before `modules/GUI/ScrollFrame.lua` (which reads
-   `PetBattleTeams.PetBattleTeamsFrame` at file scope) and before anything constructing frames.
+1. `PetBattleTeams.lua` **en premier** : crée l'objet AceAddon `PetBattleTeams`, la métable de
+   localisation `addon.L`, le gestionnaire slash et les StaticPopups.
+2. `i18n/*` ensuite : chaque fichier appelle `addon:RegisterLocale` ;
+   `Localization.en.lua` est la base.
+3. `TeamManager.lua` avant tout fichier appelant `GetModule("TeamManager")` au niveau module
+   (ImportExport, GUI, Config, classes…).
+4. Ordre de la chaîne de modèle : `RematchImporter.lua` → `RematchExporter.lua` →
+   `TeamModel.lua` → `ImportExport.lua` (chacun capture `ns.<Modèle>` depuis la table privée au
+   niveau fichier).
+5. `classes/*.lua` avant `modules/GUI/ScrollFrame.lua` (qui lit
+   `PetBattleTeams.PetBattleTeamsFrame` au niveau fichier) et avant toute construction de frames.
 
-Module styles in use (follow the existing one when adding code):
+Styles de modules en usage (suivez celui qui existe déjà en ajoutant du code) :
 
-- **AceAddon modules** (`PetBattleTeams:NewModule(...)`): TeamManager, GUI, Config (embeds
-  AceConsole-3.0), Tooltip, Cursor, NoteEditor, ScriptEditor, ImportExport. Queried with
-  `GetModule("Name")`.
-- **Mixin classes** with `PetBattleTeams.Embed` (copy method table into instance):
-  `PetBattleTeamsFrame` (classes/TeamFrame.lua) and `PetBattleTeamsUnitFrame`
+- **Modules AceAddon** (`PetBattleTeams:NewModule(...)`) : TeamManager, GUI, Config (embarque
+  AceConsole-3.0), Tooltip, Cursor, NoteEditor, ScriptEditor, ImportExport. Interrogés avec
+  `GetModule("Nom")`.
+- **Classes mixin** avec `PetBattleTeams.Embed` (copie la table de méthodes dans l'instance) :
+  `PetBattleTeamsFrame` (classes/TeamFrame.lua) et `PetBattleTeamsUnitFrame`
   (classes/PetUnitFrame.lua).
-- **Pure model files** sharing the addon's private vararg table (`local _, ns = ...`):
-  RematchImporter, RematchExporter, TeamModel — no WoW API except through injected `api`.
+- **Fichiers modèle purs** partageant la table vararg privée de l'addon
+  (`local _, ns = ...`) : RematchImporter, RematchExporter, TeamModel — aucune API WoW hors
+  injection d'un `api`.
 
-### Namespaces and globals
+### Namespaces et variables globales
 
-- `PetBattleTeams` (AceAddon object) is the only addon namespace; modules hang off it.
-- The private vararg table (`local _, addon = ...` / `local _, ns = ...`) carries `L`
-  (localization) and the three model files. Do not create new globals.
-- Existing **global frames**: `PetBattleTeamFrame` (MainFrame), `PetBattleTeamsTooltip`,
-  `PetBattleTeamsImportExportFrame` (in `UISpecialFrames`), `CursorTeamFrame` (in
-  `UISpecialFrames`), dynamically named Revive/Bandage buttons
-  (`parent:GetName()..name` pattern).
-- **Slash globals**: `SLASH_PETBATTLETEAMS1/2` (`/pbt`, `/PetBattleTeams`) +
-  `SlashCmdList.PETBATTLETEAMS`. Note: `Config.lua:351` also registers `/pbt` through
-  AceConfig (`SLASH_ACECONSOLE_PBT1`) — a known collision (backlog.md finding 6).
-- **SavedVariables globals**: `PetBattleTeamsDB` (AceDB-3.0), `PetBattleTeamsSettings`
-  (plain table, `ForceEnglish` key).
-- Localization keys are the **English source strings**; `L[...]` falls back to the key itself.
+- `PetBattleTeams` (objet AceAddon) est l'unique namespace de l'addon ; les modules y
+  accrochent.
+- La table vararg privée (`local _, addon = ...` / `local _, ns = ...`) porte `L`
+  (localisation) et les trois fichiers de modèle. Ne créez pas de nouvelles globales.
+- **Frames globales existantes** : `PetBattleTeamFrame` (MainFrame), `PetBattleTeamsTooltip`,
+  `PetBattleTeamsImportExportFrame` (dans `UISpecialFrames`), `CursorTeamFrame` (dans
+  `UISpecialFrames`), boutons Revive/Bandage nommés dynamiquement (motif
+  `parent:GetName()..name`).
+- **Globales slash** : `SLASH_PETBATTLETEAMS1/2` (`/pbt`, `/PetBattleTeams`) +
+  `SlashCmdList.PETBATTLETEAMS`. Attention : `Config.lua:351` enregistre aussi `/pbt` via
+  AceConfig (`SLASH_ACECONSOLE_PBT1`) — collision connue (backlog.md constat 6).
+- **Globales SavedVariables** : `PetBattleTeamsDB` (AceDB-3.0), `PetBattleTeamsSettings`
+  (table simple, clé `ForceEnglish`).
+- Les clés de localisation sont les **chaînes anglaises sources** ; `L[...]` retombe sur la clé
+  elle-même.
 
-## 3. WoW-specific rules
+## 3. Règles spécifiques à WoW
 
-- **API per client version.** Code runs on both retail 12.x and MoP Classic. Guard
-  12.x-only globals (`issecretvalue` at `TeamManager.lua:175` is the pattern:
-  `if issecretvalue and issecretvalue(v) then … end`). Never assume an API exists on both
-  clients without checking `docs/WoWAddonDevGuide-master/01_API_Reference.md`.
-- **Secret values (12.x).** Do not do arithmetic, comparisons or string ops on values from
-  unit-identity APIs during combat/tainted contexts. `UnitGUID`/`UnitName` need
-  `issecretvalue` guards wherever they are operated on (`TeamManager.lua:418-429` lacks one —
-  see backlog.md finding 13). Spell cooldowns: pass duration objects to cooldown frames, not
-  raw `startTime`/`duration` (`ReviveButton.lua:14-16` violates this — backlog.md finding 4).
-- **Combat lockdown.** Frames created from `secureactionbuttontemplate`
-  (`ReviveButton.lua:41`, `PetBandageButton.lua:35`) are protected: `SetAttribute`,
-  `Show`/`Hide`, `SetParent`, `SetPoint` on them must be guarded with `InCombatLockdown()` or
-  deferred (pattern: `MainFrame.lua:99`, `GUI.lua:119`). Known violations are listed in
-  backlog.md findings 2-3, 8 — do not replicate them in new code.
-- **Event lifecycle.** Everything hangs off `ADDON_LOADED` and AceAddon `OnInitialize`
-  callbacks (see `docs/ARCHITECTURE.md` §4). `PLAYER_LOGIN`/`PLAYER_ENTERING_WORLD` are **not**
-  used. The GUI is built lazily when the LoadOnDemand addon `Blizzard_Collections` loads
-  (`GUI.lua:21-36`) — never assume `PetJournal` exists before that.
-- **SavedVariables.** Opened through AceDB-3.0 in `OnInitialize` (after the client loaded the
-  SV file; `## LoadSavedVariablesFirst: 1` is set in the TOC). Validate types when reading
-  values that users can hand-edit (precedent: `TeamManager:ConvertDeprecated`,
-  `TeamManager.lua:764-808`). Add defaults to the namespace defaults table
-  (`TeamManager.lua:816-832`, `GUI.lua:58-73`, `Tooltip.lua:44-50`).
-- **Inter-addon communication.** None over chat (`C_ChatInfo` is unused). Integration is
-  LibStub-based (AceAddon `GetAddon`, CallbackHandler callbacks). If you add PBS features,
-  keep the `ScriptEditor` contract: validate via `ScriptClass:SetCode` before storing.
-- **Deprecated/legacy APIs.** `SetBackdrop` is used on `BackdropTemplate` frames (fine on both
-  clients); `PetJournal_UpdatePetLoadOut` is called only behind an existence check
-  (`TeamManager.lua:88-90`). Prefer `C_*` namespaces over deprecated globals for new code.
+- **API par version de client.** Le code tourne sur retail 12.x et MoP Classic. Protégez les
+  globales propres à 12.x (`issecretvalue` en `TeamManager.lua:175` est le motif :
+  `if issecretvalue and issecretvalue(v) then … end`). Ne supposez jamais qu'une API existe sur
+  les deux clients sans vérifier `docs/WoWAddonDevGuide-master/01_API_Reference.md`.
+- **Secret values (12.x).** Pas d'arithmétique, de comparaison ni d'opération de chaîne sur les
+  valeurs des API d'identité d'unité en combat/contexte teinté. `UnitGUID`/`UnitName` exigent
+  une garde `issecretvalue` partout où elles sont utilisées (`TeamManager.lua:418-429` en manque
+  une — backlog.md constat 13). Recharges de sort : passez des objets duration aux frames de
+  cooldown, pas les `startTime`/`duration` bruts (`ReviveButton.lua:14-16` viole cette règle —
+  backlog.md constat 4).
+- **Combat lockdown.** Les frames créées depuis `secureactionbuttontemplate`
+  (`ReviveButton.lua:41`, `PetBandageButton.lua:35`) sont protégées : `SetAttribute`,
+  `Show`/`Hide`, `SetParent`, `SetPoint` dessus doivent être gardés par `InCombatLockdown()` ou
+  différés (motif : `MainFrame.lua:99`, `GUI.lua:119`). Les violations connues sont listées
+  dans backlog.md constats 2-3, 8 — ne les reproduisez pas dans le nouveau code.
+- **Cycle de vie des événements.** Tout repose sur `ADDON_LOADED` et les callbacks
+  `OnInitialize` d'AceAddon (voir `docs/ARCHITECTURE.md` §4). `PLAYER_LOGIN` /
+  `PLAYER_ENTERING_WORLD` **ne sont pas** utilisés. L'UI est construite paresseusement au
+  chargement de l'addon LoadOnDemand `Blizzard_Collections` (`GUI.lua:21-36`) — ne supposez
+  jamais que `PetJournal` existe avant cela.
+- **SavedVariables.** Ouvertes via AceDB-3.0 dans `OnInitialize` (après le chargement du
+  fichier SV par le client ; `## LoadSavedVariablesFirst: 1` est défini dans le TOC). Validez
+  les types en lisant des valeurs éditables à la main par l'utilisateur (précédent :
+  `TeamManager:ConvertDeprecated`, `TeamManager.lua:764-808`). Ajoutez les défauts dans la
+  table de défauts du namespace (`TeamManager.lua:816-832`, `GUI.lua:58-73`,
+  `Tooltip.lua:44-50`).
+- **Communication entre addons.** Aucune par chat (`C_ChatInfo` inutilisé). L'intégration passe
+  par LibStub (AceAddon `GetAddon`, callbacks CallbackHandler). Si vous ajoutez des
+  fonctionnalités PBS, respectez le contrat `ScriptEditor` : valider via
+  `ScriptClass:SetCode` avant stockage.
+- **API obsolètes/legacy.** `SetBackdrop` est utilisé sur des frames `BackdropTemplate` (valide
+  sur les deux clients) ; `PetJournal_UpdatePetLoadOut` n'est appelé que derrière une garde
+  d'existence (`TeamManager.lua:88-90`). Préférez les espaces de noms `C_*` aux globales
+  obsolètes pour le nouveau code.
 
-## 4. Instructions for AI agents
+## 4. Instructions pour les agents IA
 
-Before any modification:
+Avant toute modification :
 
-1. Read the target file fully and its TOC neighbors — check what captures references at file
-   scope before reordering anything.
-2. Identify the module style in use (AceAddon module / mixin class / pure model) and follow it.
-3. Grep for every caller of a function you change (the workspace tooling: `rtk grep` or plain
-   `grep` from the workspace root; see the workspace `AGENTS.md` §9).
-4. Check the WoW API against `docs/WoWAddonDevGuide-master/` for both target clients.
-5. Respect combat/secure-frame rules and the secret-values rules above.
+1. Lisez intégralement le fichier cible et ses voisins dans le TOC — vérifiez ce qui capture des
+   références au niveau fichier avant tout réordonnancement.
+2. Identifiez le style de module en usage (module AceAddon / classe mixin / modèle pur) et
+   suivez-le.
+3. Cherchez (`grep`) tous les appelants d'une fonction que vous changez (outillage de
+   l'espace de travail : `rtk grep` ou `grep` simple depuis la racine ; voir l'`AGENTS.md` de
+   l'espace de travail §9).
+4. Vérifiez l'API WoW dans `docs/WoWAddonDevGuide-master/` pour les deux clients ciblés.
+5. Respectez les règles combat/frames protégées et les règles de secret values ci-dessus.
 
-After any modification:
+Après toute modification :
 
-1. Run the Lua syntax gate (§5) on every file you touched.
-2. Re-check module dependencies and load order (TOC).
-3. Re-check event registrations and callbacks you touched.
-4. Consider both clients (retail 12.x and MoP Classic) and combat paths.
-5. List the in-game tests that remain to be done (no automated runtime tests exist).
+1. Lancez la porte de syntaxe Lua (§5) sur chaque fichier touché.
+2. Revérifiez les dépendances entre modules et l'ordre de chargement (TOC).
+3. Revérifiez les enregistrements d'événements et les callbacks touchés.
+4. Considérez les deux clients (retail 12.x et MoP Classic) et les chemins en combat.
+5. Listez les tests in-game restant à effectuer (aucun test automatisé d'exécution n'existe).
 
-Localization: any user-facing string change must update **all 9 files in `i18n/`** (keys are
-English source strings; see the workspace `AGENTS.md` §10.6).
+Localisation : toute modification de chaîne visible par l'utilisateur doit mettre à jour
+**les 9 fichiers de `i18n/`** (les clés sont les chaînes anglaises sources ; voir
+l'`AGENTS.md` de l'espace de travail §10.6).
 
-## 5. Commands and tools (all real — nothing else exists)
+## 5. Commandes et outils (tous réels — rien d'autre n'existe)
 
-- **Lua syntax gate** (Lua 5.1 parser; run from the workspace root
-  `/mnt/d/RProjects/_KaspOu`):
+- **Porte de syntaxe Lua** (analyseur Lua 5.1 ; à lancer depuis la racine de l'espace de
+  travail `/mnt/d/RProjects/_KaspOu`) :
 
     ```bash
-    python3 tools/validate_lua.py KPetBattle-Teams/PetBattleTeams   # this addon
-    python3 tools/validate_lua.py --selftest                        # checker self-test
+    python3 tools/validate_lua.py KPetBattle-Teams/PetBattleTeams   # cet addon
+    python3 tools/validate_lua.py --selftest                        # auto-test du vérificateur
     ```
 
-- **In-game unit tests**: `PetBattleTeams/modules/TeamManagerUnitTests.lua` is loaded by the
-  TOC but never runs automatically. Manual run in-game:
-  `/run PetBattleTeams.TeamManagerUnitTests:Run()` (the comment at line 53 shows a broken
-  command — there is no global `TeamManagerUnitTests`). Warning: a run has live side effects
-  (fires real callbacks, re-applies the loadout; backlog.md finding 16).
-- **Dev harness**: `.context/run.py` (needs `pip install lupa`) is **broken** — it opens
-  `tests/import_test.lua`, which does not exist (the file lives in `.context/`), and the
-  fixture `export.txt` is missing (backlog.md finding 17). Not usable as-is.
-- **Packaging**: `.release.bat` → `wsl bash ../packager/release.sh -d` (BigWigs WoW packager,
-  manifest `.pkgmeta`), plus `.release.live.bat` and `.release.xcopylibs.bat`. Release scripts
-  are state-changing — run them only when explicitly asked.
-- **No lint, no build, no CI** in this repo. Lua files carry `-- luacheck: globals …`
-  annotations, but there is no `.luacheckrc` and no lint command. Do not invent one.
+- **Tests unitaires in jeu** : `PetBattleTeams/modules/TeamManagerUnitTests.lua` est chargé par
+  le TOC mais ne s'exécute jamais automatiquement. Lancement manuel in-game :
+  `/run PetBattleTeams.TeamManagerUnitTests:Run()` (le commentaire ligne 53 affiche une
+  commande cassée — il n'existe pas de global `TeamManagerUnitTests`). Avertissement : une
+  exécution a des effets de bord réels (déclenche de vrais callbacks, ré-applique le loadout ;
+  backlog.md constat 16).
+- **Banc de dev** : `.context/run.py` (nécessite `pip install lupa`) est **cassé** — il ouvre
+  `tests/import_test.lua`, qui n'existe pas (le fichier est dans `.context/`), et le fixture
+  `export.txt` est absent (backlog.md constat 17). Inutilisable en l'état.
+- **Packaging** : `.release.bat` → `wsl bash ../packager/release.sh -d` (BigWigs WoW packager,
+  manifeste `.pkgmeta`), plus `.release.live.bat` et `.release.xcopylibs.bat`. Les scripts de
+  release modifient l'état — ne lancez-les que si on vous le demande explicitement.
+- **Aucun lint, aucun build, aucune CI** dans ce dépôt. Les fichiers Lua portent des annotations
+  `-- luacheck: globals …`, mais il n'y a ni `.luacheckrc` ni commande de lint. N'en inventez
+  pas.
 
-## 6. Known landmines (do not replicate; see backlog.md for details)
+## 6. Mines terrestres connues (ne pas reproduire ; détails dans backlog.md)
 
-- Two `EMPTY_PET` sentinels coexist: `TeamManager.lua:31` (`"BattlePet-0-000000000000"`) is the
-  real one; `Cursor.lua:18` still has the legacy `"0x0000000000000000"` (backlog.md finding 5).
-- `/pbt` is registered twice (backlog.md finding 6).
-- Imported team strings can carry PBS scripts past validation (backlog.md finding 1).
-- Dead artifacts: `modules/GUI/DescriptionEditor .lua` (empty file, space in the name, not in
-  the TOC), `modules/Tutorial.lua` (not in the TOC, depends on unshipped `CustomTutorials-2.0`),
-  `modules/GUI/LockTeamsButton.lua` (`GUI:CreateLockTeamsButton` is never called),
-  `StaticPopupDialogs.PBT_IMPORT_TEAMS` (never shown, calls a nonexistent method).
-- `TeamManager:GetIgnoreEmptyPets` is hardcoded `return true`
-  (`TeamManager.lua:300-302`) — the DB key is ignored.
+- Deux sentinelles `EMPTY_PET` coexistent : `TeamManager.lua:31`
+  (`"BattlePet-0-000000000000"`) est la vraie ; `Cursor.lua:18` porte encore l'ancienne
+  `"0x0000000000000000"` (backlog.md constat 5).
+- `/pbt` est enregistré deux fois (backlog.md constat 6).
+- Des chaînes d'équipe importées peuvent transporter des scripts PBS au-delà de la validation
+  (backlog.md constat 1).
+- Artefacts morts : `modules/GUI/DescriptionEditor .lua` (fichier vide, espace dans le nom,
+  absent du TOC), `modules/Tutorial.lua` (absent du TOC, dépend de `CustomTutorials-2.0` non
+  livré), `modules/GUI/LockTeamsButton.lua` (`GUI:CreateLockTeamsButton` jamais appelé),
+  `StaticPopupDialogs.PBT_IMPORT_TEAMS` (jamais affiché, appelle une méthode inexistante).
+- `TeamManager:GetIgnoreEmptyPets` est en dur `return true` (`TeamManager.lua:300-302`) — la
+  clé DB est ignorée.
